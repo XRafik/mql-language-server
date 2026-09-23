@@ -1,3 +1,8 @@
+## [Unreleased]
+
+### Added
+- feat(vscode): official VS Code extension "MQL Language Server" (issue #70) — activates on `.mq4`/`.mq5`/`.mqh`, resolves the `mql-lsp-server` binary (custom `serverPath` setting → cached download → automatic download from GitHub Releases with SHA256 verification against `CHECKSUMS.txt`), and starts it over stdio; the release pipeline builds, tests and uploads `mql-language-server-<tag>.vsix` as a release asset. Marketplace publishing deferred.
+
 ## [2.4.1] - 2026-09-23
 
 Patch release for the 2.4.0 line: three navigation/packaging fixes surfaced by the downstream agent-lsp integration, each verified by runtime reproduction on the integration fixture.
