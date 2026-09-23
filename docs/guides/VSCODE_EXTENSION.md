@@ -36,7 +36,7 @@ On activation over an MQL document, the extension resolves the `mql-lsp-server` 
 3. **Automatic download** — otherwise the extension downloads the matching binary for the current platform (`mql-lsp-server-<rid>` from the
    [GitHub releases](https://github.com/davalillo/mql-language-server/releases)) and verifies its SHA256 against the published `CHECKSUMS.txt` before installing it.
 
-The server is then started with `--stdio`. The extension version (`0.1.0`) is independent of the server version: each new release ships a fresh VSIX, and the extension picks up new server binaries on demand.
+The server is then started with `--stdio`. The extension version (`0.1.0`) is independent of the server version: each new release ships a fresh VSIX. Note: a cached binary is reused until its platform mapping changes or you clear the extension's global storage — to force a fresh download of a newer server release, either set `mqlLanguageServer.serverPath` to the new binary or run **Developer: Reload Window** after clearing the cached file (see troubleshooting below).
 
 ## 🔧 Settings
 
