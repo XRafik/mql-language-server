@@ -221,6 +221,29 @@ jobs:
       - name: Pack NuGet
         run: dotnet pack src/MqlLanguageServer.Server.csproj -c Release --no-build --output nupkg/
 
+      # VS Code extension (issue #70): build, test and package the client, then
+      # move the VSIX into bin/ with the release tag in its name. The extension
+      # version (package.json) is independent of the server tag, so the asset
+      # is renamed here to carry the effective tag.
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+
+      - name: Build VS Code extension
+        env:
+          EFFECTIVE_TAG: ${{ needs.get-effective-tag.outputs.effective_tag }}
+        run: |
+          cd vscode/mql-language-server
+          npm ci && npm test && npm run package
+          cd ../..
+          mkdir -p bin
+          # Glob instead of a fixed name: vsce names the artifact
+          # <publisher>-<name>-<version>.vsix and the version changes over time.
+          mv vscode/mql-language-server/*mql-language-server-*.vsix \
+            "bin/mql-language-server-${EFFECTIVE_TAG}.vsix"
+          ls -l "bin/mql-language-server-${EFFECTIVE_TAG}.vsix"
+
       # NuGet Trusted Publishing: exchange the GitHub Actions OIDC token for a
       # short-lived (1h, single-use) API key instead of storing a long-lived secret.
       # Requires a one-time Trusted Publishing policy on nuget.org for
@@ -292,6 +315,7 @@ jobs:
             - **Linux (ARM64):** `mql-lsp-server-linux-arm64`
             - **macOS (Intel):** `mql-lsp-server-osx-x64`
             - **macOS (M1/M2/M3):** `mql-lsp-server-osx-arm64`
+            - **VS Code (extensión):** `mql-language-server-${{ needs.get-effective-tag.outputs.effective_tag }}.vsix`
             - **Checksums:** `CHECKSUMS.txt` (verifica integridad de archivos)
 
             _El código fuente adjunto abajo (Source code zip) contiene el código completo de este repositorio._
@@ -307,6 +331,7 @@ jobs:
             bin/mql-lsp-server-osx-arm64
             bin/mql-lsp-server-win-x64.exe
             bin/mql-lsp-server-win-arm64.exe
+            bin/mql-language-server-${{ needs.get-effective-tag.outputs.effective_tag }}.vsix
             bin/CHECKSUMS.txt
             nupkg/*.nupkg
           draft: false

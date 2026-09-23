@@ -40,3 +40,23 @@ jobs:
 
       - name: Vulnerable packages gate
         run: dotnet list MqlLanguageServer.sln package --vulnerable --include-transitive
+
+  vscode-extension:
+    name: VS Code Extension
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+
+      - name: Compile, test and package
+        working-directory: vscode/mql-language-server
+        run: |
+          npm ci
+          npm run compile
+          npx vitest run
+          npm run package
