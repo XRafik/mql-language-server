@@ -1,0 +1,85 @@
+{
+  "name": "mql-language-server",
+  "displayName": "MQL4/MQL5 Language Server",
+  "description": "Language server support for MQL4/MQL5 (MetaTrader): completions, diagnostics, and navigation via mql-lsp-server.",
+  "version": "0.1.0",
+  "publisher": "davalillo",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davalillo/mql-language-server"
+  },
+  "engines": {
+    "vscode": "^1.90.0",
+    "node": ">=20"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:mql4",
+    "onLanguage:mql5"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "mql4",
+        "aliases": [
+          "MQL4",
+          "mql4"
+        ],
+        "extensions": [
+          ".mq4"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "mql5",
+        "aliases": [
+          "MQL5",
+          "mql5"
+        ],
+        "extensions": [
+          ".mq5",
+          ".mqh"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configuration": {
+      "title": "MQL Language Server",
+      "properties": {
+        "mqlLanguageServer.serverPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to a custom mql-lsp-server binary. Overrides automatic download."
+        },
+        "mqlLanguageServer.logLevel": {
+          "type": "string",
+          "enum": [
+            "off",
+            "error",
+            "info",
+            "debug"
+          ],
+          "default": "info",
+          "description": "Logging verbosity for the language server client output channel."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "test": "vitest run",
+    "package": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --platform=node --format=cjs && vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^3.1.0",
+    "esbuild": "^0.23.0",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}

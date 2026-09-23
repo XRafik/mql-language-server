@@ -70,5 +70,10 @@ benchmarks/
 
 # Test transient output
 tests/TestResults/
+
+# VS Code extension build artifacts (vscode/mql-language-server)
+# dist/ is already covered by the root dist/ rule above.
+vscode/mql-language-server/node_modules/
+vscode/mql-language-server/*.vsix
 # CodeGraph generated index
 .codegraph/
