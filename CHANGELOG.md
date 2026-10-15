@@ -1,3 +1,11 @@
+## [Unreleased]
+
+Closes #163: the MQL5 builtin golden list now covers the File* function family and the TIME_*/FILE_*/SEEK_*/CP_* constants, eliminating false 5070 unresolved-symbol diagnostics in MQL5 documents that use file I/O or datetime string formatting. The MQL4 golden list got its own smaller symmetric gap filled (7 functions + 8 constants, all documented MQL4 build 600+ API). Data-only change per the #136 contract: new names go into `data/builtins/mql5.json` / `data/builtins/mql4.json` with signatures/descriptions from the official documentation; no registry code was touched.
+
+### Added
+- feat(analysis): register the MQL5 File* family (16 functions: `FileOpen`, `FileClose`, `FileRead`, `FileWrite`, `FileWriteString`, `FileReadString`, `FileIsEnding`, `FolderCreate`, `FolderDelete`, `FileDelete`, `FileCopy`, `FileMove`, `FileSeek`, `FileSize`, `FileTell`, `FileFlush`) and 14 constants (`TIME_DATE`, `TIME_MINUTES`, `TIME_SECONDS`, `FILE_COMMON`, `FILE_WRITE`, `FILE_READ`, `FILE_TXT`, `FILE_ANSI`, `FILE_CSV`, `SEEK_SET`, `SEEK_CUR`, `SEEK_END`, `CP_UTF8`, `CP_ACP`) in the MQL5 golden list (#163). Previously any MQL5 document touching file I/O produced false `5070` errors for these standard names. `FILE_BIN`/`FILE_SHARE_READ`/`FILE_SHARE_WRITE` were already present (the issue overcounted by three).
+- feat(analysis): symmetric MQL4 golden-list enrichment (#163): `FileWriteString`, `FileReadString`, `FolderCreate`, `FolderDelete`, `FileCopy`, `FileMove`, `FileTell` + `TIME_MINUTES`, `FILE_COMMON`, `FILE_TXT`, `FILE_ANSI`, `SEEK_SET`, `SEEK_CUR`, `CP_UTF8`, `CP_ACP`. Tests: `Issue163BuiltinRegistryCoverageTests` (both-dialect coverage theories plus end-to-end `UnresolvedSymbolRule` runs over the issue repro snippet in MQL5 and MQL4, with a genuinely-undeclared-symbol guard). Full suite 1529 passing.
+
 ## [2.6.1] - 2026-10-06
 
 Closes #160 (root-cause fix for the agent-lsp cold-start symptom): the server now emits `$/progress` (`workDoneProgress`) around the startup workspace scan and no longer silently drops requests batched with the `initialize` request. Verified end-to-end with raw stdio probes: a batched `textDocument/hover` that previously got no reply at all is now answered, and clients that declare `window.workDoneProgress` receive `begin`/`report`/`end` progress tokens spanning the whole scan. Full suite 1494 passing.

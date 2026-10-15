@@ -1818,6 +1818,41 @@
     "WindowPriceMin": {
       "signature": "double WindowPriceMin(int shift=0)",
       "provenance": "issue152-corpus-enrichment"
+    },
+    "FileWriteString": {
+      "signature": "uint FileWriteString(int handle, string text, int length)",
+      "docUrl": "https://docs.mql4.com/files/filewritestring",
+      "provenance": "issue-163-documented"
+    },
+    "FileReadString": {
+      "signature": "string FileReadString(int handle, int length)",
+      "docUrl": "https://docs.mql4.com/files/filereadstring",
+      "provenance": "issue-163-documented"
+    },
+    "FolderCreate": {
+      "signature": "bool FolderCreate(string folder_name, int common_flag)",
+      "docUrl": "https://docs.mql4.com/files/foldercreate",
+      "provenance": "issue-163-documented"
+    },
+    "FolderDelete": {
+      "signature": "bool FolderDelete(string folder_name, int common_flag)",
+      "docUrl": "https://docs.mql4.com/files/folderdelete",
+      "provenance": "issue-163-documented"
+    },
+    "FileCopy": {
+      "signature": "bool FileCopy(string src_file_name, int common_flag, string dst_file_name, int mode_flags)",
+      "docUrl": "https://docs.mql4.com/files/filecopy",
+      "provenance": "issue-163-documented"
+    },
+    "FileMove": {
+      "signature": "bool FileMove(string src_file_name, int common_flag, string dst_file_name, int mode_flags)",
+      "docUrl": "https://docs.mql4.com/files/filemove",
+      "provenance": "issue-163-documented"
+    },
+    "FileTell": {
+      "signature": "ulong FileTell(int handle)",
+      "docUrl": "https://docs.mql4.com/files/filetell",
+      "provenance": "issue-163-documented"
     }
   },
   "variables": {
@@ -5015,6 +5050,43 @@
     "__FUNCTION__": {
       "description": "Predefined macro substitution: name of the function in whose body the macro is located",
       "provenance": "issue152-corpus-enrichment"
+    },
+    "TIME_MINUTES": {
+      "description": "TimeToStr flag: result string in 'hh:mi' format",
+      "provenance": "issue-163-documented"
+    },
+    "FILE_COMMON": {
+      "description": "File open flag: the file is located in the common folder of all client terminals",
+      "docUrl": "https://docs.mql4.com/constants/fileconstants",
+      "provenance": "issue-163-documented"
+    },
+    "FILE_TXT": {
+      "description": "File open flag: txt file (string of type string)",
+      "docUrl": "https://docs.mql4.com/constants/fileconstants",
+      "provenance": "issue-163-documented"
+    },
+    "FILE_ANSI": {
+      "description": "File open flag: strings of ANSI type (one-byte symbols)",
+      "docUrl": "https://docs.mql4.com/constants/fileconstants",
+      "provenance": "issue-163-documented"
+    },
+    "SEEK_SET": {
+      "description": "File pointer seek origin: from the beginning of the file",
+      "docUrl": "https://docs.mql4.com/constants/fileconstants",
+      "provenance": "issue-163-documented"
+    },
+    "SEEK_CUR": {
+      "description": "File pointer seek origin: from the current position of the file pointer",
+      "docUrl": "https://docs.mql4.com/constants/fileconstants",
+      "provenance": "issue-163-documented"
+    },
+    "CP_UTF8": {
+      "description": "Code page constant: UTF-8 code page (65001)",
+      "provenance": "issue-163-documented"
+    },
+    "CP_ACP": {
+      "description": "Code page constant: the currently active ANSI code page (0)",
+      "provenance": "issue-163-documented"
     }
   }
 }

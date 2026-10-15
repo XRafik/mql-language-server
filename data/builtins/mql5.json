@@ -566,6 +566,102 @@
       "apiTier": "shared",
       "docUrl": "https://www.mql5.com/en/docs/strings/stringinit",
       "provenance": "issue-136-documented"
+    },
+    "FileOpen": {
+      "signature": "int FileOpen(string file_name, int open_flags, string delimiter, uint codepage)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/fileopen",
+      "provenance": "issue-163-documented"
+    },
+    "FileClose": {
+      "signature": "void FileClose(int file_handle)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/fileclose",
+      "provenance": "issue-163-documented"
+    },
+    "FileRead": {
+      "signature": "uint FileRead(int file_handle, void buffer[], uint count)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/fileread",
+      "provenance": "issue-163-documented"
+    },
+    "FileWrite": {
+      "signature": "uint FileWrite(int file_handle, ...)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/filewrite",
+      "provenance": "issue-163-documented"
+    },
+    "FileWriteString": {
+      "signature": "uint FileWriteString(int file_handle, const string text, int size)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/filewritestring",
+      "provenance": "issue-163-documented"
+    },
+    "FileReadString": {
+      "signature": "string FileReadString(int file_handle, int size)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/filereadstring",
+      "provenance": "issue-163-documented"
+    },
+    "FileIsEnding": {
+      "signature": "bool FileIsEnding(int file_handle)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/fileisending",
+      "provenance": "issue-163-documented"
+    },
+    "FolderCreate": {
+      "signature": "bool FolderCreate(const string folder_name, int common_flag)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/foldercreate",
+      "provenance": "issue-163-documented"
+    },
+    "FolderDelete": {
+      "signature": "bool FolderDelete(const string folder_name, int common_flag)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/folderdelete",
+      "provenance": "issue-163-documented"
+    },
+    "FileDelete": {
+      "signature": "bool FileDelete(const string file_name, int common_flag)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/filedelete",
+      "provenance": "issue-163-documented"
+    },
+    "FileCopy": {
+      "signature": "bool FileCopy(const string src_file_name, int common_flag, const string dst_file_name, int mode_flags)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/filecopy",
+      "provenance": "issue-163-documented"
+    },
+    "FileMove": {
+      "signature": "bool FileMove(const string src_file_name, int common_flag, const string dst_file_name, int mode_flags)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/filemove",
+      "provenance": "issue-163-documented"
+    },
+    "FileSeek": {
+      "signature": "bool FileSeek(int file_handle, ulong offset, ENUM_FILE_SEEK origin)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/fileseek",
+      "provenance": "issue-163-documented"
+    },
+    "FileSize": {
+      "signature": "ulong FileSize(int file_handle)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/filesize",
+      "provenance": "issue-163-documented"
+    },
+    "FileTell": {
+      "signature": "ulong FileTell(int file_handle)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/filetell",
+      "provenance": "issue-163-documented"
+    },
+    "FileFlush": {
+      "signature": "void FileFlush(int file_handle)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/files/fileflush",
+      "provenance": "issue-163-documented"
     }
   },
   "variables": {
@@ -1978,6 +2074,90 @@
       "apiTier": "shared",
       "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
       "provenance": "issue-136-documented"
+    },
+    "TIME_DATE": {
+      "description": "TimeToString flag: result string in 'yyyy.mm.dd' format",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/common/timetostring",
+      "provenance": "issue-163-documented"
+    },
+    "TIME_MINUTES": {
+      "description": "TimeToString flag: result string in 'hh:mi' format",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/common/timetostring",
+      "provenance": "issue-163-documented"
+    },
+    "TIME_SECONDS": {
+      "description": "TimeToString flag: result string in 'hh:mi:ss' format",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/common/timetostring",
+      "provenance": "issue-163-documented"
+    },
+    "FILE_COMMON": {
+      "description": "File open flag: the file is located in the common folder of all client terminals",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
+      "provenance": "issue-163-documented"
+    },
+    "FILE_WRITE": {
+      "description": "File open flag: writing. A new file is created, or an existing one is truncated to zero size",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
+      "provenance": "issue-163-documented"
+    },
+    "FILE_READ": {
+      "description": "File open flag: reading. The file must already exist",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
+      "provenance": "issue-163-documented"
+    },
+    "FILE_TXT": {
+      "description": "File open flag: txt file (string of type string)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
+      "provenance": "issue-163-documented"
+    },
+    "FILE_ANSI": {
+      "description": "File open flag: strings of ANSI type (one-byte symbols)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
+      "provenance": "issue-163-documented"
+    },
+    "FILE_CSV": {
+      "description": "File open flag: csv file (string of type string with delimiters)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
+      "provenance": "issue-163-documented"
+    },
+    "SEEK_SET": {
+      "description": "File pointer seek origin: from the beginning of the file",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
+      "provenance": "issue-163-documented"
+    },
+    "SEEK_CUR": {
+      "description": "File pointer seek origin: from the current position of the file pointer",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
+      "provenance": "issue-163-documented"
+    },
+    "SEEK_END": {
+      "description": "File pointer seek origin: from the end of the file",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/io_constants/fileopenflags",
+      "provenance": "issue-163-documented"
+    },
+    "CP_UTF8": {
+      "description": "Code page constant: UTF-8 code page (65001)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/namedconstants/otherconstants",
+      "provenance": "issue-163-documented"
+    },
+    "CP_ACP": {
+      "description": "Code page constant: the currently active ANSI code page (0)",
+      "apiTier": "shared",
+      "docUrl": "https://www.mql5.com/en/docs/constants/namedconstants/otherconstants",
+      "provenance": "issue-163-documented"
     }
   }
 }
