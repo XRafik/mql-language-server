@@ -1,4 +1,4 @@
-## [Unreleased]
+## [2.6.2] - 2026-10-15
 
 Closes #163: the MQL5 builtin golden list now covers the File* function family and the TIME_*/FILE_*/SEEK_*/CP_* constants, eliminating false 5070 unresolved-symbol diagnostics in MQL5 documents that use file I/O or datetime string formatting. The MQL4 golden list got its own smaller symmetric gap filled (7 functions + 8 constants, all documented MQL4 build 600+ API). Data-only change per the #136 contract: new names go into `data/builtins/mql5.json` / `data/builtins/mql4.json` with signatures/descriptions from the official documentation; no registry code was touched.
 
