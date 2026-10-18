@@ -38,6 +38,14 @@ Mql* structures are already registered; 3 predefined variables
 - [x] T6 — CHANGELOG Unreleased updated. Commit: 3be8611.
 - [x] T7 — Work-unit commits recorded here; Engram summary updated.
 
+- [x] T8 — Completeness pass (2026-10-18, post-push audit): extended return
+      types (ENUM_*/Mql*/pointer forms) recovered 8 functions
+      (CheckPointer, GetPointer, Period, ChartPeriod, MathClassify,
+      DatabaseColumnType, CLHandleType, DXHandleType) -> functions 816;
+      Standard-Library class-member pages (Dequeue/Peek/Pop) now skipped;
+      3 predefined variables registered (_AppliedTo, _RandomSeed, _IsX64)
+      -> variables 2003. Full suite 1596/1596. Commits: see git log.
+
 ## Evidence log
 
 - 2026-10-18: signature-page shape confirmed (p2060 AccountInfoInteger:

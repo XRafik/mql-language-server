@@ -1,7 +1,7 @@
 {
   "docs": "./README.md",
   "dialect": "mql5",
-  "provenance": "Seeded by tools/generate-golden-lists/extract_registry.py from hand-curated Mql5Builtins.cs (v2.5.1-rc.1). Enriched with documented names + metadata by apply_issue136.py. | Enum-constant enrichment 2026-10-18 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_enum_constants.py (+1641 documented names). | Function enrichment 2026-10-18 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_functions.py (+653 documented functions with signatures).",
+  "provenance": "Seeded by tools/generate-golden-lists/extract_registry.py from hand-curated Mql5Builtins.cs (v2.5.1-rc.1). Enriched with documented names + metadata by apply_issue136.py. | Enum-constant enrichment 2026-10-18 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_enum_constants.py (+1641 documented names). | Function enrichment 2026-10-18 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_functions.py (+653 documented functions with signatures). | Function enrichment 2026-10-19 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_functions.py (+8 documented functions with signatures). | Enum-constant enrichment 2026-10-19 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_enum_constants.py (+3 documented names).",
   "functions": {
     "OrderSend": {
       "signature": "bool OrderSend(MqlTradeRequest& request, MqlTradeResult& result)",
@@ -3274,6 +3274,38 @@
     "iWPR": {
       "signature": "int iWPR(string symbol, ENUM_TIMEFRAMES period, int calc_period );",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3160"
+    },
+    "CLHandleType": {
+      "signature": "ENUM_OPENCL_HANDLE_TYPE CLHandleType(int handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 3199"
+    },
+    "ChartPeriod": {
+      "signature": "ENUM_TIMEFRAMES ChartPeriod(long chart_id=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 2397"
+    },
+    "CheckPointer": {
+      "signature": "ENUM_POINTER_TYPE CheckPointer(object* anyobject );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 1116"
+    },
+    "DXHandleType": {
+      "signature": "ENUM_DX_HANDLE_TYPE DXHandleType(int handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 3345"
+    },
+    "DatabaseColumnType": {
+      "signature": "ENUM_DATABASE_FIELD_TYPE DatabaseColumnType(int request, int column );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 3311"
+    },
+    "GetPointer": {
+      "signature": "void* GetPointer(any_class anyobject );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 1126"
+    },
+    "MathClassify": {
+      "signature": "ENUM_FP_CLASS MathClassify(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 1941"
+    },
+    "Period": {
+      "signature": "ENUM_TIMEFRAMES Period();",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 2074"
     }
   },
   "variables": {
@@ -11334,6 +11366,18 @@
     "ENUM_TRADE_TRANSACTION_TYPE": {
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 (enum type name)"
+    },
+    "_AppliedTo": {
+      "description": "(description not yet captured)",
+      "provenance": "official-mql5-reference-pdf (predefined variables section)"
+    },
+    "_RandomSeed": {
+      "description": "(description not yet captured)",
+      "provenance": "official-mql5-reference-pdf (predefined variables section)"
+    },
+    "_IsX64": {
+      "description": "(description not yet captured)",
+      "provenance": "official-mql5-reference-pdf (predefined variables section)"
     }
   }
 }

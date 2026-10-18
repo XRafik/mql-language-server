@@ -53,7 +53,8 @@ SIG_WINDOW_CHARS = 600
 # the start pattern anyway.
 RETURN_TYPE_RE = re.compile(
     r"\b(bool|int|long|ulong|uint|double|string|void|datetime|color|char|"
-    r"uchar|short|ushort|float|matrix|vector)[ \t]+")
+    r"uchar|short|ushort|float|matrix|vector|ENUM_\w+|Mql\w+|void\*|"
+    r"object\*|T\*?)[ \t]+")
 
 NAME_LINE_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)$")
 PAGE_NUMBER_RE = re.compile(r"^\d{1,5}$")
@@ -92,7 +93,10 @@ def extract_functions(raw_text: str, universe: set[str]) -> tuple[dict[str, dict
         # return matrices stay in.
         section = next((l for l in lines if "©" not in l
                         and not PAGE_NUMBER_RE.match(l)), "")
-        if "Matrix and Vector" in section:
+        if "Matrix and Vector" in section or "Standard Library" in section:
+            # Matrix/vector methods + OpenBLAS internals (scope-excluded), and
+            # Standard-Library class members (CQueue.Dequeue etc. resolve via
+            # includes once system-include support exists).
             continue
         headings = [l for l in lines if NAME_LINE_RE.match(l)
                     and not PAGE_NUMBER_RE.match(l)

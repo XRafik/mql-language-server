@@ -196,6 +196,15 @@ def chapter_page_indices(layout_text: str) -> list[int]:
     ]
 
 
+# Documented predefined variables the structural scanner cannot see
+# (lowercase-first names, documented outside the ALLCAPS enum tables).
+PREDEFINED_VARIABLES = {
+    "_AppliedTo": "official-mql5-reference-pdf (predefined variables section)",
+    "_RandomSeed": "official-mql5-reference-pdf (predefined variables section)",
+    "_IsX64": "official-mql5-reference-pdf (predefined variables section)",
+}
+
+
 def transcribe_colors(page_text: str, printed: int,
                       names: dict[str, set[int]], vocabulary: set[str]) -> None:
     """The Web Colors page renders as a swatch grid: many color names per
@@ -387,6 +396,14 @@ def pdf_mode(raw_path: Path, layout_path: Path, dry_run: bool) -> int:
         return 0
 
     added = 0
+    for name, provenance in PREDEFINED_VARIABLES.items():
+        if name in golden["variables"]:
+            continue
+        golden["variables"][name] = {
+            "description": NO_DESCRIPTION,
+            "provenance": provenance,
+        }
+        added += 1
     for name, info in sorted(names.items()):
         if name in existing:
             continue
