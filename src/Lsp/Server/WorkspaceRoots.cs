@@ -87,7 +87,12 @@ public static class WorkspaceRoots
             return false;
         }
 
-        return PathSecurity.IsUnderAnyRoot(filePath, _roots);
+        return PathSecurity.IsUnderAnyRoot(filePath, _roots)
+            // System-include roots (MQL4/MQL5 Standard Library headers) live
+            // outside every workspace folder by design — reads under a
+            // declared system root are allowed too. With no system roots
+            // configured this is a no-op (fail open).
+            || SystemIncludeRoots.ContainsPath(filePath);
     }
 
     private static string? Normalize(string folder)

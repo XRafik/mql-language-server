@@ -14,6 +14,7 @@ using MqlLanguageServer.Mql5.Builtins;
 using MqlLanguageServer.Mql5.Parser;
 using MqlLanguageServer.Models;
 using MqlLanguageServer.Parser;
+using Newtonsoft.Json.Linq;
 using Serilog;
 
 using OmniSharp.Extensions.LanguageServer.Server;
@@ -56,6 +57,37 @@ namespace MqlLanguageServer
         private static DidOpenTextDocumentHandler? didOpenTextDocumentHandler;
         private static DidChangeTextDocumentHandler? didChangeTextDocumentHandler;
         private static DidCloseTextDocumentHandler? didCloseTextDocumentHandler;
+
+        /// <summary>
+        /// Extracts the <c>systemIncludeRoots</c> string array from the
+        /// initialize request's InitializationOptions. The OmniSharp 0.19.9
+        /// property is typed <see cref="object"/>; the wire serializer hands us
+        /// a Newtonsoft <see cref="JObject"/>, but any other shape (or a
+        /// missing/malformed option) yields an empty list — fail open.
+        /// </summary>
+        private static IReadOnlyList<string> ParseSystemIncludeRoots(object? initializationOptions)
+        {
+            var roots = new List<string>();
+            if (initializationOptions is not JObject options)
+            {
+                return roots;
+            }
+
+            if (options["systemIncludeRoots"] is not JArray array)
+            {
+                return roots;
+            }
+
+            foreach (var item in array)
+            {
+                if (item is JValue { Value: string root } && !string.IsNullOrWhiteSpace(root))
+                {
+                    roots.Add(root);
+                }
+            }
+
+            return roots;
+        }
 
         /// <summary>
         /// Reads the build date embedded as assembly metadata ("BuildDate") by the
@@ -389,6 +421,30 @@ namespace MqlLanguageServer
                             // every client-driven disk read must be inside one of
                             // them (fail-open only while the set is empty).
                             WorkspaceRoots.Set(workspaceFoldersSnapshot);
+
+                            // System include roots (MQL4/MQL5 Standard Library):
+                            // optional initialization option
+                            // `systemIncludeRoots: [ "...MQL5/Include", ... ]`.
+                            // Angle-bracket includes (<Trade\Trade.mqh>) resolve
+                            // against these roots; resolved headers are lazily
+                            // parsed and indexed by didOpen. Fail open: absent or
+                            // malformed option keeps today's behavior exactly.
+                            try
+                            {
+                                var systemRoots = ParseSystemIncludeRoots(request.InitializationOptions);
+                                SystemIncludeRoots.Set(systemRoots);
+                                IncludePathResolver.SetSystemIncludeRootsProvider(() => SystemIncludeRoots.Current);
+                                if (systemRoots.Count > 0)
+                                {
+                                    Log.Information("System include roots configured: {SystemRootCount} root(s)", systemRoots.Count);
+                                }
+                            }
+                            catch (Exception systemRootsEx)
+                            {
+                                SystemIncludeRoots.Clear();
+                                Log.Warning(systemRootsEx,
+                                    "Could not read the systemIncludeRoots initialization option; continuing without system include roots.");
+                            }
 
                             // Issue #93 (fix A): open the receiver gate NOW instead of
                             // at the end of the initialize handling.
