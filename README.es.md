@@ -57,6 +57,28 @@ Semántica:
 - Un `.mqh` ignorado no se indexa; los fuentes que lo incluyan pueden reportar símbolos no resueltos para sus declaraciones ("ignorado" significa "fuera del índice").
 - El archivo se lee una vez por escaneo al arranque — no hay watcher, así que editarlo requiere reiniciar el servidor.
 
+## Raíces de Includes del Sistema (`systemIncludeRoots`)
+
+Los includes con corchetes angulares (`#include <Trade\Trade.mqh>`) son includes de la biblioteca del sistema: resuelven contra los directorios de la biblioteca estándar del terminal MetaTrader, que están fuera de todas las carpetas del workspace. El servidor acepta una opción de inicialización **`systemIncludeRoots`** — un array de rutas absolutas de directorios, típicamente los directorios `MQL5/Include` / `MQL4/Include` del terminal:
+
+```json
+{
+  "initializationOptions": {
+    "systemIncludeRoots": [
+      "/ruta/a/MetaTrader/MQL5/Include"
+    ]
+  }
+}
+```
+
+Semántica:
+
+- Las entradas con corchetes angulares resuelven contra cada raíz configurada (en orden), con normalización de separadores (`\` y `/` ambos aceptados) y comprobación de existencia insensible a mayúsculas estilo Windows; la traversía `..` que escape de la raíz se rechaza.
+- Un header resuelto se parsea con el parser del dialecto y se indexa perezosamente en el índice global de símbolos en `didOpen` (deduplicado — un header ya indexado nunca se re-parsea).
+- Una vez indexadas, las clases y tipos de la Biblioteca Estándar (`CTrade`, `CArrayObj`, `MqlTradeRequest`, …) funcionan con definition, hover, references, completion y la supresión de diagnósticos cross-file — sin falsos positivos de `Undeclared symbol` para ellos.
+- Fail open: sin raíces configuradas, o cuando un header no se puede resolver ni parsear, el comportamiento es exactamente el anterior — sin errores ni diagnósticos extra.
+- Los includes con comillas (`#include "file.mqh"`) no se ven afectados: siguen resolviéndose relativo al archivo que los incluye.
+
 ## Decisiones Tecnológicas
 
 Esta sección documenta las decisiones técnicas clave tomadas durante el desarrollo para facilitar el onboarding de nuevos desarrolladores.

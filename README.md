@@ -57,6 +57,28 @@ Semantics:
 - An ignored `.mqh` is not indexed; sources that include it may report unresolved symbols for its declarations ("ignored" means "outside the index").
 - The file is read once per scan at startup — there is no watcher, so editing it requires a server restart.
 
+## System Include Roots (`systemIncludeRoots`)
+
+Angle-bracket includes (`#include <Trade\Trade.mqh>`) are system-library includes: they resolve against the MetaTrader terminal's standard-library directories, which are outside every workspace folder. The server accepts a **`systemIncludeRoots`** initialization option — an array of absolute directory paths, typically the terminal's `MQL5/Include` / `MQL4/Include` directories:
+
+```json
+{
+  "initializationOptions": {
+    "systemIncludeRoots": [
+      "/path/to/MetaTrader/MQL5/Include"
+    ]
+  }
+}
+```
+
+Semantics:
+
+- Angle-bracket entries resolve against each configured root (in order), with path-separator normalization (`\` and `/` both accepted) and a Windows-style case-insensitive existence check; `..` traversal escaping the root is rejected.
+- A resolved header is parsed with the dialect parser and lazily indexed into the global symbol index at `didOpen` (deduplicated — an already-indexed header is never re-parsed).
+- Once indexed, Standard-Library classes and types (`CTrade`, `CArrayObj`, `MqlTradeRequest`, …) work with definition, hover, references, completion and the cross-file diagnostic suppression — no false `Undeclared symbol` positives for them.
+- Fail open: with no roots configured, or when a header cannot be resolved or parsed, behavior is exactly as before — no errors, no extra diagnostics.
+- Quoted includes (`#include "file.mqh"`) are unaffected: they still resolve relative to the including file.
+
 ## Technical Decisions
 
 This section documents the key technical decisions made during development to ease the onboarding of new developers.
