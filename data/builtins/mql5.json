@@ -1,7 +1,7 @@
 {
   "docs": "./README.md",
   "dialect": "mql5",
-  "provenance": "Seeded by tools/generate-golden-lists/extract_registry.py from hand-curated Mql5Builtins.cs (v2.5.1-rc.1). Enriched with documented names + metadata by apply_issue136.py. | Enum-constant enrichment 2026-10-18 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_enum_constants.py (+1641 documented names).",
+  "provenance": "Seeded by tools/generate-golden-lists/extract_registry.py from hand-curated Mql5Builtins.cs (v2.5.1-rc.1). Enriched with documented names + metadata by apply_issue136.py. | Enum-constant enrichment 2026-10-18 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_enum_constants.py (+1641 documented names). | Function enrichment 2026-10-18 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_functions.py (+653 documented functions with signatures). | Function enrichment 2026-10-19 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_functions.py (+8 documented functions with signatures). | Enum-constant enrichment 2026-10-19 from the official MQL5 Reference PDF by tools/generate-golden-lists/apply_mql5_enum_constants.py (+3 documented names).",
   "functions": {
     "OrderSend": {
       "signature": "bool OrderSend(MqlTradeRequest& request, MqlTradeResult& result)",
@@ -662,6 +662,2650 @@
       "apiTier": "shared",
       "docUrl": "https://www.mql5.com/en/docs/files/fileflush",
       "provenance": "issue-163-documented"
+    },
+    "Add": {
+      "signature": "bool Add(T value ); | bool Add(TKey key, TValue value ); | bool Add(CKeyValuePair<TKeyTValue>* pair );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4372,4396,4447,4463,4476 et al"
+    },
+    "AddAfter": {
+      "signature": "bool AddAfter(CLinkedListNode<T>* node, CLinkedListNode<T>* new_node );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4497"
+    },
+    "AddBefore": {
+      "signature": "bool AddBefore(CLinkedListNode<T>* node, CLinkedListNode<T>* new_node );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4498"
+    },
+    "AddFirst": {
+      "signature": "bool AddFirst(CLinkedListNode<T>* node );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4499"
+    },
+    "AddLast": {
+      "signature": "bool AddLast(CLinkedListNode<T>* node );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4500"
+    },
+    "AddRange": {
+      "signature": "bool AddRange(const T& array[] ); | bool AddRange(ICollection<T>* collection );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4448"
+    },
+    "AmbientColorGet": {
+      "signature": "void AmbientColorGet(DXColor &ambient_color );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5162"
+    },
+    "AmbientColorSet": {
+      "signature": "void AmbientColorSet(const DXColor &ambient_color );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5163"
+    },
+    "Arc": {
+      "signature": "void Arc(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4982"
+    },
+    "ArrayBinarySearch": {
+      "signature": "int ArrayBinarySearch(T& array[], const int start_index, const int count, T value, IComparer<T>* comparer );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4588"
+    },
+    "ArrayBsearch": {
+      "signature": "int ArrayBsearch(const double& array[], double value ); | int ArrayBsearch(const float& array[], float value ); | int ArrayBsearch(const long& array[], long value ); | int ArrayBsearch(const int& array[], int value ); | int ArrayBsearch(const short& array[], short value ); | int ArrayBsearch(const char& array[], char value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1195"
+    },
+    "ArrayCompare": {
+      "signature": "int ArrayCompare(const void& array1[], const void& array2[], int start1=0, int start2=0, int count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1204"
+    },
+    "ArrayFree": {
+      "signature": "void ArrayFree(void& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1207"
+    },
+    "ArrayFromFP16": {
+      "signature": "bool ArrayFromFP16(const float& dst_array[], const ushort& src_array[], ENUM_FLOAT16_FORMAT fmt ); | bool ArrayFromFP16(const double& dst_array[], const ushort& src_array[], ENUM_FLOAT16_FORMAT fmt );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1281"
+    },
+    "ArrayFromFP8": {
+      "signature": "bool ArrayFromFP8(const float& dst_array[], const uchar& src_array[], ENUM_FLOAT8_FORMAT fmt ); | bool ArrayFromFP8(const double& dst_array[], const uchar& src_array[], ENUM_FLOAT8_FORMAT fmt );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1284"
+    },
+    "ArrayGetAsSeries": {
+      "signature": "bool ArrayGetAsSeries(const void& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1216"
+    },
+    "ArrayIndexOf": {
+      "signature": "int ArrayIndexOf(T& array[], T value, const int start_index, const int count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4589"
+    },
+    "ArrayInsert": {
+      "signature": "bool ArrayInsert(void& dst_array[], const void& src_array[], uint dst_start, uint src_start=0, uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1256"
+    },
+    "ArrayIsDynamic": {
+      "signature": "bool ArrayIsDynamic(const void& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1223"
+    },
+    "ArrayIsSeries": {
+      "signature": "bool ArrayIsSeries(const void& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1225"
+    },
+    "ArrayLastIndexOf": {
+      "signature": "int ArrayLastIndexOf(T& array[], T value, const int start_index, const int count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4590"
+    },
+    "ArrayMaximum": {
+      "signature": "int ArrayMaximum(const void& array[], int start=0, int count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1227"
+    },
+    "ArrayMinimum": {
+      "signature": "int ArrayMinimum(const void& array[], int start=0, int count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1238"
+    },
+    "ArrayPrint": {
+      "signature": "void ArrayPrint(const void& array[], uint digits=_Digits, const string separator=NULL, ulong start=0, ulong count=WHOLE_ARRAY, ulong flags=ARRAYPRINT_HEADER|ARRAYPRINT_INDEX|ARRAYPRINT_LIMIT|ARRAYPRINT_ALIGN );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1249"
+    },
+    "ArrayRange": {
+      "signature": "int ArrayRange(const void& array[], int rank_index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1252"
+    },
+    "ArrayRemove": {
+      "signature": "bool ArrayRemove(void& array[], uint start, uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1259"
+    },
+    "ArrayReverse": {
+      "signature": "bool ArrayReverse(void& array[], uint start=0, uint count=WHOLE_ARRAY ); | bool ArrayReverse(T& array[], const int start_index, const int count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1261,4591"
+    },
+    "ArraySetAsSeries": {
+      "signature": "bool ArraySetAsSeries(const void& array[], bool flag );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1263"
+    },
+    "ArraySwap": {
+      "signature": "bool ArraySwap(void& array1[], void& array2[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1273"
+    },
+    "ArrayToFP16": {
+      "signature": "bool ArrayToFP16(const ushort& dst_array[], const float& src_array[], ENUM_FLOAT16_FORMAT fmt ); | bool ArrayToFP16(const ushort& dst_array[], const double& src_array[], ENUM_FLOAT16_FORMAT fmt );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1275"
+    },
+    "ArrayToFP8": {
+      "signature": "bool ArrayToFP8(const uchar& dst_array[], const float& src_array[], ENUM_FLOAT8_FORMAT fmt ); | bool ArrayToFP8(const uchar& dst_array[], const double& src_array[], ENUM_FLOAT8_FORMAT fmt );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1278"
+    },
+    "Bars": {
+      "signature": "int Bars(string symbol_name, ENUM_TIMEFRAMES timeframe ); | int Bars(string symbol_name, ENUM_TIMEFRAMES timeframe, datetime start_time, datetime stop_time );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2215"
+    },
+    "BarsCalculated": {
+      "signature": "int BarsCalculated(int indicator_handle, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2218"
+    },
+    "BinarySearch": {
+      "signature": "int BinarySearch(const int index, const int count, T item, IComparer<T>* comparer ); | int BinarySearch(T item, IComparer<T>* comparer ); | int BinarySearch(T item );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4452"
+    },
+    "BufferCreate": {
+      "signature": "bool BufferCreate(const int buffer_index, const uint size_in_bytes, const uint flags );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3938"
+    },
+    "BufferFree": {
+      "signature": "bool BufferFree(const int buffer_index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3939"
+    },
+    "BufferFromArray": {
+      "signature": "bool BufferFromArray(const int buffer_index, T &data[], const uint data_array_offset, const uint data_array_count, const uint flags );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3940"
+    },
+    "BufferRead": {
+      "signature": "bool BufferRead(const int buffer_index, T &data[], const uint cl_buffer_offset, const uint data_array_offset, const uint data_array_count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3941"
+    },
+    "BufferWrite": {
+      "signature": "bool BufferWrite(const int buffer_index, T &data[], const uint cl_buffer_offset, const uint data_array_offset, const uint data_array_count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3942"
+    },
+    "CLBufferCreate": {
+      "signature": "int CLBufferCreate(int context, uint size, uint flags );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3224"
+    },
+    "CLBufferFree": {
+      "signature": "void CLBufferFree(int buffer );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3225"
+    },
+    "CLBufferRead": {
+      "signature": "uint CLBufferRead(int buffer, const void& data[], uint buffer_offset=0, uint data_offset=0, uint data_count=WHOLE_ARRAY ); | uint CLBufferRead(int buffer, uint buffer_offset, const matrix& mat, ulong rows=-1, ulong cols=-1 ); | uint CLBufferRead(int buffer, uint buffer_offset, const vector& vec, ulong size-1, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3231"
+    },
+    "CLBufferWrite": {
+      "signature": "uint CLBufferWrite(int buffer, const void& data[], uint buffer_offset=0, uint data_offset=0, uint data_count=WHOLE_ARRAY ); | uint CLBufferWrite(int buffer, uint buffer_offset, matrix<T> &mat ); | uint CLBufferWrite(int buffer, uint buffer_offset, vector<T> &vec );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3226"
+    },
+    "CLContextCreate": {
+      "signature": "int CLContextCreate(int device=CL_USE_ANY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3206"
+    },
+    "CLContextFree": {
+      "signature": "void CLContextFree(int context );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3207"
+    },
+    "CLExecute": {
+      "signature": "bool CLExecute(int kernel ); | bool CLExecute(int kernel, uint work_dim, const uint& global_work_offset[], const uint& global_work_size[] ); | bool CLExecute(int kernel, uint work_dim, const uint& global_work_offset[], const uint& global_work_size[], const uint& local_work_size[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3235"
+    },
+    "CLExecutionStatus": {
+      "signature": "int CLExecutionStatus(int kernel );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3237"
+    },
+    "CLGetDeviceInfo": {
+      "signature": "bool CLGetDeviceInfo(int handle, int property_id, uchar& data[], uint& size );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3208"
+    },
+    "CLGetInfoInteger": {
+      "signature": "long CLGetInfoInteger(int handle, ENUM_OPENCL_PROPERTY_INTEGER prop );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3200"
+    },
+    "CLGetInfoString": {
+      "signature": "bool CLGetInfoString(int handle, ENUM_OPENCL_PROPERTY_STRING prop, string& value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3203"
+    },
+    "CLKernelCreate": {
+      "signature": "int CLKernelCreate(int program, const string kernel_name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3219"
+    },
+    "CLKernelFree": {
+      "signature": "void CLKernelFree(int kernel );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3220"
+    },
+    "CLProgramCreate": {
+      "signature": "int CLProgramCreate(int context, const string source ); | int CLProgramCreate(int context, const string source, string &build_log );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3213"
+    },
+    "CLProgramFree": {
+      "signature": "void CLProgramFree(int program );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3218"
+    },
+    "CLSetKernelArg": {
+      "signature": "bool CLSetKernelArg(int kernel, uint arg_index, void arg_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3221"
+    },
+    "CLSetKernelArgMem": {
+      "signature": "bool CLSetKernelArgMem(int kernel, uint arg_index, int cl_mem_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3222"
+    },
+    "CLSetKernelArgMemLocal": {
+      "signature": "bool CLSetKernelArgMemLocal(int kernel, uint arg_index, ulong local_mem_size );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3223"
+    },
+    "CalendarCountries": {
+      "signature": "int CalendarCountries(MqlCalendarCountry& countries[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2174"
+    },
+    "CalendarCountryById": {
+      "signature": "bool CalendarCountryById(const long country_id, MqlCalendarCountry& country );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2166"
+    },
+    "CalendarEventByCountry": {
+      "signature": "int CalendarEventByCountry(string country_code, MqlCalendarEvent& events[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2176"
+    },
+    "CalendarEventByCurrency": {
+      "signature": "int CalendarEventByCurrency(const string currency, MqlCalendarEvent& events[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2178"
+    },
+    "CalendarEventById": {
+      "signature": "bool CalendarEventById(ulong event_id, MqlCalendarEvent& event );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2168"
+    },
+    "CalendarValueById": {
+      "signature": "bool CalendarValueById(ulong value_id, MqlCalendarValue& value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2171"
+    },
+    "CalendarValueHistory": {
+      "signature": "int CalendarValueHistory(MqlCalendarValue& values[], datetime datetime_from, datetime datetime_to=0 const string country_code=NULL, const string currency=NULL );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2183"
+    },
+    "CalendarValueHistoryByEvent": {
+      "signature": "int CalendarValueHistoryByEvent(ulong event_id, MqlCalendarValue& values[], datetime datetime_from, datetime datetime_to=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2180"
+    },
+    "CalendarValueLast": {
+      "signature": "int CalendarValueLast(ulong& change_id, MqlCalendarValue& values[], const string country_code=NULL, const string currency=NULL );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2191"
+    },
+    "CalendarValueLastByEvent": {
+      "signature": "int CalendarValueLastByEvent(ulong event_id, ulong& change_id, MqlCalendarValue& values[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2186"
+    },
+    "CharArrayToStruct": {
+      "signature": "bool CharArrayToStruct(void& struct_object, const uchar& char_array[], uint start_pos=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1885"
+    },
+    "ChartApplyTemplate": {
+      "signature": "bool ChartApplyTemplate(long chart_id, const string filename );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2376"
+    },
+    "ChartClose": {
+      "signature": "bool ChartClose(long chart_id=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2394"
+    },
+    "ChartFirst": {
+      "signature": "long ChartFirst();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2392"
+    },
+    "ChartGetDouble": {
+      "signature": "double ChartGetDouble(long chart_id, ENUM_CHART_PROPERTY_DOUBLE prop_id, int sub_window=0 ); | bool ChartGetDouble(long chart_id, ENUM_CHART_PROPERTY_DOUBLE prop_id, int sub_window, double& double_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2407"
+    },
+    "ChartGetInteger": {
+      "signature": "long ChartGetInteger(long chart_id, ENUM_CHART_PROPERTY_INTEGER prop_id, int sub_window=0 ); | bool ChartGetInteger(long chart_id, ENUM_CHART_PROPERTY_INTEGER prop_id, int sub_window=0 long& long_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2409"
+    },
+    "ChartGetString": {
+      "signature": "string ChartGetString(long chart_id, ENUM_CHART_PROPERTY_STRING prop_id ); | bool ChartGetString(long chart_id, ENUM_CHART_PROPERTY_STRING prop_id, string& string_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2411"
+    },
+    "ChartID": {
+      "signature": "long ChartID();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2416"
+    },
+    "ChartIndicatorAdd": {
+      "signature": "bool ChartIndicatorAdd(long chart_id, int sub_window int indicator_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2418"
+    },
+    "ChartIndicatorDelete": {
+      "signature": "bool ChartIndicatorDelete(long chart_id, int sub_window const string indicator_shortname );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2422"
+    },
+    "ChartIndicatorGet": {
+      "signature": "int ChartIndicatorGet(long chart_id, int sub_window const string indicator_shortname );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2425"
+    },
+    "ChartIndicatorName": {
+      "signature": "string ChartIndicatorName(long chart_id, int sub_window int index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2427"
+    },
+    "ChartIndicatorsTotal": {
+      "signature": "int ChartIndicatorsTotal(long chart_id, int sub_window );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2429"
+    },
+    "ChartNavigate": {
+      "signature": "bool ChartNavigate(long chart_id, ENUM_CHART_POSITION position, int shift=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2413"
+    },
+    "ChartNext": {
+      "signature": "long ChartNext(long chart_id );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2393"
+    },
+    "ChartObjectName": {
+      "signature": "string ChartObjectName();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4993"
+    },
+    "ChartOpen": {
+      "signature": "long ChartOpen(string symbol, ENUM_TIMEFRAMES period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2390"
+    },
+    "ChartPriceOnDropped": {
+      "signature": "double ChartPriceOnDropped();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2432"
+    },
+    "ChartRedraw": {
+      "signature": "void ChartRedraw(long chart_id=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2398"
+    },
+    "ChartSaveTemplate": {
+      "signature": "bool ChartSaveTemplate(long chart_id, const string filename );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2379"
+    },
+    "ChartScreenShot": {
+      "signature": "bool ChartScreenShot(long chart_id, string filename, int width, int height, ENUM_ALIGN_MODE align_mode=ALIGN_RIGHT );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2438"
+    },
+    "ChartSetDouble": {
+      "signature": "bool ChartSetDouble(long chart_id, ENUM_CHART_PROPERTY_DOUBLE prop_id, double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2401"
+    },
+    "ChartSetInteger": {
+      "signature": "bool ChartSetInteger(long chart_id, ENUM_CHART_PROPERTY_INTEGER prop_id, long value ); | bool ChartSetInteger(long chart_id, ENUM_CHART_PROPERTY_INTEGER prop_id, int sub_window, long value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2403"
+    },
+    "ChartSetString": {
+      "signature": "bool ChartSetString(long chart_id, ENUM_CHART_PROPERTY_STRING prop_id, string str_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2405"
+    },
+    "ChartSetSymbolPeriod": {
+      "signature": "bool ChartSetSymbolPeriod(long chart_id, string symbol, ENUM_TIMEFRAMES period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2436"
+    },
+    "ChartSymbol": {
+      "signature": "string ChartSymbol(long chart_id=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2396"
+    },
+    "ChartTimeOnDropped": {
+      "signature": "datetime ChartTimeOnDropped();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2433"
+    },
+    "ChartTimePriceToXY": {
+      "signature": "bool ChartTimePriceToXY(long chart_id, int sub_window, datetime time, double price, int& x, int& y );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2386"
+    },
+    "ChartWindowFind": {
+      "signature": "int ChartWindowFind(long chart_id, string indicator_shortname 2. The function must be called from a custom indicator. It returns the number of the subwindow where the indicator is working. int ChartWindowFind(); | int ChartWindowFind();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2384"
+    },
+    "ChartWindowOnDropped": {
+      "signature": "int ChartWindowOnDropped();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2431"
+    },
+    "ChartXOnDropped": {
+      "signature": "int ChartXOnDropped();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2434"
+    },
+    "ChartXYToTimePrice": {
+      "signature": "bool ChartXYToTimePrice(long chart_id, int x, int y, int& sub_window, datetime& time, double& price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2388"
+    },
+    "ChartYOnDropped": {
+      "signature": "int ChartYOnDropped();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2435"
+    },
+    "Circle": {
+      "signature": "void Circle(int x, int y, int r, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4994"
+    },
+    "CircleAA": {
+      "signature": "void CircleAA(const int x, const int y, const double r, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4995"
+    },
+    "CircleWu": {
+      "signature": "void CircleWu(const int x, const int y, const double r, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4996"
+    },
+    "Clear": {
+      "signature": "void Clear();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4376,4455,4470,4482,4507 et al"
+    },
+    "ColorToARGB": {
+      "signature": "uint ColorToARGB(color clr, uchar alpha=255 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1892"
+    },
+    "ColorToPRGB": {
+      "signature": "uint ColorToPRGB(color clr, uchar alpha=255 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1894"
+    },
+    "ColorToString": {
+      "signature": "string ColorToString(color color_value, bool color_name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1896"
+    },
+    "Compare": {
+      "signature": "int Compare(T value ); | int Compare(T x, T y ); | int Compare(CKeyValuePair<TKeyTValue>* pair ); | int Compare(const bool x, const bool y ); | int Compare(const char x, const char y ); | int Compare(const uchar x, const uchar y ); | int Compare(const short x, const short y ); | int Compare(const ushort x, const ushort y ); | int Compare(const color x, const color y ); | int Compare(const int x, const int y );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4382,4384,4415,4436,4592"
+    },
+    "Contains": {
+      "signature": "bool Contains(T item ); | bool Contains(TKey key, TValue value ); | bool Contains(CKeyValuePair<TKeyTValue>* item );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4374,4397,4443,4466,4478 et al"
+    },
+    "ContainsKey": {
+      "signature": "bool ContainsKey(TKey key );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4467,4547"
+    },
+    "ContainsValue": {
+      "signature": "bool ContainsValue(TValue value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4468,4548"
+    },
+    "CopyBuffer": {
+      "signature": "int CopyBuffer(int indicator_handle, int buffer_num, int start_pos, int count, double buffer[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2226"
+    },
+    "CopySeries": {
+      "signature": "int CopySeries(string symbol_name, ENUM_TIMEFRAMES timeframe, int start_pos, int count, ulong rates_mask, void& array1[], void& array2[] ... );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2235"
+    },
+    "CopyTicks": {
+      "signature": "int CopyTicks(string symbol_name, MqlTick& ticks_array[], uint flags=COPY_TICKS_ALL, ulong from=0, uint count=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2266"
+    },
+    "CopyTicksRange": {
+      "signature": "int CopyTicksRange(const string symbol_name, MqlTick& ticks_array[], uint flags=COPY_TICKS_ALL, ulong from_msc=0, ulong to_msc=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2272"
+    },
+    "CopyTo": {
+      "signature": "int CopyTo(T& dst_array[], const int dst_start=0 ); | int CopyTo(TKey& dst_keys[], TValue& dst_values[], const int dst_start=0 ); | int CopyTo(CKeyValuePair<TKeyTValue>*& dst_array[], const int dst_start=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4375,4401,4451,4469,4481 et al"
+    },
+    "Count": {
+      "signature": "int Count();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4373,4442,4464,4477,4501 et al"
+    },
+    "CreateBitmap": {
+      "signature": "bool CreateBitmap(const string name, const datetime time, const double price, const int width, const int height, ENUM_COLOR_FORMAT clrfmt=COLOR_FORMAT_XRGB_NOALPHA ); | bool CreateBitmap(const long chart_id, const int subwin, const string name, const datetime time, const double price, const int width, const int height, ENUM_COLOR_FORMAT clrfmt=COLOR_FORMAT_XRGB_NOALPHA );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4998"
+    },
+    "CreateBitmapLabel": {
+      "signature": "bool CreateBitmapLabel(const string name, const int x, const int y, const int width, const int height, ENUM_COLOR_FORMAT clrfmt=COLOR_FORMAT_XRGB_NOALPHA ); | bool CreateBitmapLabel(const long chart_id, const int subwin, const string name, const int x, const int y, const int width, const int height, ENUM_COLOR_FORMAT clrfmt=COLOR_FORMAT_XRGB_NOALPHA );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5000"
+    },
+    "CustomBookAdd": {
+      "signature": "bool CustomBookAdd(const string symbol, const MqlBookInfo& books[] uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2371"
+    },
+    "CustomRatesDelete": {
+      "signature": "int CustomRatesDelete(const string symbol, datetime from, datetime to );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2331"
+    },
+    "CustomRatesReplace": {
+      "signature": "int CustomRatesReplace(const string symbol, datetime from, datetime to, const MqlRates& rates[], uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2336"
+    },
+    "CustomRatesUpdate": {
+      "signature": "int CustomRatesUpdate(const string symbol, const MqlRates& rates[], uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2341"
+    },
+    "CustomSymbolCreate": {
+      "signature": "bool CustomSymbolCreate(const string symbol_name, const string symbol_path=\"\", const string symbol_origin=NULL );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2299"
+    },
+    "CustomSymbolDelete": {
+      "signature": "bool CustomSymbolDelete(const string symbol_name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2302"
+    },
+    "CustomSymbolSetDouble": {
+      "signature": "bool CustomSymbolSetDouble(const string symbol_name, ENUM_SYMBOL_INFO_DOUBLE property_id, double property_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2308"
+    },
+    "CustomSymbolSetInteger": {
+      "signature": "bool CustomSymbolSetInteger(const string symbol_name, ENUM_SYMBOL_INFO_INTEGER property_id, long property_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2304"
+    },
+    "CustomSymbolSetMarginRate": {
+      "signature": "bool CustomSymbolSetMarginRate(const string symbol_name, ENUM_ORDER_TYPE order_type, double initial_margin_rate, double maintenance_margin_rate );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2316"
+    },
+    "CustomSymbolSetSessionQuote": {
+      "signature": "bool CustomSymbolSetSessionQuote(const string symbol_name, ENUM_DAY_OF_WEEK day_of_week, uint session_index, datetime from, datetime to );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2321"
+    },
+    "CustomSymbolSetSessionTrade": {
+      "signature": "bool CustomSymbolSetSessionTrade(const string symbol_name, ENUM_DAY_OF_WEEK day_of_week, uint session_index, datetime from, datetime to );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2326"
+    },
+    "CustomSymbolSetString": {
+      "signature": "bool CustomSymbolSetString(const string symbol_name, ENUM_SYMBOL_INFO_STRING property_id, string property_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2312"
+    },
+    "CustomTicksAdd": {
+      "signature": "int CustomTicksAdd(const string symbol, const MqlTick& ticks[], uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2346"
+    },
+    "CustomTicksDelete": {
+      "signature": "int CustomTicksDelete(const string symbol, long from_msc, long to_msc );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2354"
+    },
+    "CustomTicksReplace": {
+      "signature": "int CustomTicksReplace(const string symbol, long from_msc, long to_msc, const MqlTick& ticks[], uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2362"
+    },
+    "DXBufferCreate": {
+      "signature": "int DXBufferCreate(int context, ENUM_DX_BUFFER_TYPE buffer_type, const void& data[], uint start=0, uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3327"
+    },
+    "DXBufferSet": {
+      "signature": "bool DXBufferSet(int context, int buffer, uint start=0, uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3343"
+    },
+    "DXContextClearColors": {
+      "signature": "bool DXContextClearColors(int context, const DXVector& color );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3323"
+    },
+    "DXContextClearDepth": {
+      "signature": "bool DXContextClearDepth(int context );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3324"
+    },
+    "DXContextCreate": {
+      "signature": "int DXContextCreate(uint width, uint height );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3320"
+    },
+    "DXContextGetColors": {
+      "signature": "bool DXContextGetColors(int context, uint& image[], int image_width=WHOLE_ARRAY, int image_height=WHOLE_ARRAY, int image_offset_x=0, int image_offset_y=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3325"
+    },
+    "DXContextGetDepth": {
+      "signature": "bool DXContextGetDepth(int context, float& image[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3326"
+    },
+    "DXContextGetSize": {
+      "signature": "bool DXContextGetSize(int context, uint& width, uint& height );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3322"
+    },
+    "DXContextSetSize": {
+      "signature": "bool DXContextSetSize(int context, uint& width, uint& height );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3321"
+    },
+    "DXDraw": {
+      "signature": "bool DXDraw(int context, uint start=0, uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3340"
+    },
+    "DXDrawIndexed": {
+      "signature": "bool DXDrawIndexed(int context, uint start=0, uint count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3341"
+    },
+    "DXInputCreate": {
+      "signature": "int DXInputCreate(int context, uint input_size );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3334"
+    },
+    "DXInputSet": {
+      "signature": "bool DXInputSet(int input, const void& data );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3335"
+    },
+    "DXPrimiveTopologySet": {
+      "signature": "bool DXPrimiveTopologySet(int context, ENUM_DX_PRIMITIVE_TOPOLOGY primitive_topology );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3342"
+    },
+    "DXRelease": {
+      "signature": "bool DXRelease(int handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3346"
+    },
+    "DXShaderCreate": {
+      "signature": "int DXShaderCreate(int context, ENUM_DX_SHADER_TYPE shader_type, const string source, const string entry_point, string& compile_error );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3336"
+    },
+    "DXShaderInputsSet": {
+      "signature": "bool DXShaderInputsSet(int shader, const int& inputs[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3338"
+    },
+    "DXShaderSet": {
+      "signature": "bool DXShaderSet(int context, int shader );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3344"
+    },
+    "DXShaderSetLayout": {
+      "signature": "bool DXShaderSetLayout(int shader, const DXVertexLayout& layout[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3337"
+    },
+    "DXShaderTexturesSet": {
+      "signature": "bool DXShaderTexturesSet(int shader, const int& textures[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3339"
+    },
+    "DXTextureCreate": {
+      "signature": "int DXTextureCreate(int context, ENUM_DX_FORMAT format, uint width, uint height, const void& data[], uint data_x, uint data_y, uint data_width, uint data_height );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3328"
+    },
+    "DatabaseBind": {
+      "signature": "bool DatabaseBind(int request, int index, T value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3286"
+    },
+    "DatabaseClose": {
+      "signature": "void DatabaseClose(int database );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3243"
+    },
+    "DatabaseColumnBlob": {
+      "signature": "bool DatabaseColumnBlob(int request, int column, void& data[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3317"
+    },
+    "DatabaseColumnDouble": {
+      "signature": "bool DatabaseColumnDouble(int request, int column, double& value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3316"
+    },
+    "DatabaseColumnInteger": {
+      "signature": "bool DatabaseColumnInteger(int request, int column, int& value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3314"
+    },
+    "DatabaseColumnLong": {
+      "signature": "bool DatabaseColumnLong(int request, int column, long& value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3315"
+    },
+    "DatabaseColumnName": {
+      "signature": "bool DatabaseColumnName(int request, int column, string& name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3310"
+    },
+    "DatabaseColumnSize": {
+      "signature": "int DatabaseColumnSize(int request, int column );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3312"
+    },
+    "DatabaseColumnText": {
+      "signature": "bool DatabaseColumnText(int request, int column, string& value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3313"
+    },
+    "DatabaseColumnsCount": {
+      "signature": "int DatabaseColumnsCount(int request );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3309"
+    },
+    "DatabaseExecute": {
+      "signature": "bool DatabaseExecute(int database, string sql );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3259"
+    },
+    "DatabaseExport": {
+      "signature": "long DatabaseExport(int database, const string table_or_sql, const string filename, uint flags, const string separator );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3247"
+    },
+    "DatabaseFinalize": {
+      "signature": "void DatabaseFinalize(int request );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3301"
+    },
+    "DatabaseImport": {
+      "signature": "long DatabaseImport(int database, const string table, const string filename, uint flags, const string separator, ulong skip_rows, const string skip_comments );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3244"
+    },
+    "DatabaseOpen": {
+      "signature": "int DatabaseOpen(string filename, uint flags );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3241"
+    },
+    "DatabasePrepare": {
+      "signature": "int DatabasePrepare(int database, string sql, ... );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3271"
+    },
+    "DatabasePrint": {
+      "signature": "long DatabasePrint(int database, const string table_or_sql, uint flags );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3253"
+    },
+    "DatabaseRead": {
+      "signature": "bool DatabaseRead(int request );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3296"
+    },
+    "DatabaseReadBind": {
+      "signature": "bool DatabaseReadBind(int request, void& struct_object );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3297"
+    },
+    "DatabaseReset": {
+      "signature": "int DatabaseReset(int request );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3280"
+    },
+    "DatabaseTableExists": {
+      "signature": "bool DatabaseTableExists(int database, string table );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3258"
+    },
+    "DatabaseTransactionBegin": {
+      "signature": "bool DatabaseTransactionBegin(int database );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3302"
+    },
+    "DatabaseTransactionCommit": {
+      "signature": "bool DatabaseTransactionCommit(int database );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3307"
+    },
+    "DatabaseTransactionRollback": {
+      "signature": "bool DatabaseTransactionRollback(int database );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3308"
+    },
+    "DebugBreak": {
+      "signature": "void DebugBreak();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1123"
+    },
+    "Destroy": {
+      "signature": "void Destroy();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5002"
+    },
+    "Digits": {
+      "signature": "int Digits();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2075"
+    },
+    "Ellipse": {
+      "signature": "void Ellipse(int x1, int y1, int x2, int y2, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5003"
+    },
+    "EllipseAA": {
+      "signature": "void EllipseAA(int x1, int y1, int x2, int y2, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5004"
+    },
+    "EllipseWu": {
+      "signature": "void EllipseWu(int x1, int y1, int x2, int y2, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5005"
+    },
+    "Enqueue": {
+      "signature": "bool Enqueue(T value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4515"
+    },
+    "EnumToString": {
+      "signature": "string EnumToString(any_enum value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1898"
+    },
+    "Equals": {
+      "signature": "bool Equals(T value ); | bool Equals(T x, T y ); | bool Equals(CKeyValuePair<TKeyTValue>* pair );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4379,4386,4417,4437,4595"
+    },
+    "Erase": {
+      "signature": "void Erase(const uint clr=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5006"
+    },
+    "EventChartCustom": {
+      "signature": "bool EventChartCustom(long chart_id, ushort custom_event_id, long lparam, double dparam, string sparam );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3191"
+    },
+    "ExceptWith": {
+      "signature": "void ExceptWith(ICollection<T>* collection ); | void ExceptWith(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4404,4484,4565"
+    },
+    "Execute": {
+      "signature": "bool Execute(const int kernel_index, const int work_dim, const uint &work_offset[], const uint &work_size[] ); | bool Execute(const int kernel_index, const int work_dim, const uint &work_offset[], const uint &work_size[], const uint &local_work_size[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3943"
+    },
+    "ExpertRemove": {
+      "signature": "void ExpertRemove();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1124"
+    },
+    "FileFindClose": {
+      "signature": "void FileFindClose(long search_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2660"
+    },
+    "FileFindFirst": {
+      "signature": "long FileFindFirst(const string file_filter, string& returned_filename, int common_flag=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2656"
+    },
+    "FileFindNext": {
+      "signature": "bool FileFindNext(long search_handle, string& returned_filename );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2658"
+    },
+    "FileGetInteger": {
+      "signature": "long FileGetInteger(int file_handle, ENUM_FILE_PROPERTY_INTEGER property_id ); | long FileGetInteger(const string file_name, ENUM_FILE_PROPERTY_INTEGER property_id, bool common_folder=false );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2678"
+    },
+    "FileIsExist": {
+      "signature": "bool FileIsExist(const string file_name, int common_flag=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2662"
+    },
+    "FileIsLineEnding": {
+      "signature": "bool FileIsLineEnding(int file_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2683"
+    },
+    "FileLoad": {
+      "signature": "long FileLoad(const string file_name, void& buffer[], int common_flag=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2750"
+    },
+    "FileReadArray": {
+      "signature": "uint FileReadArray(int file_handle, void& array[], int start=0, int count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2688"
+    },
+    "FileReadBool": {
+      "signature": "bool FileReadBool(int file_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2690"
+    },
+    "FileReadDatetime": {
+      "signature": "datetime FileReadDatetime(int file_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2693"
+    },
+    "FileReadDouble": {
+      "signature": "double FileReadDouble(int file_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2696"
+    },
+    "FileReadFloat": {
+      "signature": "float FileReadFloat(int file_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2699"
+    },
+    "FileReadInteger": {
+      "signature": "int FileReadInteger(int file_handle, int size=INT_VALUE );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2702"
+    },
+    "FileReadLong": {
+      "signature": "long FileReadLong(int file_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2706"
+    },
+    "FileReadNumber": {
+      "signature": "double FileReadNumber(int file_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2709"
+    },
+    "FileReadStruct": {
+      "signature": "uint FileReadStruct(int file_handle, const void& struct_object, int size=-1 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2716"
+    },
+    "FileSave": {
+      "signature": "bool FileSave(const string file_name, void& buffer[], int common_flag=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2752"
+    },
+    "FileSelectDialog": {
+      "signature": "int FileSelectDialog(string caption, string initial_dir, string filter, uint flags, string& filenames[], string default_filename );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2654"
+    },
+    "FileWriteArray": {
+      "signature": "uint FileWriteArray(int file_handle, const void& array[], int start=0, int count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2731"
+    },
+    "FileWriteDouble": {
+      "signature": "uint FileWriteDouble(int file_handle, double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2734"
+    },
+    "FileWriteFloat": {
+      "signature": "uint FileWriteFloat(int file_handle, float value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2737"
+    },
+    "FileWriteInteger": {
+      "signature": "uint FileWriteInteger(int file_handle, int value, int size=INT_VALUE );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2739"
+    },
+    "FileWriteLong": {
+      "signature": "uint FileWriteLong(int file_handle, long value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2742"
+    },
+    "FileWriteStruct": {
+      "signature": "uint FileWriteStruct(int file_handle, const void& struct_object, int size=-1 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2747"
+    },
+    "Fill": {
+      "signature": "void Fill(int x, int y, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5007"
+    },
+    "FillCircle": {
+      "signature": "void FillCircle(int x, int y, int r, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5008"
+    },
+    "FillPolygon": {
+      "signature": "void FillPolygon(int& x, int& y, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4990"
+    },
+    "FillRectangle": {
+      "signature": "void FillRectangle(int x1, int y1, int x2, int y2, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5009"
+    },
+    "FillTriangle": {
+      "signature": "void FillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5010"
+    },
+    "FolderClean": {
+      "signature": "bool FolderClean(string folder_name, int common_flag=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2760"
+    },
+    "FontAngleGet": {
+      "signature": "uint FontAngleGet();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5011"
+    },
+    "FontAngleSet": {
+      "signature": "bool FontAngleSet(uint angle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5012"
+    },
+    "FontFlagsGet": {
+      "signature": "uint FontFlagsGet();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5013"
+    },
+    "FontFlagsSet": {
+      "signature": "bool FontFlagsSet(uint flags );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5014"
+    },
+    "FontGet": {
+      "signature": "void FontGet(string& name, int& size, uint& flags, uint& angle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5015"
+    },
+    "FontNameGet": {
+      "signature": "string FontNameGet();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5016"
+    },
+    "FontNameSet": {
+      "signature": "bool FontNameSet(string name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5017"
+    },
+    "FontSet": {
+      "signature": "bool FontSet(const string name, const int size, const uint flags=0, const uint angle=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5018"
+    },
+    "FontSizeGet": {
+      "signature": "int FontSizeGet();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5019"
+    },
+    "FontSizeSet": {
+      "signature": "bool FontSizeSet(int size );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5020"
+    },
+    "FrameAdd": {
+      "signature": "bool FrameAdd(const string name, long id, double value, const string filename ); | bool FrameAdd(const string name, long id, double value, const void& data[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3181"
+    },
+    "FrameFilter": {
+      "signature": "bool FrameFilter(const string name, long id );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3178"
+    },
+    "FrameFirst": {
+      "signature": "bool FrameFirst();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3177"
+    },
+    "FrameInputs": {
+      "signature": "bool FrameInputs(ulong pass, string& parameters[], uint& parameters_count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3180"
+    },
+    "FrameNext": {
+      "signature": "bool FrameNext(ulong& pass, string& name, long& id, double& value ); | bool FrameNext(ulong& pass, string& name, long& id, double& value, void& data[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3179"
+    },
+    "GetContext": {
+      "signature": "int GetContext();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3944"
+    },
+    "GetHashCode": {
+      "signature": "int GetHashCode(const bool value ); | int GetHashCode(const char value ); | int GetHashCode(const uchar value ); | int GetHashCode(const short value ); | int GetHashCode(const ushort value ); | int GetHashCode(const color value ); | int GetHashCode(const int value ); | int GetHashCode(const uint value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4596"
+    },
+    "GetKernel": {
+      "signature": "int GetKernel(const int kernel_index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3945"
+    },
+    "GetKernelName": {
+      "signature": "string GetKernelName(const int kernel_index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3946"
+    },
+    "GetMicrosecondCount": {
+      "signature": "ulong GetMicrosecondCount();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1133"
+    },
+    "GetProgram": {
+      "signature": "int GetProgram();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3947"
+    },
+    "GetReverse": {
+      "signature": "bool GetReverse(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4576"
+    },
+    "GetTickCount": {
+      "signature": "uint GetTickCount();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1130"
+    },
+    "GetTickCount64": {
+      "signature": "ulong GetTickCount64();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1131"
+    },
+    "GetViewBetween": {
+      "signature": "bool GetViewBetween(T& array[], T lower_value, T upper_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4575"
+    },
+    "GlobalVariableName": {
+      "signature": "string GlobalVariableName(int index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2635"
+    },
+    "GlobalVariableSetOnCondition": {
+      "signature": "bool GlobalVariableSetOnCondition(string name, double value, double check_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2642"
+    },
+    "GlobalVariableTime": {
+      "signature": "datetime GlobalVariableTime(string name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2626"
+    },
+    "GlobalVariablesDeleteAll": {
+      "signature": "int GlobalVariablesDeleteAll(string prefix_name=NULL, datetime limit_data=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2648"
+    },
+    "GlobalVariablesFlush": {
+      "signature": "void GlobalVariablesFlush();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2639"
+    },
+    "GlobalVariablesTotal": {
+      "signature": "int GlobalVariablesTotal();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2650"
+    },
+    "HashCode": {
+      "signature": "int HashCode(); | int HashCode(T value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4380,4387,4418,4438"
+    },
+    "Height": {
+      "signature": "int Height();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5021"
+    },
+    "HistoryDealGetDouble": {
+      "signature": "double HistoryDealGetDouble(ulong ticket_number, ENUM_DEAL_PROPERTY_DOUBLE property_id ); | bool HistoryDealGetDouble(ulong ticket_number, ENUM_DEAL_PROPERTY_DOUBLE property_id, double& double_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2535"
+    },
+    "HistoryDealGetInteger": {
+      "signature": "long HistoryDealGetInteger(ulong ticket_number, ENUM_DEAL_PROPERTY_INTEGER property_id ); | bool HistoryDealGetInteger(ulong ticket_number, ENUM_DEAL_PROPERTY_INTEGER property_id, long& long_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2540"
+    },
+    "HistoryDealGetString": {
+      "signature": "string HistoryDealGetString(ulong ticket_number, ENUM_DEAL_PROPERTY_STRING property_id ); | bool HistoryDealGetString(ulong ticket_number, ENUM_DEAL_PROPERTY_STRING property_id, string& string_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2543"
+    },
+    "HistoryDealGetTicket": {
+      "signature": "ulong HistoryDealGetTicket(int index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2533"
+    },
+    "HistoryDealSelect": {
+      "signature": "bool HistoryDealSelect(ulong ticket );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2529"
+    },
+    "HistoryDealsTotal": {
+      "signature": "int HistoryDealsTotal();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2532"
+    },
+    "HistoryOrderGetDouble": {
+      "signature": "double HistoryOrderGetDouble(ulong ticket_number, ENUM_ORDER_PROPERTY_DOUBLE property_id ); | bool HistoryOrderGetDouble(ulong ticket_number, ENUM_ORDER_PROPERTY_DOUBLE property_id, double& double_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2519"
+    },
+    "HistoryOrderGetInteger": {
+      "signature": "long HistoryOrderGetInteger(ulong ticket_number, ENUM_ORDER_PROPERTY_INTEGER property_id ); | bool HistoryOrderGetInteger(ulong ticket_number, ENUM_ORDER_PROPERTY_INTEGER property_id, long& long_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2523"
+    },
+    "HistoryOrderGetString": {
+      "signature": "string HistoryOrderGetString(ulong ticket_number, ENUM_ORDER_PROPERTY_STRING property_id ); | bool HistoryOrderGetString(ulong ticket_number, ENUM_ORDER_PROPERTY_STRING property_id, string& string_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2526"
+    },
+    "HistoryOrderGetTicket": {
+      "signature": "ulong HistoryOrderGetTicket(int index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2517"
+    },
+    "HistoryOrderSelect": {
+      "signature": "bool HistoryOrderSelect(ulong ticket );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2513"
+    },
+    "HistoryOrdersTotal": {
+      "signature": "int HistoryOrdersTotal();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2516"
+    },
+    "HistorySelect": {
+      "signature": "bool HistorySelect(datetime from_date, datetime to_date );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2507"
+    },
+    "HistorySelectByPosition": {
+      "signature": "bool HistorySelectByPosition(ulong position_id );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2509"
+    },
+    "IndexOf": {
+      "signature": "int IndexOf(T item ); | int IndexOf(T item, const int start_index ); | int IndexOf(T item, const int start_index, const int count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4392,4453"
+    },
+    "IndicatorAdd": {
+      "signature": "bool IndicatorAdd(int sub_win int handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5246"
+    },
+    "IndicatorCreate": {
+      "signature": "int IndicatorCreate(string symbol, ENUM_TIMEFRAMES period, ENUM_INDICATOR indicator_type, int parameters_cnt=0, const MqlParam& parameters_array[]=NULL, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2220"
+    },
+    "IndicatorDelete": {
+      "signature": "bool IndicatorDelete(int sub_win const string name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5247"
+    },
+    "IndicatorName": {
+      "signature": "string IndicatorName(int sub_win int index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5249"
+    },
+    "IndicatorParameters": {
+      "signature": "int IndicatorParameters(int indicator_handle, ENUM_INDICATOR& indicator_type, MqlParam& parameters[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2222"
+    },
+    "IndicatorSetDouble": {
+      "signature": "bool IndicatorSetDouble(int prop_id, double prop_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2875"
+    },
+    "IndicatorSetInteger": {
+      "signature": "bool IndicatorSetInteger(int prop_id, int prop_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2879"
+    },
+    "IndicatorSetString": {
+      "signature": "bool IndicatorSetString(int prop_id, string prop_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2883"
+    },
+    "IndicatorsTotal": {
+      "signature": "int IndicatorsTotal(long chart_id, int sub_win );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5248"
+    },
+    "Initialize": {
+      "signature": "bool Initialize(const string program, const bool show_log=true );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3948"
+    },
+    "Insert": {
+      "signature": "bool Insert(const int index, T item );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4391,4449"
+    },
+    "InsertRange": {
+      "signature": "bool InsertRange(const int index, const T& array[] ); | bool InsertRange(const int index, ICollection<T>* collection );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4450"
+    },
+    "IntersectWith": {
+      "signature": "void IntersectWith(ICollection<T>* collection ); | void IntersectWith(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4405,4485,4566"
+    },
+    "IsLeaf": {
+      "signature": "bool IsLeaf();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4425"
+    },
+    "IsProperSubsetOf": {
+      "signature": "bool IsProperSubsetOf(ICollection<T>* collection ); | bool IsProperSubsetOf(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4408,4488,4569"
+    },
+    "IsProperSupersetOf": {
+      "signature": "bool IsProperSupersetOf(ICollection<T>* collection ); | bool IsProperSupersetOf(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4409,4489,4570"
+    },
+    "IsStopped": {
+      "signature": "bool IsStopped();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2065"
+    },
+    "IsSubsetOf": {
+      "signature": "bool IsSubsetOf(ICollection<T>* collection ); | bool IsSubsetOf(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4410,4490,4571"
+    },
+    "IsSupersetOf": {
+      "signature": "bool IsSupersetOf(ICollection<T>* collection ); | bool IsSupersetOf(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4411,4491,4572"
+    },
+    "KernelCreate": {
+      "signature": "bool KernelCreate(const int kernel_index, const string kernel_name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3949"
+    },
+    "KernelFree": {
+      "signature": "bool KernelFree(const int kernel_index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3950"
+    },
+    "LastIndexOf": {
+      "signature": "int LastIndexOf(T item ); | int LastIndexOf(T item, const int start_index ); | int LastIndexOf(T item, const int start_index, const int count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4393,4454"
+    },
+    "LightColorGet": {
+      "signature": "void LightColorGet(DXColor &light_color );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5170"
+    },
+    "LightColorSet": {
+      "signature": "void LightColorSet(const DXColor &light_color );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5171"
+    },
+    "LightDirectionGet": {
+      "signature": "void LightDirectionGet(DXVector3 &light_direction );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5172"
+    },
+    "LightDirectionSet": {
+      "signature": "void LightDirectionSet(const DXVector3 &light_direction );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5173"
+    },
+    "Line": {
+      "signature": "void Line(int x1, int y1, int x2, int y2, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5022"
+    },
+    "LineAA": {
+      "signature": "void LineAA(const int x1, const int y1, const int x2, const int y2, const uint clr, const uint style=UINT_MAX );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5023"
+    },
+    "LineHorizontal": {
+      "signature": "void LineHorizontal(int x1, int x2, int y, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5025"
+    },
+    "LineStyleSet": {
+      "signature": "void LineStyleSet(const uint style );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5027"
+    },
+    "LineVertical": {
+      "signature": "void LineVertical(int x, int y1, int y2, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5026"
+    },
+    "LineWu": {
+      "signature": "void LineWu(const int x1, const int y1, const int x2, const int y2, const uint clr, const uint style=UINT_MAX );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5024"
+    },
+    "LoadFromFile": {
+      "signature": "bool LoadFromFile(const string filename );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5031"
+    },
+    "MarketBookGet": {
+      "signature": "bool MarketBookGet(string symbol, MqlBookInfo& book[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2164"
+    },
+    "MathArccos": {
+      "signature": "double MathArccos(double val );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1928"
+    },
+    "MathArccosh": {
+      "signature": "double MathArccosh(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1994"
+    },
+    "MathArcsin": {
+      "signature": "double MathArcsin(double val );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1931"
+    },
+    "MathArcsinh": {
+      "signature": "double MathArcsinh(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1997"
+    },
+    "MathArctan": {
+      "signature": "double MathArctan(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1934"
+    },
+    "MathArctan2": {
+      "signature": "double MathArctan2(double y double x );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1937"
+    },
+    "MathArctanh": {
+      "signature": "double MathArctanh(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2000"
+    },
+    "MathAverageDeviation": {
+      "signature": "double MathAverageDeviation(const double& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3497"
+    },
+    "MathCeil": {
+      "signature": "double MathCeil(double val );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1943"
+    },
+    "MathCosh": {
+      "signature": "double MathCosh(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2003"
+    },
+    "MathCumulativeDistributionBeta": {
+      "signature": "double MathCumulativeDistributionBeta(const double x, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionBeta(const double x, const double a, const double b, int& error_code ); | bool MathCumulativeDistributionBeta(const double& x[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionBeta(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3528"
+    },
+    "MathCumulativeDistributionBinomial": {
+      "signature": "double MathCumulativeDistributionBinomial(const double x, const double n, const double p, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionBinomial(const double x, const double n, const double p, int& error_code ); | bool MathCumulativeDistributionBinomial(const double& x[], const double n, const double p, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionBinomial(const double& x[], const double n, const double p, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3695"
+    },
+    "MathCumulativeDistributionCauchy": {
+      "signature": "double MathCumulativeDistributionCauchy(const double x, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionCauchy(const double x, const double a, const double b, int& error_code ); | bool MathCumulativeDistributionCauchy(const double& x[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionCauchy(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3660"
+    },
+    "MathCumulativeDistributionChiSquare": {
+      "signature": "double MathCumulativeDistributionChiSquare(const double x, const double nu, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionChiSquare(const double x, const double nu, int& error_code ); | bool MathCumulativeDistributionChiSquare(const double& x[], const double nu, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionChiSquare(const double& x[], const double nu, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3564"
+    },
+    "MathCumulativeDistributionExponential": {
+      "signature": "double MathCumulativeDistributionExponential(const double x, const double mu, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionExponential(const double x, const double mu, int& error_code ); | bool MathCumulativeDistributionExponential(const double& x[], const double mu, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionExponential(const double& x[], const double mu, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3588"
+    },
+    "MathCumulativeDistributionF": {
+      "signature": "double MathCumulativeDistributionF(const double x, const double nu1, const double nu2, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionF(const double x, const double nu1, const double nu2, int& error_code ); | bool MathCumulativeDistributionF(const double& x[], const double nu1, const double nu2, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionF(const double& x[], const double nu1, const double nu2, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3600"
+    },
+    "MathCumulativeDistributionGamma": {
+      "signature": "double MathCumulativeDistributionGamma(const double x, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionGamma(const double x, const double a, const double b, int& error_code ); | bool MathCumulativeDistributionGamma(const double& x[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionGamma(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3552"
+    },
+    "MathCumulativeDistributionGeometric": {
+      "signature": "double MathCumulativeDistributionGeometric(const double x, const double p, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionGeometric(const double x, const double p, int& error_code ); | bool MathCumulativeDistributionGeometric(const double& x[], const double p, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionGeometric(const double& x[], const double p, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3718"
+    },
+    "MathCumulativeDistributionHypergeometric": {
+      "signature": "double MathCumulativeDistributionHypergeometric(const double x, const double m, const double k, const double n, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionHypergeometric(const double x, const double m, const double k, const double n, int& error_code ); | bool MathCumulativeDistributionHypergeometric(const double& x[], const double m, const double k, const double n, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionHypergeometric(const double& x[], const double m, const double k, const double n, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3730"
+    },
+    "MathCumulativeDistributionLogistic": {
+      "signature": "double MathCumulativeDistributionLogistic(const double x, const double mu, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionLogistic(const double x, const double mu, const double sigma, int& error_code ); | bool MathCumulativeDistributionLogistic(const double& x[], const double mu, const double sigma, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionLogistic(const double& x[], const double mu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3648"
+    },
+    "MathCumulativeDistributionLognormal": {
+      "signature": "double MathCumulativeDistributionLognormal(const double x, const double mu, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionLognormal(const double x, const double mu, const double sigma, int& error_code ); | bool MathCumulativeDistributionLognormal(const double& x[], const double mu, const double sigma, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionLognormal(const double& x[], const double mu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3516"
+    },
+    "MathCumulativeDistributionNegativeBinomial": {
+      "signature": "double MathCumulativeDistributionNegativeBinomial(const double x, const double r, const double p, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionNegativeBinomial(const double x, const double r, const double p, int& error_code ); | bool MathCumulativeDistributionNegativeBinomial(const double& x[], const double r, const double p, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionNegativeBinomial(const double& x[], const double r, const double p, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3706"
+    },
+    "MathCumulativeDistributionNoncentralBeta": {
+      "signature": "double MathCumulativeDistributionNoncentralBeta(const double x, const double a, const double b, const double lambda, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionNoncentralBeta(const double x, const double a, const double b, const double lambda, int& error_code ); | bool MathCumulativeDistributionNoncentralBeta(const double& x[], const double a, const double b, const double lambda, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionNoncentralBeta(const double& x[], const double a, const double b, const double lambda, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3540"
+    },
+    "MathCumulativeDistributionNoncentralChiSquare": {
+      "signature": "double MathCumulativeDistributionNoncentralChiSquare(const double x, const double nu, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionNoncentralChiSquare(const double x, const double nu, const double sigma, int& error_code ); | bool MathCumulativeDistributionNoncentralChiSquare(const double& x[], const double nu, const double sigma, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionNoncentralChiSquare(const double& x[], const double nu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3576"
+    },
+    "MathCumulativeDistributionNoncentralF": {
+      "signature": "double MathCumulativeDistributionNoncentralF(const double x, const double nu1, const double nu2, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionNoncentralF(const double x, const double nu1, const double nu2, const double sigma, int& error_code ); | bool MathCumulativeDistributionNoncentralF(const double& x[], const double nu1, const double nu2, const double sigma, const bool tail, const bool log_mode, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3612"
+    },
+    "MathCumulativeDistributionNoncentralT": {
+      "signature": "double MathCumulativeDistributionNoncentralT(const double x, const double nu, const double delta, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionNoncentralT(const double x, const double nu, const double delta, int& error_code ); | bool MathCumulativeDistributionNoncentralT(const double& x[], const double nu, const double delta, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionNoncentralT(const double& x[], const double nu, const double delta, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3636"
+    },
+    "MathCumulativeDistributionNormal": {
+      "signature": "double MathCumulativeDistributionNormal(const double x, const double mu, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionNormal(const double x, const double mu, const double sigma, int& error_code ); | bool MathCumulativeDistributionNormal(const double& x[], const double mu, const double sigma, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionNormal(const double& x[], const double mu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3504"
+    },
+    "MathCumulativeDistributionPoisson": {
+      "signature": "double MathCumulativeDistributionPoisson(const double x, const double lambda, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionPoisson(const double x, const double lambda, int& error_code ); | bool MathCumulativeDistributionPoisson(const double& x[], const double lambda, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionPoisson(const double& x[], const double lambda, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3742"
+    },
+    "MathCumulativeDistributionT": {
+      "signature": "double MathCumulativeDistributionT(const double x, const double nu, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionT(const double x, const double nu, int& error_code ); | bool MathCumulativeDistributionT(const double& x[], const double nu, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionT(const double& x[], const double nu, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3624"
+    },
+    "MathCumulativeDistributionUniform": {
+      "signature": "double MathCumulativeDistributionUniform(const double x, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionUniform(const double x, const double a, const double b, int& error_code ); | bool MathCumulativeDistributionUniform(const double& x[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionUniform(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3672"
+    },
+    "MathCumulativeDistributionWeibull": {
+      "signature": "double MathCumulativeDistributionWeibull(const double x, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathCumulativeDistributionWeibull(const double x, const double a, const double b, int& error_code ); | bool MathCumulativeDistributionWeibull(const double& x[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathCumulativeDistributionWeibull(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3684"
+    },
+    "MathExpm1": {
+      "signature": "double MathExpm1(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1987"
+    },
+    "MathFloor": {
+      "signature": "double MathFloor(double val );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1951"
+    },
+    "MathIsValidNumber": {
+      "signature": "bool MathIsValidNumber(double number );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1986"
+    },
+    "MathKurtosis": {
+      "signature": "double MathKurtosis(const double& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3493"
+    },
+    "MathLog1p": {
+      "signature": "double MathLog1p(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1990"
+    },
+    "MathMean": {
+      "signature": "double MathMean(const double& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3490"
+    },
+    "MathMedian": {
+      "signature": "double MathMedian(const double& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3495"
+    },
+    "MathMod": {
+      "signature": "double MathMod(double value, double value2 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1965"
+    },
+    "MathMoments": {
+      "signature": "double MathMoments(const double& array[], double& mean, double& variance, double& skewness, double& kurtosis, const int start=0, const int count=WHOLE_ARRAY );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3494"
+    },
+    "MathMomentsBeta": {
+      "signature": "double MathMomentsBeta(const double a, const double b, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3533"
+    },
+    "MathMomentsBinomial": {
+      "signature": "double MathMomentsBinomial(const double n, const double p, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3700"
+    },
+    "MathMomentsCauchy": {
+      "signature": "double MathMomentsCauchy(const double a, const double b, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3665"
+    },
+    "MathMomentsChiSquare": {
+      "signature": "double MathMomentsChiSquare(const double nu, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3569"
+    },
+    "MathMomentsExponential": {
+      "signature": "double MathMomentsExponential(const double mu, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3593"
+    },
+    "MathMomentsF": {
+      "signature": "double MathMomentsF(const double nu1, const double nu2, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3605"
+    },
+    "MathMomentsGamma": {
+      "signature": "double MathMomentsGamma(const double a, const double b, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3557"
+    },
+    "MathMomentsGeometric": {
+      "signature": "double MathMomentsGeometric(const double p, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3723"
+    },
+    "MathMomentsHypergeometric": {
+      "signature": "double MathMomentsHypergeometric(const double m, const double k, const double n, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3735"
+    },
+    "MathMomentsLogistic": {
+      "signature": "double MathMomentsLogistic(const double mu, const double sigma, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3653"
+    },
+    "MathMomentsLognormal": {
+      "signature": "double MathMomentsLognormal(const double mu, const double sigma, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3521"
+    },
+    "MathMomentsNegativeBinomial": {
+      "signature": "double MathMomentsNegativeBinomial(const double r, const double p, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3711"
+    },
+    "MathMomentsNoncentralBeta": {
+      "signature": "double MathMomentsNoncentralBeta(const double a, const double b, const double lambda, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3545"
+    },
+    "MathMomentsNoncentralChiSquare": {
+      "signature": "double MathMomentsNoncentralChiSquare(const double nu, const double sigma, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3581"
+    },
+    "MathMomentsNoncentralF": {
+      "signature": "double MathMomentsNoncentralF(const double nu1, const double nu2, const double sigma, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3617"
+    },
+    "MathMomentsNoncentralT": {
+      "signature": "double MathMomentsNoncentralT(const double nu, const double delta, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3641"
+    },
+    "MathMomentsNormal": {
+      "signature": "double MathMomentsNormal(const double mu, const double sigma, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3509"
+    },
+    "MathMomentsPoisson": {
+      "signature": "double MathMomentsPoisson(const double lambda, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3747"
+    },
+    "MathMomentsT": {
+      "signature": "double MathMomentsT(const double nu, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3629"
+    },
+    "MathMomentsUniform": {
+      "signature": "double MathMomentsUniform(const double a, const double b, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3677"
+    },
+    "MathMomentsWeibull": {
+      "signature": "double MathMomentsWeibull(const double a, const double b, double& mean, double& variance, double& skewness, double& kurtosis, int& error_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3689"
+    },
+    "MathProbabilityDensityBeta": {
+      "signature": "double MathProbabilityDensityBeta(const double x, const double a, const double b, const bool log_mode, int& error_code ); | double MathProbabilityDensityBeta(const double x, const double a, const double b, int& error_code ); | bool MathProbabilityDensityBeta(const double& x[], const double a, const double b, const bool log_mode, double& result[] ); | bool MathProbabilityDensityBeta(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3526"
+    },
+    "MathProbabilityDensityBinomial": {
+      "signature": "double MathProbabilityDensityBinomial(const double x, const double n, const double p, const bool log_mode, int& error_code ); | double MathProbabilityDensityBinomial(const double x, const double n, const double p, int& error_code ); | bool MathProbabilityDensityBinomial(const double& x[], const double n, const double p, const bool log_mode, double& result[] ); | bool MathProbabilityDensityBinomial(const double& x[], const double n, const double p, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3693"
+    },
+    "MathProbabilityDensityCauchy": {
+      "signature": "double MathProbabilityDensityCauchy(const double x, const double a, const double b, const bool log_mode, int& error_code ); | double MathProbabilityDensityCauchy(const double x, const double a, const double b, int& error_code ); | bool MathProbabilityDensityCauchy(const double& x[], const double a, const double b, const bool log_mode, double& result[] ); | bool MathProbabilityDensityCauchy(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3658"
+    },
+    "MathProbabilityDensityChiSquare": {
+      "signature": "double MathProbabilityDensityChiSquare(const double x, const double nu, const bool log_mode, int& error_code ); | double MathProbabilityDensityChiSquare(const double x, const double nu, int& error_code ); | bool MathProbabilityDensityChiSquare(const double& x[], const double nu, const bool log_mode, double& result[] ); | bool MathProbabilityDensityChiSquare(const double& x[], const double nu, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3562"
+    },
+    "MathProbabilityDensityExponential": {
+      "signature": "double MathProbabilityDensityExponential(const double x, const double mu, const bool log_mode, int& error_code ); | double MathProbabilityDensityExponential(const double x, const double mu, int& error_code ); | bool MathProbabilityDensityExponential(const double& x[], const double mu, const bool log_mode, double& result[] ); | bool MathProbabilityDensityExponential(const double& x[], const double mu, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3586"
+    },
+    "MathProbabilityDensityF": {
+      "signature": "double MathProbabilityDensityF(const double x, const double nu1, const double nu2, const bool log_mode, int& error_code ); | double MathProbabilityDensityF(const double x, const double nu1, const double nu2, int& error_code ); | bool MathProbabilityDensityF(const double& x[], const double nu1, const double nu2, const bool log_mode, double& result[] ); | bool MathProbabilityDensityF(const double& x[], const double nu1, const double nu2, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3598"
+    },
+    "MathProbabilityDensityGamma": {
+      "signature": "double MathProbabilityDensityGamma(const double x, const double a, const double b, const bool log_mode, int& error_code ); | double MathProbabilityDensityGamma(const double x, const double a, const double b, int& error_code ); | bool MathProbabilityDensityGamma(const double& x[], const double a, const double b, const bool log_mode, double& result[] ); | bool MathProbabilityDensityGamma(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3550"
+    },
+    "MathProbabilityDensityGeometric": {
+      "signature": "double MathProbabilityDensityGeometric(const double x, const double p, const bool log_mode, int& error_code ); | double MathProbabilityDensityGeometric(const double x, const double p, int& error_code ); | bool MathProbabilityDensityGeometric(const double& x[], const double p, const bool log_mode, double& result[] ); | bool MathProbabilityDensityGeometric(const double& x[], const double p, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3716"
+    },
+    "MathProbabilityDensityHypergeometric": {
+      "signature": "double MathProbabilityDensityHypergeometric(const double x, const double m, const double k, const double n, const bool log_mode, int& error_code ); | double MathProbabilityDensityHypergeometric(const double x, const double m, const double k, const double n, int& error_code ); | bool MathProbabilityDensityHypergeometric(const double& x[], const double m, const double k, const double n, const bool log_mode, double& result[] ); | bool MathProbabilityDensityHypergeometric(const double& x[], const double m, const double k, const double n, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3728"
+    },
+    "MathProbabilityDensityLogistic": {
+      "signature": "double MathProbabilityDensityLogistic(const double x, const double mu, const double sigma, const bool log_mode, int& error_code ); | double MathProbabilityDensityLogistic(const double x, const double mu, const double sigma, int& error_code ); | bool MathProbabilityDensityLogistic(const double& x[], const double mu, const double sigma, const bool log_mode, double& result[] ); | bool MathProbabilityDensityLogistic(const double& x[], const double mu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3646"
+    },
+    "MathProbabilityDensityLognormal": {
+      "signature": "double MathProbabilityDensityLognormal(const double x, const double mu, const double sigma, const bool log_mode, int& error_code ); | double MathProbabilityDensityLognormal(const double x, const double mu, const double sigma, int& error_code ); | bool MathProbabilityDensityLognormal(const double& x[], const double mu, const double sigma, const bool log_mode, double& result[] ); | bool MathProbabilityDensityLognormal(const double& x[], const double mu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3514"
+    },
+    "MathProbabilityDensityNegativeBinomial": {
+      "signature": "double MathProbabilityDensityNegativeBinomial(const double x, const double r, const double p, const bool log_mode, int& error_code ); | double MathProbabilityDensityNegativeBinomial(const double x, const double r, const double p, int& error_code ); | bool MathProbabilityDensityNegativeBinomial(const double& x[], const double r, const double p, const bool log_mode, double& result[] ); | bool MathProbabilityDensityNegativeBinomial(const double& x[], const double r, const double p, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3704"
+    },
+    "MathProbabilityDensityNoncentralBeta": {
+      "signature": "double MathProbabilityDensityNoncentralBeta(const double x, const double a, const double b, const double lambda, const bool log_mode, int& error_code ); | double MathProbabilityDensityNoncentralBeta(const double x, const double a, const double b, const double lambda, int& error_code ); | bool MathProbabilityDensityNoncentralBeta(const double& x[], const double a, const double b, const double lambda, const bool log_mode, double& result[] ); | bool MathProbabilityDensityNoncentralBeta(const double& x[], const double a, const double b, const double lambda, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3538"
+    },
+    "MathProbabilityDensityNoncentralChiSquare": {
+      "signature": "double MathProbabilityDensityNoncentralChiSquare(const double x, const double nu, const double sigma, const bool log_mode, int& error_code ); | double MathProbabilityDensityNoncentralChiSquare(const double x, const double nu, const double sigma, int& error_code ); | bool MathProbabilityDensityNoncentralChiSquare(const double& x[], const double nu, const double sigma, const bool log_mode, double& result[] ); | bool MathProbabilityDensityNoncentralChiSquare(const double& x[], const double nu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3574"
+    },
+    "MathProbabilityDensityNoncentralF": {
+      "signature": "double MathProbabilityDensityNoncentralF(const double x, const double nu1, const double nu2, const double sigma, const bool log_mode, int& error_code ); | double MathProbabilityDensityNoncentralF(const double x, const double nu1, const double nu2, const double sigma, int& error_code ); | bool MathProbabilityDensityNoncentralF(const double& x[], const double nu1, const double nu2, const double sigma, const bool log_mode, double& result[] ); | bool MathProbabilityDensityNoncentralF(const double& x[], const double nu1, const double nu2, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3610"
+    },
+    "MathProbabilityDensityNoncentralT": {
+      "signature": "double MathProbabilityDensityNoncentralT(const double x, const double nu, const double delta, const bool log_mode, int& error_code ); | double MathProbabilityDensityNoncentralT(const double x, const double nu, const double delta, int& error_code ); | bool MathProbabilityDensityNoncentralT(const double& x[], const double nu, const double delta, const bool log_mode, double& result[] ); | bool MathProbabilityDensityNoncentralT(const double& x[], const double nu, const double delta, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3634"
+    },
+    "MathProbabilityDensityNormal": {
+      "signature": "double MathProbabilityDensityNormal(const double x, const double mu, const double sigma, const bool log_mode, int& error_code ); | double MathProbabilityDensityNormal(const double x, const double mu, const double sigma, int& error_code ); | bool MathProbabilityDensityNormal(const double& x[], const double mu, const double sigma, const bool log_mode, double& result[] ); | bool MathProbabilityDensityNormal(const double& x[], const double mu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3502"
+    },
+    "MathProbabilityDensityPoisson": {
+      "signature": "double MathProbabilityDensityPoisson(const double x, const double lambda, const bool log_mode, int& error_code ); | double MathProbabilityDensityPoisson(const double x, const double lambda, int& error_code ); | bool MathProbabilityDensityPoisson(const double& x[], const double lambda, const bool log_mode, double& result[] ); | bool MathProbabilityDensityPoisson(const double& x[], const double lambda, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3740"
+    },
+    "MathProbabilityDensityT": {
+      "signature": "double MathProbabilityDensityT(const double x, const double nu, const bool log_mode, int& error_code ); | double MathProbabilityDensityT(const double x, const double nu, int& error_code ); | bool MathProbabilityDensityT(const double& x[], const double nu, const bool log_mode, double& result[] ); | bool MathProbabilityDensityT(const double& x[], const double nu, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3622"
+    },
+    "MathProbabilityDensityUniform": {
+      "signature": "double MathProbabilityDensityUniform(const double x, const double a, const double b, const bool log_mode, int& error_code ); | double MathProbabilityDensityUniform(const double x, const double a, const double b, int& error_code ); | bool MathProbabilityDensityUniform(const double& x[], const double a, const double b, const bool log_mode, double& result[] ); | bool MathProbabilityDensityUniform(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3670"
+    },
+    "MathProbabilityDensityWeibull": {
+      "signature": "double MathProbabilityDensityWeibull(const double x, const double a, const double b, const bool log_mode, int& error_code ); | double MathProbabilityDensityWeibull(const double x, const double a, const double b, int& error_code ); | bool MathProbabilityDensityWeibull(const double& x[], const double a, const double b, const bool log_mode, double& result[] ); | bool MathProbabilityDensityWeibull(const double& x[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3682"
+    },
+    "MathQuantileBeta": {
+      "signature": "double MathQuantileBeta(const double probability, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileBeta(const double probability, const double a, const double b, int& error_code ); | double MathQuantileBeta(const double& probability[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileBeta(const double& probability[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3530"
+    },
+    "MathQuantileBinomial": {
+      "signature": "double MathQuantileBinomial(const double probability, const double n, const double p, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileBinomial(const double probability, const double n, const double p, int& error_code ); | double MathQuantileBinomial(const double& probability[], const double n, const double p, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileBinomial(const double& probability[], const double n, const double p, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3697"
+    },
+    "MathQuantileCauchy": {
+      "signature": "double MathQuantileCauchy(const double probability, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileCauchy(const double probability, const double a, const double b, int& error_code ); | double MathQuantileCauchy(const double& probability[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileCauchy(const double& probability[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3662"
+    },
+    "MathQuantileChiSquare": {
+      "signature": "double MathQuantileChiSquare(const double probability, const double nu, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileChiSquare(const double probability, const double nu, int& error_code ); | double MathQuantileChiSquare(const double& probability[], const double nu, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileChiSquare(const double& probability[], const double nu, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3566"
+    },
+    "MathQuantileExponential": {
+      "signature": "double MathQuantileExponential(const double probability, const double mu, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileExponential(const double probability, const double mu, int& error_code ); | double MathQuantileExponential(const double& probability[], const double mu, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileExponential(const double& probability[], const double mu, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3590"
+    },
+    "MathQuantileF": {
+      "signature": "double MathQuantileF(const double probability, const double nu1, const double nu2, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileF(const double probability, const double nu1, const double nu2, int& error_code ); | double MathQuantileF(const double& probability[], const double nu1, const double nu2, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileF(const double& probability[], const double nu1, const double nu2, double& result[] ); | double MathQuantileF(const double probability, const double nu1, const double nu2, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileF(const double probability, const double nu1, const double nu2, const double sigma, int& error_code ); | double MathQuantileF(const double& probability[], const double nu1, const double nu2, const double sigma, const bool tail, const bool log_mode, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3602,3614"
+    },
+    "MathQuantileGamma": {
+      "signature": "double MathQuantileGamma(const double probability, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileGamma(const double probability, const double a, const double b, int& error_code ); | double MathQuantileGamma(const double& probability[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileGamma(const double& probability[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3554"
+    },
+    "MathQuantileGeometric": {
+      "signature": "double MathQuantileGeometric(const double probability, const double p, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileGeometric(const double probability, const double p, int& error_code ); | double MathQuantileGeometric(const double& probability[], const double p, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileGeometric(const double& probability[], const double p, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3720"
+    },
+    "MathQuantileHypergeometric": {
+      "signature": "double MathQuantileHypergeometric(const double probability, const double m, const double k, const double n, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileHypergeometric(const double probability, const double m, const double k, const double n, int& error_code ); | double MathQuantileHypergeometric(const double& probability[], const double m, const double k, const double n, const bool tail, const bool log_mode, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3732"
+    },
+    "MathQuantileLogistic": {
+      "signature": "double MathQuantileLogistic(const double probability, const double mu, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileLogistic(const double probability, const double mu, const double sigma, int& error_code ); | double MathQuantileLogistic(const double& probability[], const double mu, const double sigma, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileLogistic(const double& probability[], const double mu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3650"
+    },
+    "MathQuantileLognormal": {
+      "signature": "double MathQuantileLognormal(const double probability, const double mu, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileLognormal(const double probability, const double mu, const double sigma, int& error_code ); | bool MathQuantileLognormal(const double& probability[], const double mu, const double sigma, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileLognormal(const double& probability[], const double mu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3518"
+    },
+    "MathQuantileNegativeBinomial": {
+      "signature": "double MathQuantileNegativeBinomial(const double probability, const double r, const double p, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileNegativeBinomial(const double probability, const double r, const double p, int& error_code ); | double MathQuantileNegativeBinomial(const double& probability[], const double r, const double p, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileNegativeBinomial(const double& probability[], const double r, const double p, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3708"
+    },
+    "MathQuantileNoncentralBeta": {
+      "signature": "double MathQuantileNoncentralBeta(const double probability, const double a, const double b, const double lambda, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileNoncentralBeta(const double probability, const double a, const double b, const double lambda, int& error_code ); | double MathQuantileNoncentralBeta(const double& probability[], const double a, const double b, const double lambda, const bool tail, const bool log_mode, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3542"
+    },
+    "MathQuantileNoncentralChiSquare": {
+      "signature": "double MathQuantileNoncentralChiSquare(const double probability, const double nu, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileNoncentralChiSquare(const double probability, const double nu, const double sigma, int& error_code ); | double MathQuantileNoncentralChiSquare(const double& probability[], const double nu, const double sigma, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileNoncentralChiSquare(const double& probability[], const double nu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3578"
+    },
+    "MathQuantileNoncentralT": {
+      "signature": "double MathQuantileNoncentralT(const double probability, const double nu, const double delta, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileNoncentralT(const double probability, const double nu, const double delta, int& error_code ); | double MathQuantileNoncentralT(const double& probability[], const double nu, const double delta, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileNoncentralT(const double& probability[], const double nu, const double delta, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3638"
+    },
+    "MathQuantileNormal": {
+      "signature": "double MathQuantileNormal(const double probability, const double mu, const double sigma, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileNormal(const double probability, const double mu, const double sigma, int& error_code ); | bool MathQuantileNormal(const double& probability[], const double mu, const double sigma, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileNormal(const double& probability[], const double mu, const double sigma, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3506"
+    },
+    "MathQuantilePoisson": {
+      "signature": "double MathQuantilePoisson(const double probability, const double lambda, const bool tail, const bool log_mode, int& error_code ); | double MathQuantilePoisson(const double probability, const double lambda, int& error_code ); | double MathQuantilePoisson(const double& probability[], const double lambda, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantilePoisson(const double& probability[], const double lambda, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3744"
+    },
+    "MathQuantileT": {
+      "signature": "double MathQuantileT(const double probability, const double nu, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileT(const double probability, const double nu, int& error_code ); | double MathQuantileT(const double& probability[], const double nu, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileT(const double& probability[], const double nu, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3626"
+    },
+    "MathQuantileUniform": {
+      "signature": "double MathQuantileUniform(const double probability, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileUniform(const double probability, const double a, const double b, int& error_code ); | double MathQuantileUniform(const double& probability[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileUniform(const double& probability[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3674"
+    },
+    "MathQuantileWeibull": {
+      "signature": "double MathQuantileWeibull(const double probability, const double a, const double b, const bool tail, const bool log_mode, int& error_code ); | double MathQuantileWeibull(const double probability, const double a, const double b, int& error_code ); | double MathQuantileWeibull(const double& probability[], const double a, const double b, const bool tail, const bool log_mode, double& result[] ); | bool MathQuantileWeibull(const double& probability[], const double a, const double b, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3686"
+    },
+    "MathRand": {
+      "signature": "int MathRand();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1970"
+    },
+    "MathRandomBeta": {
+      "signature": "double MathRandomBeta(const double a, const double b, int& error_code ); | bool MathRandomBeta(const double a, const double b, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3532"
+    },
+    "MathRandomBinomial": {
+      "signature": "double MathRandomBinomial(const double n, const double p, int& error_code ); | bool MathRandomBinomial(const double n, const double p, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3699"
+    },
+    "MathRandomCauchy": {
+      "signature": "double MathRandomCauchy(const double a, const double b, int& error_code ); | bool MathRandomCauchy(const double a, const double b, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3664"
+    },
+    "MathRandomChiSquare": {
+      "signature": "double MathRandomChiSquare(const double nu, int& error_code ); | bool MathRandomChiSquare(const double nu, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3568"
+    },
+    "MathRandomExponential": {
+      "signature": "double MathRandomExponential(const double mu, int& error_code ); | bool MathRandomExponential(const double mu, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3592"
+    },
+    "MathRandomF": {
+      "signature": "double MathRandomF(const double nu1, const double nu2, int& error_code ); | bool MathRandomF(const double nu1, const double nu2, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3604"
+    },
+    "MathRandomGamma": {
+      "signature": "double MathRandomGamma(const double a, const double b, int& error_code ); | bool MathRandomGamma(const double a, const double b, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3556"
+    },
+    "MathRandomGeometric": {
+      "signature": "double MathRandomGeometric(const double p, int& error_code ); | bool MathRandomGeometric(const double p, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3722"
+    },
+    "MathRandomHypergeometric": {
+      "signature": "double MathRandomHypergeometric(const double m, const double k, const double n, int& error_code ); | bool MathRandomHypergeometric(const double m, const double k, const double n, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3734"
+    },
+    "MathRandomLogistic": {
+      "signature": "double MathRandomLogistic(const double mu, const double sigma, int& error_code ); | bool MathRandomLogistic(const double mu, const double sigma, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3652"
+    },
+    "MathRandomLognormal": {
+      "signature": "double MathRandomLognormal(const double mu, const double sigma, int& error_code ); | double MathRandomLognormal(const double mu, const double sigma, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3520"
+    },
+    "MathRandomNegativeBinomial": {
+      "signature": "double MathRandomNegativeBinomial(const double r, const double p, int& error_code ); | bool MathRandomNegativeBinomial(const double r, const double p, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3710"
+    },
+    "MathRandomNoncentralBeta": {
+      "signature": "double MathRandomNoncentralBeta(const double a, const double b, const double lambda, int& error_code ); | bool MathRandomNoncentralBeta(const double a, const double b, const double lambda, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3544"
+    },
+    "MathRandomNoncentralChiSquare": {
+      "signature": "double MathRandomNoncentralChiSquare(const double nu, const double sigma, int& error_code ); | bool MathRandomNoncentralChiSquare(const double nu, const double sigma, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3580"
+    },
+    "MathRandomNoncentralF": {
+      "signature": "double MathRandomNoncentralF(const double nu1, const double nu2, const double sigma, int& error_code ); | bool MathRandomNoncentralF(const double nu1, const double nu2, const double sigma, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3616"
+    },
+    "MathRandomNoncentralT": {
+      "signature": "double MathRandomNoncentralT(const double nu, const double delta, int& error_code ); | bool MathRandomNoncentralT(const double nu, const double delta, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3640"
+    },
+    "MathRandomNormal": {
+      "signature": "double MathRandomNormal(const double mu, const double sigma, int& error_code ); | bool MathRandomNormal(const double mu, const double sigma, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3508"
+    },
+    "MathRandomPoisson": {
+      "signature": "double MathRandomPoisson(const double lambda, int& error_code ); | bool MathRandomPoisson(const double lambda, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3746"
+    },
+    "MathRandomT": {
+      "signature": "double MathRandomT(const double nu, int& error_code ); | bool MathRandomT(const double nu, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3628"
+    },
+    "MathRandomUniform": {
+      "signature": "double MathRandomUniform(const double a, const double b, int& error_code ); | bool MathRandomUniform(const double a, const double b, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3676"
+    },
+    "MathRandomWeibull": {
+      "signature": "double MathRandomWeibull(const double a, const double b, int& error_code ); | bool MathRandomWeibull(const double a, const double b, const int data_count, double& result[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3688"
+    },
+    "MathRound": {
+      "signature": "double MathRound(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1971"
+    },
+    "MathSinh": {
+      "signature": "double MathSinh(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2006"
+    },
+    "MathSkewness": {
+      "signature": "double MathSkewness(const double& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3492"
+    },
+    "MathSrand": {
+      "signature": "void MathSrand(int seed );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1980"
+    },
+    "MathStandardDeviation": {
+      "signature": "double MathStandardDeviation(const double& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3496"
+    },
+    "MathSwap": {
+      "signature": "ushort MathSwap(ushort value ); | uint MathSwap(uint value ); | ulong MathSwap(ulong value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2012"
+    },
+    "MathTanh": {
+      "signature": "double MathTanh(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2009"
+    },
+    "MathVariance": {
+      "signature": "double MathVariance(const double& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3491"
+    },
+    "ObjectAdd": {
+      "signature": "bool ObjectAdd(CDXObject *object );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5174"
+    },
+    "ObjectCreate": {
+      "signature": "bool ObjectCreate(long chart_id, string name, ENUM_OBJECT type, sub_window nwin, datetime time1, double price1, ... datetime timeN=0, double priceN=0, ... datetime time30=0, double price30=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2897"
+    },
+    "ObjectDelete": {
+      "signature": "bool ObjectDelete(long chart_id, string name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2906"
+    },
+    "ObjectFind": {
+      "signature": "int ObjectFind(long chart_id, string name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2911"
+    },
+    "ObjectGetDouble": {
+      "signature": "double ObjectGetDouble(long chart_id, string name, ENUM_OBJECT_PROPERTY_DOUBLE prop_id, int prop_modifier=0 ); | bool ObjectGetDouble(long chart_id, string name, ENUM_OBJECT_PROPERTY_DOUBLE prop_id, int prop_modifier, double& double_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2941"
+    },
+    "ObjectGetInteger": {
+      "signature": "long ObjectGetInteger(long chart_id, string name, ENUM_OBJECT_PROPERTY_INTEGER prop_id, int prop_modifier=0 ); | bool ObjectGetInteger(long chart_id, string name, ENUM_OBJECT_PROPERTY_INTEGER prop_id, int prop_modifier, long& long_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2946"
+    },
+    "ObjectGetString": {
+      "signature": "string ObjectGetString(long chart_id, string name, ENUM_OBJECT_PROPERTY_STRING prop_id, int prop_modifier=0 ); | bool ObjectGetString(long chart_id, string name, ENUM_OBJECT_PROPERTY_STRING prop_id, int prop_modifier, string& string_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2949"
+    },
+    "ObjectGetTimeByValue": {
+      "signature": "datetime ObjectGetTimeByValue(long chart_id, string name, double value, int line_id );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2914"
+    },
+    "ObjectGetValueByTime": {
+      "signature": "double ObjectGetValueByTime(long chart_id, string name, datetime time, int line_id );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2919"
+    },
+    "ObjectMove": {
+      "signature": "bool ObjectMove(long chart_id, string name, int point_index, datetime time, double price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2924"
+    },
+    "ObjectName": {
+      "signature": "string ObjectName(long chart_id, int pos, int sub_window=-1, int type=-1 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2903"
+    },
+    "ObjectSetDouble": {
+      "signature": "bool ObjectSetDouble(long chart_id, string name, ENUM_OBJECT_PROPERTY_DOUBLE prop_id, double prop_value ); | bool ObjectSetDouble(long chart_id, string name, ENUM_OBJECT_PROPERTY_DOUBLE prop_id, int prop_modifier, double prop_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2931"
+    },
+    "ObjectSetInteger": {
+      "signature": "bool ObjectSetInteger(long chart_id, string name, ENUM_OBJECT_PROPERTY_INTEGER prop_id, long prop_value ); | bool ObjectSetInteger(long chart_id, string name, ENUM_OBJECT_PROPERTY_INTEGER prop_id, int prop_modifier, long prop_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2935"
+    },
+    "ObjectSetString": {
+      "signature": "bool ObjectSetString(long chart_id, string name, ENUM_OBJECT_PROPERTY_STRING prop_id, string prop_value ); | bool ObjectSetString(long chart_id, string name, ENUM_OBJECT_PROPERTY_STRING prop_id, int prop_modifier, string prop_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2938"
+    },
+    "ObjectsDeleteAll": {
+      "signature": "int ObjectsDeleteAll(long chart_id, int sub_window=-1, int type=-1 ); | int ObjectsDeleteAll(long chart_id, const string prefix, int sub_window=-1, int object_type=-1 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2908"
+    },
+    "ObjectsTotal": {
+      "signature": "int ObjectsTotal(long chart_id, int sub_window=-1, int type=-1 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2929"
+    },
+    "OnCalculate": {
+      "signature": "int OnCalculate(const int rates_total, const int prev_calculated, const int begin, const double& price[] ); | int OnCalculate(const int rates_total, const int prev_calculated, const datetime& time[], const double& open[], const double& high[], const double& low[], const double& close[], const long& tick_volume[], const long& volume[], const int& spread[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2094"
+    },
+    "OnStart": {
+      "signature": "void OnStart(); | int OnStart(void); | void OnStart(void);",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 225,2079"
+    },
+    "OnTester": {
+      "signature": "double OnTester(); | double OnTester(void);",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 229,2122"
+    },
+    "OnTesterDeinit": {
+      "signature": "void OnTesterDeinit(); | void OnTesterDeinit(void);",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 230,2136"
+    },
+    "OnTesterInit": {
+      "signature": "int OnTesterInit(void); | void OnTesterInit(void);",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 229,2129"
+    },
+    "OnTesterPass": {
+      "signature": "void OnTesterPass(); | void OnTesterPass(void);",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 230,2137"
+    },
+    "OnnxCreate": {
+      "signature": "long OnnxCreate(string filename, uint flags );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3464"
+    },
+    "OnnxCreateFromBuffer": {
+      "signature": "long OnnxCreateFromBuffer(const uchar& buffer[], ulong flags );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3465"
+    },
+    "OnnxGetInputCount": {
+      "signature": "long OnnxGetInputCount(long onnx_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3470"
+    },
+    "OnnxGetInputName": {
+      "signature": "string OnnxGetInputName(long onnx_handle, long index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3472"
+    },
+    "OnnxGetInputTypeInfo": {
+      "signature": "bool OnnxGetInputTypeInfo(long onnx_handle, long index, OnnxTypeInfo& typeinfo );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3474"
+    },
+    "OnnxGetOutputCount": {
+      "signature": "long OnnxGetOutputCount(long onnx_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3471"
+    },
+    "OnnxGetOutputName": {
+      "signature": "string OnnxGetOutputName(long onnx_handle, long index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3473"
+    },
+    "OnnxGetOutputTypeInfo": {
+      "signature": "bool OnnxGetOutputTypeInfo(long onnx_handle, long index, OnnxTypeInfo& typeinfo );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3475"
+    },
+    "OnnxRelease": {
+      "signature": "bool OnnxRelease(long onnx_handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3466"
+    },
+    "OnnxRun": {
+      "signature": "bool OnnxRun(long onnx_handle, ulong flags, ... );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3467"
+    },
+    "OnnxSetInputShape": {
+      "signature": "bool OnnxSetInputShape(long onnx_handle, long input_index, const ulong& shape[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3476"
+    },
+    "OnnxSetOutputShape": {
+      "signature": "bool OnnxSetOutputShape(long onnx_handle, long output_index, const ulong& shape[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3477"
+    },
+    "OrderCalcMargin": {
+      "signature": "bool OrderCalcMargin(ENUM_ORDER_TYPE action, string symbol, double volume, double price, double& margin );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2443"
+    },
+    "OrderCalcProfit": {
+      "signature": "bool OrderCalcProfit(ENUM_ORDER_TYPE action, string symbol, double volume, double price_open, double price_close, double& profit );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2447"
+    },
+    "OrderCheck": {
+      "signature": "bool OrderCheck(MqlTradeRequest& request, MqlTradeCheckResult& result );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2450"
+    },
+    "OrderSendAsync": {
+      "signature": "bool OrderSendAsync(MqlTradeRequest& request, MqlTradeResult& result );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2459"
+    },
+    "Overlaps": {
+      "signature": "bool Overlaps(ICollection<T>* collection ); | bool Overlaps(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4412,4492,4573"
+    },
+    "ParameterGetRange": {
+      "signature": "bool ParameterGetRange(const string name, bool& enable, long& value, long& start, long& step, long& stop ); | bool ParameterGetRange(const string name, bool& enable, double& value, double& start, double& step, double& stop );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3182"
+    },
+    "ParameterSetRange": {
+      "signature": "bool ParameterSetRange(const string name, bool enable, long value, long start, long step, long stop ); | bool ParameterSetRange(const string name, bool enable, double value, double start, double step, double stop );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3185"
+    },
+    "PeriodSeconds": {
+      "signature": "int PeriodSeconds(ENUM_TIMEFRAMES period=PERIOD_CURRENT );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1140"
+    },
+    "PixelGet": {
+      "signature": "uint PixelGet(const int x, const int y );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5032"
+    },
+    "PixelSet": {
+      "signature": "void PixelSet(const int x, const int y, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5033"
+    },
+    "PixelSetAA": {
+      "signature": "void PixelSetAA(const double x, const double y, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5034"
+    },
+    "PlotIndexGetInteger": {
+      "signature": "int PlotIndexGetInteger(int plot_index, int prop_id, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2892"
+    },
+    "PlotIndexSetDouble": {
+      "signature": "bool PlotIndexSetDouble(int plot_index, int prop_id, double prop_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2886"
+    },
+    "PlotIndexSetInteger": {
+      "signature": "bool PlotIndexSetInteger(int plot_index, int prop_id, int prop_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2887"
+    },
+    "PlotIndexSetString": {
+      "signature": "bool PlotIndexSetString(int plot_index, int prop_id, string prop_value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2891"
+    },
+    "Point": {
+      "signature": "double Point();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2076"
+    },
+    "Polygon": {
+      "signature": "void Polygon(int& x[], int& y[], const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5035"
+    },
+    "PolygonAA": {
+      "signature": "void PolygonAA(int& x[], int& y[], const uint clr, const uint style=UINT_MAX );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5036"
+    },
+    "PolygonWu": {
+      "signature": "void PolygonWu(int& x[], int& y[], const uint clr, const uint style=UINT_MAX );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5037"
+    },
+    "Polyline": {
+      "signature": "void Polyline(int& x[], int& y[], const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5040"
+    },
+    "PolylineAA": {
+      "signature": "void PolylineAA(int& x[], int& y[], const uint clr, const uint style=UINT_MAX );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5044"
+    },
+    "PolylineWu": {
+      "signature": "void PolylineWu(int& x[], int& y[], const uint clr, const uint style=UINT_MAX );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5043"
+    },
+    "PositionSelectByTicket": {
+      "signature": "bool PositionSelectByTicket(ulong ticket );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2475"
+    },
+    "PrintFormat": {
+      "signature": "void PrintFormat(string format_string, ... );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1147"
+    },
+    "ProjectionMatrixGet": {
+      "signature": "void ProjectionMatrixGet(DXMatrix &projection_matrix );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5175"
+    },
+    "ProjectionMatrixSet": {
+      "signature": "void ProjectionMatrixSet(float fov, float aspect_ratio, float z_near, float z_far );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5176"
+    },
+    "Push": {
+      "signature": "bool Push(T value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4585"
+    },
+    "Rectangle": {
+      "signature": "void Rectangle(int x1, int y1, int x2, int y2, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5045"
+    },
+    "Remove": {
+      "signature": "bool Remove(T item ); | bool Remove(TKey key ); | bool Remove(CKeyValuePair<TKeyTValue>* item ); | bool Remove(CLinkedListNode<T>* node ); | bool Remove(T value ); | bool Remove(CRedBlackTreeNode<T>* node );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4377,4398,4456,4471,4483 et al"
+    },
+    "RemoveAt": {
+      "signature": "bool RemoveAt(const int index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4394,4457"
+    },
+    "RemoveFirst": {
+      "signature": "bool RemoveFirst();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4509"
+    },
+    "RemoveLast": {
+      "signature": "bool RemoveLast();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4510"
+    },
+    "RemoveMax": {
+      "signature": "bool RemoveMax();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4537"
+    },
+    "RemoveMin": {
+      "signature": "bool RemoveMin();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4536"
+    },
+    "RemoveRange": {
+      "signature": "bool RemoveRange(const int start_index, const int count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4458"
+    },
+    "Render": {
+      "signature": "bool Render(uint flags, uint background_color=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5177"
+    },
+    "Resize": {
+      "signature": "bool Resize(const int width, const int height );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5046"
+    },
+    "ResourceCreate": {
+      "signature": "bool ResourceCreate(const string resource_name, const string path ); | bool ResourceCreate(const string resource_name, const uint& data[], uint img_width, uint img_height, uint data_xoffset, uint data_yoffset, uint data_width, ENUM_COLOR_FORMAT color_format );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1154"
+    },
+    "ResourceFree": {
+      "signature": "bool ResourceFree(const string resource_name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1158"
+    },
+    "ResourceName": {
+      "signature": "string ResourceName();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5047"
+    },
+    "ResourceReadImage": {
+      "signature": "bool ResourceReadImage(const string resource_name, uint& data[], uint& width, uint& height, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1161"
+    },
+    "ResourceSave": {
+      "signature": "bool ResourceSave(const string resource_name const string file_name );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1165"
+    },
+    "Reverse": {
+      "signature": "bool Reverse(); | bool Reverse(const int start_index, const int count );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4459"
+    },
+    "SelectByIndex": {
+      "signature": "bool SelectByIndex(int index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 6067"
+    },
+    "SelectByMagic": {
+      "signature": "bool SelectByMagic(const string symbol, const ulong magic );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 6068"
+    },
+    "SelectByTicket": {
+      "signature": "bool SelectByTicket(ulong ticket );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 6069"
+    },
+    "SendFTP": {
+      "signature": "bool SendFTP(string filename, string ftp_path=NULL );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2618"
+    },
+    "SeriesInfoInteger": {
+      "signature": "long SeriesInfoInteger(string symbol_name, ENUM_TIMEFRAMES timeframe, ENUM_SERIES_INFO_INTEGER prop_id, ); | bool SeriesInfoInteger(string symbol_name, ENUM_TIMEFRAMES timeframe, ENUM_SERIES_INFO_INTEGER prop_id, long& long_var );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2213"
+    },
+    "SetArgument": {
+      "signature": "bool SetArgument(const int kernel_index, const int arg_index, T value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3951"
+    },
+    "SetArgumentBuffer": {
+      "signature": "bool SetArgumentBuffer(const int kernel_index, const int arg_index, const int buffer_index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3952"
+    },
+    "SetArgumentLocalMemory": {
+      "signature": "bool SetArgumentLocalMemory(const int kernel_index, const int arg_index, const int local_memory_size );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3953"
+    },
+    "SetBuffersCount": {
+      "signature": "bool SetBuffersCount(const int total_buffers );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3954"
+    },
+    "SetEquals": {
+      "signature": "bool SetEquals(ICollection<T>* collection ); | bool SetEquals(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4413,4493,4574"
+    },
+    "SetIndexBuffer": {
+      "signature": "bool SetIndexBuffer(int index, double buffer[], ENUM_INDEXBUFFER_TYPE data_type );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2872"
+    },
+    "SetKernelsCount": {
+      "signature": "bool SetKernelsCount(const int total_kernels );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3955"
+    },
+    "SetReturnError": {
+      "signature": "void SetReturnError(int ret_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1170"
+    },
+    "SetUserError": {
+      "signature": "void SetUserError(ushort user_error, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1172"
+    },
+    "ShortArrayToString": {
+      "signature": "string ShortArrayToString(ushort array[], int start=0, int count=-1 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1904"
+    },
+    "ShortToString": {
+      "signature": "string ShortToString(ushort symbol_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1902"
+    },
+    "Shutdown": {
+      "signature": "void Shutdown();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3956"
+    },
+    "SignalBaseGetDouble": {
+      "signature": "double SignalBaseGetDouble(ENUM_SIGNAL_BASE_DOUBLE property_id, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2548"
+    },
+    "SignalBaseGetInteger": {
+      "signature": "long SignalBaseGetInteger(ENUM_SIGNAL_BASE_INTEGER property_id, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2549"
+    },
+    "SignalBaseGetString": {
+      "signature": "string SignalBaseGetString(ENUM_SIGNAL_BASE_STRING property_id, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2550"
+    },
+    "SignalBaseSelect": {
+      "signature": "bool SignalBaseSelect(int index );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2551"
+    },
+    "SignalBaseTotal": {
+      "signature": "int SignalBaseTotal();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2552"
+    },
+    "SignalInfoGetDouble": {
+      "signature": "double SignalInfoGetDouble(ENUM_SIGNAL_INFO_DOUBLE property_id, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2553"
+    },
+    "SignalInfoGetInteger": {
+      "signature": "long SignalInfoGetInteger(ENUM_SIGNAL_INFO_INTEGER property_id, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2554"
+    },
+    "SignalInfoGetString": {
+      "signature": "string SignalInfoGetString(ENUM_SIGNAL_INFO_STRING property_id, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2555"
+    },
+    "SignalInfoSetDouble": {
+      "signature": "bool SignalInfoSetDouble(ENUM_SIGNAL_INFO_DOUBLE property_id, double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2556"
+    },
+    "SignalInfoSetInteger": {
+      "signature": "bool SignalInfoSetInteger(ENUM_SIGNAL_INFO_INTEGER property_id, long value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2557"
+    },
+    "SignalSubscribe": {
+      "signature": "bool SignalSubscribe(long signal_id );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2558"
+    },
+    "SignalUnsubscribe": {
+      "signature": "bool SignalUnsubscribe();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2559"
+    },
+    "SocketClose": {
+      "signature": "bool SocketClose(const int socket );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2565"
+    },
+    "SocketConnect": {
+      "signature": "bool SocketConnect(int socket, const string server, uint port, uint timeout_receive_ms );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2568"
+    },
+    "SocketCreate": {
+      "signature": "int SocketCreate(uint flags );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2562"
+    },
+    "SocketIsConnected": {
+      "signature": "bool SocketIsConnected(const int socket );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2572"
+    },
+    "SocketIsReadable": {
+      "signature": "uint SocketIsReadable(const int socket );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2576"
+    },
+    "SocketIsWritable": {
+      "signature": "bool SocketIsWritable(const int socket );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2579"
+    },
+    "SocketRead": {
+      "signature": "int SocketRead(int socket, uchar& buffer[], uint buffer_maxlen, uint timeout_ms );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2585"
+    },
+    "SocketSend": {
+      "signature": "int SocketSend(int socket, const uchar& buffer[], uint buffer_len );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2589"
+    },
+    "SocketTimeouts": {
+      "signature": "bool SocketTimeouts(int socket, uint timeout_send_ms, uint timeout_receive_ms );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2583"
+    },
+    "SocketTlsCertificate": {
+      "signature": "bool SocketTlsCertificate(int socket, string& subject, string& issuer, string& serial, string& thumbprint, datetime& expiration );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2598"
+    },
+    "SocketTlsHandshake": {
+      "signature": "bool SocketTlsHandshake(int socket, const string host );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2593"
+    },
+    "SocketTlsRead": {
+      "signature": "int SocketTlsRead(int socket, uchar& buffer[], uint buffer_maxlen );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2602"
+    },
+    "SocketTlsReadAvailable": {
+      "signature": "int SocketTlsReadAvailable(int socket, uchar& buffer[], const uint buffer_maxlen );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2606"
+    },
+    "SocketTlsSend": {
+      "signature": "int SocketTlsSend(int socket, const uchar& buffer[], uint buffer_len );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2611"
+    },
+    "Sort": {
+      "signature": "bool Sort(); | bool Sort(IComparer<T>* comparer ); | bool Sort(const int start_index, const int count IComparer<T>* comparer );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4460"
+    },
+    "StringAdd": {
+      "signature": "bool StringAdd(string& string_var, string add_substring );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2016"
+    },
+    "StringCompare": {
+      "signature": "int StringCompare(const string& string1, const string& string2, bool case_sensitive=true );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2019"
+    },
+    "StringFill": {
+      "signature": "bool StringFill(string& string_var, ushort character );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2023"
+    },
+    "StringReserve": {
+      "signature": "bool StringReserve(string& string_var, uint new_capacity );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2033"
+    },
+    "StringSetCharacter": {
+      "signature": "bool StringSetCharacter(string& string_var, int pos, ushort character );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2035"
+    },
+    "StringSetLength": {
+      "signature": "bool StringSetLength(string& string_var, uint new_length );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2031"
+    },
+    "StringToColor": {
+      "signature": "color StringToColor(string color_string );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1913"
+    },
+    "StringToShortArray": {
+      "signature": "int StringToShortArray(string text_string, ushort& array[], int start=0, int count=-1 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1916"
+    },
+    "StringToTime": {
+      "signature": "datetime StringToTime(const string time_string );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1918"
+    },
+    "StructToCharArray": {
+      "signature": "bool StructToCharArray(const void& struct_object, uchar& char_array[], uint start_pos=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1889"
+    },
+    "StructToTime": {
+      "signature": "datetime StructToTime(MqlDateTime& dt_struct );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2056"
+    },
+    "SupportDouble": {
+      "signature": "bool SupportDouble();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3957"
+    },
+    "Symbol": {
+      "signature": "string Symbol();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2073"
+    },
+    "SymbolExist": {
+      "signature": "bool SymbolExist(const string name, bool& is_custom );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2140"
+    },
+    "SymbolInfoMarginRate": {
+      "signature": "bool SymbolInfoMarginRate(string name, ENUM_ORDER_TYPE order_type, double& initial_margin_rate, double& maintenance_margin_rate );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2153"
+    },
+    "SymbolInfoSessionQuote": {
+      "signature": "bool SymbolInfoSessionQuote(string name, ENUM_DAY_OF_WEEK day_of_week, uint session_index, datetime& from, datetime& to );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2156"
+    },
+    "SymbolInfoSessionTrade": {
+      "signature": "bool SymbolInfoSessionTrade(string name, ENUM_DAY_OF_WEEK day_of_week, uint session_index, datetime& from, datetime& to );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2158"
+    },
+    "SymbolIsSynchronized": {
+      "signature": "bool SymbolIsSynchronized(string name, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2146"
+    },
+    "SymbolName": {
+      "signature": "string SymbolName(int pos, bool selected );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2142"
+    },
+    "SymbolSelect": {
+      "signature": "bool SymbolSelect(string name, bool select );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2144"
+    },
+    "SymbolsTotal": {
+      "signature": "int SymbolsTotal(bool selected );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2139"
+    },
+    "SymmetricExceptWith": {
+      "signature": "void SymmetricExceptWith(ICollection<T>* collection ); | void SymmetricExceptWith(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4406,4486,4567"
+    },
+    "TerminalClose": {
+      "signature": "bool TerminalClose(int ret_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1175"
+    },
+    "TesterDeposit": {
+      "signature": "bool TesterDeposit(double money );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1183"
+    },
+    "TesterHideIndicators": {
+      "signature": "void TesterHideIndicators(bool hide );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1177"
+    },
+    "TesterStatistics": {
+      "signature": "double TesterStatistics(ENUM_STATISTICS statistic_id );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1179"
+    },
+    "TesterStop": {
+      "signature": "void TesterStop();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1181"
+    },
+    "TesterWithdrawal": {
+      "signature": "bool TesterWithdrawal(double money );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1186"
+    },
+    "TextGetSize": {
+      "signature": "bool TextGetSize(const string text, uint& width, uint& height );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2963"
+    },
+    "TextHeight": {
+      "signature": "int TextHeight(const string text );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5048"
+    },
+    "TextOut": {
+      "signature": "bool TextOut(const string text, int x, int y, uint anchor, uint &data[], uint width, uint height, uint color, ENUM_COLOR_FORMAT color_format ); | void TextOut(int x, int y, string text, const uint clr, uint alignment=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2959,5049"
+    },
+    "TextSetFont": {
+      "signature": "bool TextSetFont(const string name, int size, uint flags, int orientation=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2952"
+    },
+    "TextSize": {
+      "signature": "void TextSize(const string text, int& width, int& height );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5050"
+    },
+    "TextWidth": {
+      "signature": "int TextWidth(const string text );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5051"
+    },
+    "TimeDaylightSavings": {
+      "signature": "int TimeDaylightSavings();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2053"
+    },
+    "TimeGMT": {
+      "signature": "datetime TimeGMT(); | datetime TimeGMT(MqlDateTime& dt_struct );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2051"
+    },
+    "TimeGMTOffset": {
+      "signature": "int TimeGMTOffset();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2054"
+    },
+    "TimeToStruct": {
+      "signature": "bool TimeToStruct(datetime dt, MqlDateTime& dt_struct );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2055"
+    },
+    "TimeTradeServer": {
+      "signature": "datetime TimeTradeServer(); | datetime TimeTradeServer(MqlDateTime& dt_struct );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2047"
+    },
+    "TranslateKey": {
+      "signature": "short TranslateKey(int key_code );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1189"
+    },
+    "TransparentLevelSet": {
+      "signature": "void TransparentLevelSet(const uchar value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5052"
+    },
+    "Triangle": {
+      "signature": "void Triangle(int x1, int y1, int x2, int y2, int x3, int y3, const uint clr );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5053"
+    },
+    "TriangleAA": {
+      "signature": "void TriangleAA(const int x1, const int y1, const int x2, const int y2, const int x3, const int y3, const uint clr, const uint style=UINT_MAX );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5054"
+    },
+    "TriangleWu": {
+      "signature": "void TriangleWu(const int x1, const int y1, const int x2, const int y2, const int x3, const int y3, const uint clr, const uint style=UINT_MAX );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5055"
+    },
+    "TrimExcess": {
+      "signature": "void TrimExcess();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4444,4480,4518,4581"
+    },
+    "TryGetMax": {
+      "signature": "bool TryGetMax(T& max );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4532,4561"
+    },
+    "TryGetMin": {
+      "signature": "bool TryGetMin(T& min );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4531,4560"
+    },
+    "TryGetValue": {
+      "signature": "bool TryGetValue(const int index, T& value ); | bool TryGetValue(TKey key, TValue& value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4389,4399,4445,4472,4552"
+    },
+    "TrySetValue": {
+      "signature": "bool TrySetValue(const int index, T value ); | bool TrySetValue(TKey key, TValue value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4390,4400,4446,4473,4553"
+    },
+    "UninitializeReason": {
+      "signature": "int UninitializeReason();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2066"
+    },
+    "UnionWith": {
+      "signature": "void UnionWith(ICollection<T>* collection ); | void UnionWith(T& array[] );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 4407,4487,4568"
+    },
+    "Update": {
+      "signature": "void Update(const bool redraw=true );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5056"
+    },
+    "ViewMatrixGet": {
+      "signature": "void ViewMatrixGet(DXMatrix &view_matrix );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5180"
+    },
+    "ViewMatrixSet": {
+      "signature": "void ViewMatrixSet(const DXMatrix &view_matrix );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5181"
+    },
+    "ViewPositionSet": {
+      "signature": "void ViewPositionSet(const DXVector3 &position );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5182"
+    },
+    "ViewRotationSet": {
+      "signature": "void ViewRotationSet(const DXVector3 &rotation );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5183"
+    },
+    "ViewTargetSet": {
+      "signature": "void ViewTargetSet(const DXVector3 &target );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5184"
+    },
+    "ViewUpDirectionSet": {
+      "signature": "void ViewUpDirectionSet(const DXVector3 &up_direction );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5185"
+    },
+    "Width": {
+      "signature": "int Width();",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 5057"
+    },
+    "ZeroMemory": {
+      "signature": "void ZeroMemory(void & variable );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1190"
+    },
+    "iAC": {
+      "signature": "int iAC(string symbol, ENUM_TIMEFRAMES period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2971"
+    },
+    "iAD": {
+      "signature": "int iAD(string symbol, ENUM_TIMEFRAMES period, ENUM_APPLIED_VOLUME applied_volume );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2976"
+    },
+    "iADX": {
+      "signature": "int iADX(string symbol, ENUM_TIMEFRAMES period, int adx_period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2981"
+    },
+    "iADXWilder": {
+      "signature": "int iADXWilder(string symbol, ENUM_TIMEFRAMES period, int adx_period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2986"
+    },
+    "iAMA": {
+      "signature": "int iAMA(string symbol, ENUM_TIMEFRAMES period, int ama_period, int fast_ma_period, int slow_ma_period, int ama_shift, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2998"
+    },
+    "iAO": {
+      "signature": "int iAO(string symbol, ENUM_TIMEFRAMES period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3003"
+    },
+    "iAlligator": {
+      "signature": "int iAlligator(string symbol, ENUM_TIMEFRAMES period, int jaw_period, int jaw_shift, int teeth_period, int teeth_shift, int lips_period, int lips_shift, ENUM_MA_METHOD ma_method, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2991"
+    },
+    "iBWMFI": {
+      "signature": "int iBWMFI(string symbol, ENUM_TIMEFRAMES period, ENUM_APPLIED_VOLUME applied_volume );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3088"
+    },
+    "iBearsPower": {
+      "signature": "int iBearsPower(string symbol, ENUM_TIMEFRAMES period, int ma_period, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3013"
+    },
+    "iBullsPower": {
+      "signature": "int iBullsPower(string symbol, ENUM_TIMEFRAMES period, int ma_period, );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3024"
+    },
+    "iCCI": {
+      "signature": "int iCCI(string symbol, ENUM_TIMEFRAMES period, int ma_period, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3029"
+    },
+    "iChaikin": {
+      "signature": "int iChaikin(string symbol, ENUM_TIMEFRAMES period, int fast_ma_period, int slow_ma_period, ENUM_MA_METHOD ma_method, ENUM_APPLIED_VOLUME applied_volume );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3034"
+    },
+    "iCustom": {
+      "signature": "int iCustom(string symbol, ENUM_TIMEFRAMES period, string name ... );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3039"
+    },
+    "iDEMA": {
+      "signature": "int iDEMA(string symbol, ENUM_TIMEFRAMES period, int ma_period, int ma_shift, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3043"
+    },
+    "iDeMarker": {
+      "signature": "int iDeMarker(string symbol, ENUM_TIMEFRAMES period, int ma_period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3048"
+    },
+    "iEnvelopes": {
+      "signature": "int iEnvelopes(string symbol, ENUM_TIMEFRAMES period, int ma_period, int ma_shift, ENUM_MA_METHOD ma_method, ENUM_APPLIED_PRICE applied_price, double deviation );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3053"
+    },
+    "iForce": {
+      "signature": "int iForce(string symbol, ENUM_TIMEFRAMES period, int ma_period, ENUM_MA_METHOD ma_method, ENUM_APPLIED_VOLUME applied_volume );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3059"
+    },
+    "iFrAMA": {
+      "signature": "int iFrAMA(string symbol, ENUM_TIMEFRAMES period, int ma_period, int ma_shift, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3069"
+    },
+    "iFractals": {
+      "signature": "int iFractals(string symbol, ENUM_TIMEFRAMES period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3064"
+    },
+    "iGator": {
+      "signature": "int iGator(string symbol, ENUM_TIMEFRAMES period, int jaw_period, int jaw_shift, int teeth_period, int teeth_shift, int lips_period, int lips_shift, ENUM_MA_METHOD ma_method, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3074"
+    },
+    "iIchimoku": {
+      "signature": "int iIchimoku(string symbol, ENUM_TIMEFRAMES period, int tenkan_sen, int kijun_sen, int senkou_span_b );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3081"
+    },
+    "iMFI": {
+      "signature": "int iMFI(string symbol, ENUM_TIMEFRAMES period, int ma_period, ENUM_APPLIED_VOLUME applied_volume );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3098"
+    },
+    "iMomentum": {
+      "signature": "int iMomentum(string symbol, ENUM_TIMEFRAMES period, int mom_period, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3093"
+    },
+    "iOBV": {
+      "signature": "int iOBV(string symbol, ENUM_TIMEFRAMES period, ENUM_APPLIED_VOLUME applied_volume );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3119"
+    },
+    "iOsMA": {
+      "signature": "int iOsMA(string symbol, ENUM_TIMEFRAMES period, int fast_ema_period, int slow_ema_period, int signal_period, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3108"
+    },
+    "iRVI": {
+      "signature": "int iRVI(string symbol, ENUM_TIMEFRAMES period, int ma_period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3134"
+    },
+    "iRealVolume": {
+      "signature": "long iRealVolume(const string symbol, ENUM_TIMEFRAMES timeframe, int shift );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2292"
+    },
+    "iSAR": {
+      "signature": "int iSAR(string symbol, ENUM_TIMEFRAMES period, double step, double maximum );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3124"
+    },
+    "iSpread": {
+      "signature": "long iSpread(const string symbol, ENUM_TIMEFRAMES timeframe, int shift );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2296"
+    },
+    "iStdDev": {
+      "signature": "int iStdDev(string symbol, ENUM_TIMEFRAMES period, int ma_period, int ma_shift, ENUM_MA_METHOD ma_method, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3139"
+    },
+    "iTEMA": {
+      "signature": "int iTEMA(string symbol, ENUM_TIMEFRAMES period, int ma_period, int ma_shift, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3150"
+    },
+    "iTickVolume": {
+      "signature": "long iTickVolume(const string symbol, ENUM_TIMEFRAMES timeframe, int shift );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 2290"
+    },
+    "iTriX": {
+      "signature": "int iTriX(string symbol, ENUM_TIMEFRAMES period, int ma_period, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3155"
+    },
+    "iVIDyA": {
+      "signature": "int iVIDyA(string symbol, ENUM_TIMEFRAMES period, int cmo_period, int ema_period, int ma_shift, ENUM_APPLIED_PRICE applied_price );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3165"
+    },
+    "iWPR": {
+      "signature": "int iWPR(string symbol, ENUM_TIMEFRAMES period, int calc_period );",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 3160"
+    },
+    "CLHandleType": {
+      "signature": "ENUM_OPENCL_HANDLE_TYPE CLHandleType(int handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 3199"
+    },
+    "ChartPeriod": {
+      "signature": "ENUM_TIMEFRAMES ChartPeriod(long chart_id=0 );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 2397"
+    },
+    "CheckPointer": {
+      "signature": "ENUM_POINTER_TYPE CheckPointer(object* anyobject );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 1116"
+    },
+    "DXHandleType": {
+      "signature": "ENUM_DX_HANDLE_TYPE DXHandleType(int handle );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 3345"
+    },
+    "DatabaseColumnType": {
+      "signature": "ENUM_DATABASE_FIELD_TYPE DatabaseColumnType(int request, int column );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 3311"
+    },
+    "GetPointer": {
+      "signature": "void* GetPointer(any_class anyobject );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 1126"
+    },
+    "MathClassify": {
+      "signature": "ENUM_FP_CLASS MathClassify(double value );",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 1941"
+    },
+    "Period": {
+      "signature": "ENUM_TIMEFRAMES Period();",
+      "provenance": "official-mql5-reference-pdf-2026-10-19 pages 2074"
     }
   },
   "variables": {
@@ -8722,6 +11366,18 @@
     "ENUM_TRADE_TRANSACTION_TYPE": {
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 (enum type name)"
+    },
+    "_AppliedTo": {
+      "description": "(description not yet captured)",
+      "provenance": "official-mql5-reference-pdf (predefined variables section)"
+    },
+    "_RandomSeed": {
+      "description": "(description not yet captured)",
+      "provenance": "official-mql5-reference-pdf (predefined variables section)"
+    },
+    "_IsX64": {
+      "description": "(description not yet captured)",
+      "provenance": "official-mql5-reference-pdf (predefined variables section)"
     }
   }
 }

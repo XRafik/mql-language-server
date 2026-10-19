@@ -200,6 +200,35 @@ public class Issue136BuiltinRegistryCoverageTests
         Assert.True(new Mql5Builtins().IsBuiltinVariable(name), $"MQL5 registry is missing documented enum constant '{name}'");
     }
 
+    // --- MQL5 documented stdlib functions missing from the golden list -----
+    // --- (2026-10-18 audit: only 155 of ~760 documented functions were -----
+    // --- registered; same 5070 false-positive class as the constants). -----
+    private static readonly string[] Mql5DocumentedFunctions =
+    {
+        // indicators
+        "iCustom", "iMA", "iRSI", "iMACD", "iAlligator",
+        // chart / objects
+        "ChartOpen", "ChartSetInteger", "ChartGetInteger", "ChartScreenShot",
+        "ObjectCreate", "ObjectSetInteger",
+        // series / data access
+        "CopyBuffer", "CopyRates", "CopyTicks", "SeriesInfoInteger",
+        // trade
+        "OrderCalcMargin", "OrderSendAsync", "OrderCheck", "PositionSelectByTicket",
+        "HistorySelect", "HistoryDealsTotal",
+        // files / strings / math / common
+        "FileReadDouble", "FileLoad", "StringAdd", "MathSrand", "ZeroMemory",
+        "GetTickCount", "EventChartCustom",
+        // calendar / socket / database / onnx
+        "CalendarValueHistory", "SocketCreate", "DatabaseOpen", "OnnxRun",
+    };
+
+    [Theory]
+    [MemberData(nameof(Mql5DocumentedFunctionNames))]
+    public void Mql5DocumentedFunctions_AreRegistered(string name)
+    {
+        Assert.True(new Mql5Builtins().IsBuiltinFunction(name), $"MQL5 registry is missing documented function '{name}'");
+    }
+
     public static TheoryData<string> CoreFunctionNames() => ToTheoryData(CoreFunctionsBothDialects);
     public static TheoryData<string> Mql4FunctionNames() => ToTheoryData(Mql4Functions);
     public static TheoryData<string> UnderscoreVariableNames() => ToTheoryData(Mql4UnderscoreVariables);
@@ -207,6 +236,7 @@ public class Issue136BuiltinRegistryCoverageTests
     public static TheoryData<string> CorpusEnrichmentFunctionNames() => ToTheoryData(Mql4CorpusEnrichmentFunctions);
     public static TheoryData<string> CorpusEnrichmentConstantNames() => ToTheoryData(Mql4CorpusEnrichmentConstants);
     public static TheoryData<string> Mql5EnumConstantNames() => ToTheoryData(Mql5EnumConstants);
+    public static TheoryData<string> Mql5DocumentedFunctionNames() => ToTheoryData(Mql5DocumentedFunctions);
 
     private static TheoryData<string> ToTheoryData(string[] names)
     {
