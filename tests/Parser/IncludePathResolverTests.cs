@@ -140,4 +140,155 @@ public class IncludePathResolverTests : IDisposable
         Assert.True(ok);
         Assert.Equal(Path.Combine(sub, "Nested.mqh"), resolved);
     }
+
+    // --- System include roots (T3: angle-bracket resolution against configured roots) ---
+
+    /// <summary>
+    /// Creates a fake terminal include root under the instance temp dir
+    /// (cleaned up by Dispose) with a StdLib/ subdirectory and returns the
+    /// full path the &lt;StdLib/Trade.mqh&gt; entry must resolve to.
+    /// </summary>
+    private string CreateSystemRoot(out string headerPath)
+    {
+        var root = Path.Combine(_tempDir, "IncludeRoot");
+        Directory.CreateDirectory(Path.Combine(root, "StdLib"));
+        headerPath = Path.Combine(root, "StdLib", "Trade.mqh");
+        return root;
+    }
+
+    [Fact]
+    public void Resolve_AngleBracketEntry_WithRoot_ForwardSlashEntry_FindsHeader()
+    {
+        var root = CreateSystemRoot(out var headerPath);
+        File.WriteAllText(headerPath, "// stdlib\n");
+
+        var resolved = IncludePathResolver.ResolveWithSystemRoots(_includerPath, "<StdLib/Trade.mqh>", new[] { root });
+
+        Assert.Equal(headerPath, resolved);
+    }
+
+    [Fact]
+    public void Resolve_AngleBracketEntry_WithRoot_BackslashEntry_FindsHeader()
+    {
+        // MQL stdlib directives use the Windows separator: <Trade\Trade.mqh>.
+        var root = CreateSystemRoot(out var headerPath);
+        File.WriteAllText(headerPath, "// stdlib\n");
+
+        var resolved = IncludePathResolver.ResolveWithSystemRoots(_includerPath, "<StdLib\\Trade.mqh>", new[] { root });
+
+        Assert.Equal(headerPath, resolved);
+    }
+
+    [Fact]
+    public void Resolve_AngleBracketEntry_WithRoot_DeeplyNestedSubpath_FindsHeader()
+    {
+        var root = CreateSystemRoot(out _);
+        var deep = Path.Combine(root, "A", "B");
+        Directory.CreateDirectory(deep);
+        var deepHeader = Path.Combine(deep, "Baz.mqh");
+        File.WriteAllText(deepHeader, "// stdlib\n");
+
+        var resolved = IncludePathResolver.ResolveWithSystemRoots(_includerPath, "<A\\B\\Baz.mqh>", new[] { root });
+
+        Assert.Equal(deepHeader, resolved);
+    }
+
+    [Fact]
+    public void Resolve_AngleBracketEntry_WithRoot_CaseInsensitiveFallback_FindsHeader()
+    {
+        // Windows-style case-insensitive semantics: the on-disk casing
+        // (trade.mqh) differs from the entry (<StdLib/Trade.mqh>).
+        var root = CreateSystemRoot(out _);
+        File.WriteAllText(Path.Combine(root, "StdLib", "trade.mqh"), "// stdlib\n");
+
+        var resolved = IncludePathResolver.ResolveWithSystemRoots(_includerPath, "<StdLib/Trade.mqh>", new[] { root });
+
+        Assert.NotNull(resolved);
+        Assert.Equal(
+            Path.Combine(root, "StdLib", "trade.mqh"),
+            resolved,
+            ignoreCase: true,
+            ignoreLineEndingDifferences: false,
+            ignoreWhiteSpaceDifferences: false,
+            ignoreAllWhiteSpace: false);
+    }
+
+    [Fact]
+    public void Resolve_AngleBracketEntry_MissingUnderRoot_ReturnsNull()
+    {
+        var root = CreateSystemRoot(out _);
+
+        var resolved = IncludePathResolver.ResolveWithSystemRoots(_includerPath, "<StdLib/Missing.mqh>", new[] { root });
+
+        Assert.Null(resolved);
+    }
+
+    [Fact]
+    public void Resolve_AngleBracketEntry_NoRoots_ReturnsNull_TodaysBehavior()
+    {
+        // Fail open: no configured roots keep today's behavior — angle-bracket
+        // entries stay unresolved.
+        Assert.Null(IncludePathResolver.ResolveWithSystemRoots(_includerPath, "<StdLib/Trade.mqh>", null));
+        Assert.Null(IncludePathResolver.ResolveWithSystemRoots(_includerPath, "<StdLib/Trade.mqh>", Array.Empty<string>()));
+    }
+
+    [Fact]
+    public void Resolve_AngleBracketEntry_TraversalUnderRoot_Rejected()
+    {
+        // A system entry must never escape the configured root.
+        var root = CreateSystemRoot(out var headerPath);
+        File.WriteAllText(headerPath, "// stdlib\n");
+
+        var resolved = IncludePathResolver.ResolveWithSystemRoots(_includerPath, "<..\\..\\StdLib\\Trade.mqh>", new[] { root });
+
+        Assert.Null(resolved);
+    }
+
+    [Fact]
+    public void TryResolveSystemInclude_ProviderConfigured_Resolves()
+    {
+        try
+        {
+            var root = CreateSystemRoot(out var headerPath);
+            File.WriteAllText(headerPath, "// stdlib\n");
+            IncludePathResolver.SetSystemIncludeRootsProvider(() => new[] { root });
+
+            var ok = IncludePathResolver.TryResolveSystemInclude("<StdLib\\Trade.mqh>", out var resolved);
+
+            Assert.True(ok);
+            Assert.Equal(headerPath, resolved);
+        }
+        finally
+        {
+            IncludePathResolver.SetSystemIncludeRootsProvider(null);
+        }
+    }
+
+    [Fact]
+    public void TryResolveSystemInclude_NoProvider_ReturnsFalse()
+    {
+        var root = CreateSystemRoot(out var headerPath);
+        File.WriteAllText(headerPath, "// stdlib\n");
+
+        Assert.False(IncludePathResolver.TryResolveSystemInclude("<StdLib\\Trade.mqh>", out var resolved));
+        Assert.Equal(string.Empty, resolved);
+    }
+
+    [Fact]
+    public void TryResolveSystemInclude_QuotedEntry_ReturnsFalse()
+    {
+        var root = CreateSystemRoot(out _);
+        File.WriteAllText(Path.Combine(root, "StdLib", "Trade.mqh"), "// stdlib\n");
+        IncludePathResolver.SetSystemIncludeRootsProvider(() => new[] { root });
+        try
+        {
+            // Quoted entries keep their relative-to-includer semantics; the
+            // system-include path must never claim them.
+            Assert.False(IncludePathResolver.TryResolveSystemInclude("\"Trade.mqh\"", out _));
+        }
+        finally
+        {
+            IncludePathResolver.SetSystemIncludeRootsProvider(null);
+        }
+    }
 }

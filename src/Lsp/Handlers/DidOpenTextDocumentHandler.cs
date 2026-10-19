@@ -272,7 +272,28 @@ public class DidOpenTextDocumentHandler : LanguageAwareHandlerBase<DidOpenTextDo
             // system includes.
             if (!IncludePathResolver.TryResolveContained(includerFilePath, include, out var includeFullPath))
             {
-                continue;
+                // Angle-bracket system includes (<Trade\Trade.mqh>): resolve
+                // against the configured system include roots (the terminal's
+                // MQL5/Include / MQL4/Include dirs, delivered via the
+                // systemIncludeRoots initialization option) and LAZILY index
+                // the header. No roots configured or unresolvable header:
+                // today's behavior (skip, fail open).
+                if (!IncludePathResolver.TryResolveSystemInclude(include, out includeFullPath))
+                {
+                    continue;
+                }
+
+                // Dedup: system headers are process-lifetime index entries —
+                // an already-indexed header (same language key) is not
+                // re-parsed, mirroring the store's cached-parse reuse. The
+                // dependency edge is still refreshed so the #90 rename and
+                // #89 type-fallback reachability guards see it.
+                var existingSymbols = SymbolIndex.Index.GetFileSymbols(includeFullPath, language);
+                if (existingSymbols != null && existingSymbols.Count > 0)
+                {
+                    SymbolIndex.Index.AddDependency(includerFilePath, includeFullPath);
+                    continue;
+                }
             }
 
             // Cycle/diamond safety: each header is indexed once per open.

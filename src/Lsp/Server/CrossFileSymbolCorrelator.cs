@@ -22,9 +22,11 @@ namespace MqlLanguageServer.Lsp.Server;
 ///
 /// <para><b>Tier 1 — include closure</b>: the document's <see cref="MqlFile.Includes"/>
 /// entries are walked through <see cref="IncludePathResolver.TryResolveContained"/>
-/// (quoted includes only; angle-bracket entries are system-library includes
-/// and intentionally unresolvable — <c>Resolve</c> already rejects them).
-/// Each resolved header's own <c>#include</c> entries are extracted with a
+/// (quoted includes) and, for angle-bracket system includes, through
+/// <see cref="IncludePathResolver.TryResolveSystemInclude"/> (resolved against
+/// the configured system include roots — the MQL4/MQL5 Standard Library
+/// headers that the lazy didOpen indexing has already put into the index;
+/// entries no root can resolve degrade silently, as before). Each resolved header's own <c>#include</c> entries are extracted with a
 /// lightweight line scan over the raw text via
 /// <see cref="IncludePathResolver.ExtractFromDirective"/> (no full parse),
 /// recursing with a visited set (cycle guard) and a depth cap of 8. A
@@ -161,9 +163,10 @@ public static class CrossFileSymbolCorrelator
     }
 
     /// <summary>
-    /// Walks the document's include closure (quoted includes only, visited-set
-    /// cycle guard, depth cap of 8) and collects the names of every symbol the
-    /// index knows for the closure files in <paramref name="language"/>.
+    /// Walks the document's include closure (quoted includes plus angle-bracket
+    /// includes that resolve against the configured system include roots,
+    /// visited-set cycle guard, depth cap of 8) and collects the names of every
+    /// symbol the index knows for the closure files in <paramref name="language"/>.
     /// Unreadable or unresolvable headers degrade silently (fail open).
     /// </summary>
     private static (HashSet<string> Names, HashSet<string> Paths) CollectIncludeClosureDeclaredNames(
@@ -187,7 +190,8 @@ public static class CrossFileSymbolCorrelator
         {
             foreach (var entry in mqlFile.Includes)
             {
-                if (IncludePathResolver.TryResolveContained(documentPath, entry, out var headerPath))
+                if (IncludePathResolver.TryResolveContained(documentPath, entry, out var headerPath)
+                    || IncludePathResolver.TryResolveSystemInclude(entry, out headerPath))
                 {
                     frontier.Add((headerPath, 1));
                 }
@@ -232,7 +236,8 @@ public static class CrossFileSymbolCorrelator
 
             foreach (var entry in ExtractIncludesFromRawText(headerPath, token))
             {
-                if (IncludePathResolver.TryResolveContained(headerPath, entry, out var nestedPath))
+                if (IncludePathResolver.TryResolveContained(headerPath, entry, out var nestedPath)
+                    || IncludePathResolver.TryResolveSystemInclude(entry, out nestedPath))
                 {
                     frontier.Add((nestedPath, depth + 1));
                 }
