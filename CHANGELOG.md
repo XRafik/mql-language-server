@@ -1,3 +1,11 @@
+## [Unreleased]
+
+Closes the MQL5-side gap of #136: the MQL5 builtin golden list now carries the documented standard-library enum constants (trading, chart, object, indicator, file, terminal, math, color and error families) that the MQL4 list already had since #136/#152. Data-only change per the #136 contract: +1,641 names (constant members and ENUM_* type names) derived from the official MQL5 Reference with per-entry provenance; no registry code was touched (`Mql5Builtins` remains a projection of `data/builtins/mql5.json`, enforced by the parity tests). This eliminates the false `5070 Undeclared symbol` diagnostics for standard names such as `SYMBOL_TRADE_TICK_SIZE`, `POSITION_VOLUME` or `OBJPROP_XSIZE` — the exact false-positive class that made editors/agents block valid insertions into MQL5 documents (agent-lsp `safe_edit` incident on StratoX, 2026-10-18).
+
+### Added
+- data(builtins): enrich `data/builtins/mql5.json` with +1,641 documented MQL5 stdlib names (enum constants + ENUM_* type names), sourced from the official MQL5 Reference via the new `tools/generate-golden-lists/apply_mql5_enum_constants.py` (offline PDF extraction mode plus resumable site crawler). Pins: `Mql5EnumConstants_AreRegistered` (one to two representatives per family); full suite 1564 passing.
+- feat(tools): golden-list extractor with two source modes: resumable crawler of mql5.com/docs/constants (page cache, rate-limit friendly) and `--from-pdf` extraction from a pdftotext dump of the official reference (column-geometry and raw-text parsing, vocabulary-voted candidate repair, web-color grid transcription). All entries carry per-entry provenance; existing entries are never modified.
+
 ## [2.6.2] - 2026-10-15
 
 Closes #163: the MQL5 builtin golden list now covers the File* function family and the TIME_*/FILE_*/SEEK_*/CP_* constants, eliminating false 5070 unresolved-symbol diagnostics in MQL5 documents that use file I/O or datetime string formatting. The MQL4 golden list got its own smaller symmetric gap filled (7 functions + 8 constants, all documented MQL4 build 600+ API). Data-only change per the #136 contract: new names go into `data/builtins/mql5.json` / `data/builtins/mql4.json` with signatures/descriptions from the official documentation; no registry code was touched.

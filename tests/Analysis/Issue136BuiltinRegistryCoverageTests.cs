@@ -152,6 +152,33 @@ public class Issue136BuiltinRegistryCoverageTests
         Assert.True(Mql4Builtins.IsBuiltin(name), $"MQL4 registry is missing documented name '{name}'");
     }
 
+    // --- MQL5 stdlib enum constants missing from the MQL5 registry ---------
+    // --- (StratoX incident 2026-10-18: 5070 false positives blocked edits) -
+    // --- One-to-two representatives per documented family; completeness ---
+    // --- itself is owned by data/builtins/mql5.json (parity tests). ------
+    private static readonly string[] Mql5EnumConstants =
+    {
+        // ENUM_SYMBOL_INFO_* (SymbolInfoInteger/Double/String)
+        "SYMBOL_BID", "SYMBOL_ASK", "SYMBOL_POINT", "SYMBOL_DIGITS",
+        "SYMBOL_TRADE_TICK_SIZE", "SYMBOL_TRADE_TICK_VALUE",
+        "SYMBOL_VOLUME_MAX", "SYMBOL_VOLUME_LIMIT", "SYMBOL_VOLUME_STEP",
+        // ENUM_POSITION_*
+        "POSITION_VOLUME", "POSITION_TYPE_BUY", "POSITION_REASON_EXPERT",
+        // ENUM_ORDER_* / ENUM_DEAL_*
+        "ORDER_TYPE_BUY", "ORDER_TIME_GTC", "ORDER_REASON_EXPERT",
+        "DEAL_ENTRY_IN", "DEAL_REASON_EXPERT",
+        // ENUM_TRADE_REQUEST_* / ENUM_ACCOUNT_*
+        "TRADE_ACTION_DEAL", "TRADE_ACTION_PENDING",
+        "ACCOUNT_MARGIN_MODE_RETAIL_HEDGING", "ACCOUNT_TRADE_EXPERT",
+        // ENUM_CHART_* / ENUM_OBJECT_PROPERTY_*
+        "CHART_SHOW_GRID", "CHART_FOREGROUND", "OBJPROP_XSIZE", "OBJPROP_TIME",
+        // ENUM_FILE_* / ENUM_SERIES_INFO_* / ENUM_TERMINAL_*
+        "FILE_ANSI", "FILE_COMMON", "SERIES_BARS_COUNT", "TERMINAL_CONNECTED",
+        // ENUM_TIMEFRAMES / ENUM_INDICATOR_* / ENUM_MQL_INFO_* / errors / colors
+        "PERIOD_M1", "PERIOD_H1", "INDICATOR_DIGITS", "MQL_TESTER",
+        "ERR_SUCCESS", "clrMediumSeaGreen",
+    };
+
     [Theory]
     [MemberData(nameof(CorpusEnrichmentFunctionNames))]
     public void Mql4CorpusEnrichedFunctions_AreRegistered(string name)
@@ -166,12 +193,20 @@ public class Issue136BuiltinRegistryCoverageTests
         Assert.True(Mql4Builtins.IsBuiltinVariable(name), $"MQL4 registry is missing documented constant '{name}' (issue #152 corpus)");
     }
 
+    [Theory]
+    [MemberData(nameof(Mql5EnumConstantNames))]
+    public void Mql5EnumConstants_AreRegistered(string name)
+    {
+        Assert.True(new Mql5Builtins().IsBuiltinVariable(name), $"MQL5 registry is missing documented enum constant '{name}'");
+    }
+
     public static TheoryData<string> CoreFunctionNames() => ToTheoryData(CoreFunctionsBothDialects);
     public static TheoryData<string> Mql4FunctionNames() => ToTheoryData(Mql4Functions);
     public static TheoryData<string> UnderscoreVariableNames() => ToTheoryData(Mql4UnderscoreVariables);
     public static TheoryData<string> EnumConstantNames() => ToTheoryData(StdlibEnumConstants);
     public static TheoryData<string> CorpusEnrichmentFunctionNames() => ToTheoryData(Mql4CorpusEnrichmentFunctions);
     public static TheoryData<string> CorpusEnrichmentConstantNames() => ToTheoryData(Mql4CorpusEnrichmentConstants);
+    public static TheoryData<string> Mql5EnumConstantNames() => ToTheoryData(Mql5EnumConstants);
 
     private static TheoryData<string> ToTheoryData(string[] names)
     {
