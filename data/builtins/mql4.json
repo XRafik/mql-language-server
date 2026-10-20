@@ -1,7 +1,7 @@
 {
   "docs": "./README.md",
   "dialect": "mql4",
-  "provenance": "Seeded by tools/generate-golden-lists/extract_registry.py from hand-curated Mql4Builtins.cs (v2.5.1-rc.1). Enriched with documented names + metadata by apply_issue136.py.",
+  "provenance": "Seeded by tools/generate-golden-lists/extract_registry.py from hand-curated Mql4Builtins.cs (v2.5.1-rc.1). Enriched with documented names + metadata by apply_issue136.py. | Description enrichment 2026-10-20 from the official MQL4 Reference CHM by tools/generate-golden-lists/apply_mql4_descriptions.py (+306 function descriptions, +4 variable descriptions).",
   "functions": {
     "OnInit": {
       "signature": "int OnInit()",
@@ -37,31 +37,38 @@
     },
     "OrderSend": {
       "signature": "int OrderSend(string symbol, int cmd, double volume, double price, int slippage, string comment, int magic, datetime expiration, color arrow_color)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The main function used to open market or place a pending order."
     },
     "OrderClose": {
       "signature": "bool OrderClose(int ticket, double lots, double price, int slippage, color Arrow_Color)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Closes opened order."
     },
     "OrderCloseBy": {
       "signature": "bool OrderCloseBy(int ticket, int opposite, color Arrow_Color)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Closes an opened order by another opposite opened order."
     },
     "OrderDelete": {
       "signature": "bool OrderDelete(int ticket, color Arrow_Color)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Deletes previously opened pending order."
     },
     "OrderModify": {
       "signature": "bool OrderModify(int ticket, double price, double stoploss, double takeprofit, datetime expiration, color Arrow_Color)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Modification of characteristics of the previously opened or pending orders."
     },
     "OrdersTotal": {
       "signature": "int OrdersTotal()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the number of market and pending orders."
     },
     "OrderSelect": {
       "signature": "bool OrderSelect(int index, int select, int pool)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function selects an order for further processing."
     },
     "OrderGetDouble": {
       "signature": "double OrderGetDouble(int prop_id)",
@@ -77,104 +84,117 @@
     },
     "SymbolInfoDouble": {
       "signature": "double SymbolInfoDouble(string symbol, int prop_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the corresponding property of a specified symbol. There are 2 variants of the function. 1. Immediately returns the property value. 2. Returns true or false depending on whether a function is successfully performed. In case of success, the value of the property is placed into a recipient variable, passed by reference by the last parameter."
     },
     "SymbolInfoInteger": {
       "signature": "long SymbolInfoInteger(string symbol, int prop_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the corresponding property of a specified symbol. There are 2 variants of the function. 1. Immediately returns the property value. 2. Returns true or false depending on whether a function is successfully performed. In case of success, the value of the property is placed into a recipient variable, passed by reference by the last parameter."
     },
     "MarketInfo": {
       "signature": "double MarketInfo(string symbol, int type)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "SymbolInfoDouble / SymbolInfoInteger (MarketInfo(s, MODE_BID) -> SymbolInfoDouble(s, SYMBOL_BID))",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "No MQL5 equivalent; replaced by typed SymbolInfo functions"
-      }
+      },
+      "description": "Returns various data about securities listed in the \"Market Watch\" window."
     },
     "TimeCurrent": {
       "signature": "datetime TimeCurrent()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the last known server time, time of the last quote receipt for one of the symbols selected in the \"Market Watch\" window. In the OnTick() handler, this function returns the time of the received handled tick. In other cases (for example, call in handlers OnInit(), OnDeinit(), OnTimer() and so on) this is the time of the last quote receipt for any symbol available in the \"Market Watch\" window, the time shown in the title of this window. The time value is formed on a trade server and does not depend on the time settings on your computer. There are 2 variants of the function."
     },
     "TimeLocal": {
       "signature": "datetime TimeLocal()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the local time of a computer, where the client terminal is running. There are 2 variants of the function."
     },
     "TimeGMT": {
       "signature": "datetime TimeGMT()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the GMT, which is calculated taking into account the DST switch by the local time on the computer where the client terminal is running. There are 2 variants of the function."
     },
     "TimeToString": {
       "signature": "string TimeToString(datetime time, int mode)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Converting a value containing time in seconds elapsed since 01.01.1970 into a string of \"yyyy.mm.dd hh:mi\" format."
     },
     "TimeYear": {
       "signature": "int TimeYear(datetime time)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "TimeToStruct(time, dt); ... dt.year",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "No MQL5 equivalent"
-      }
+      },
+      "description": "Returns year of the specified date."
     },
     "TimeMonth": {
       "signature": "int TimeMonth(datetime time)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "TimeToStruct(time, dt); ... dt.mon",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "No MQL5 equivalent"
-      }
+      },
+      "description": "Returns the month number of the specified time."
     },
     "TimeDay": {
       "signature": "int TimeDay(datetime time)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "TimeToStruct(time, dt); ... dt.day",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "No MQL5 equivalent"
-      }
+      },
+      "description": "Returns the day of month (1 - 31) of the specified date."
     },
     "TimeHour": {
       "signature": "int TimeHour(datetime time)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "TimeToStruct(time, dt); ... dt.hour",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "No MQL5 equivalent"
-      }
+      },
+      "description": "Returns the hour of the specified time."
     },
     "TimeMinute": {
       "signature": "int TimeMinute(datetime time)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "TimeToStruct(time, dt); ... dt.min",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "No MQL5 equivalent"
-      }
+      },
+      "description": "Returns the minute of the specified time."
     },
     "TimeSeconds": {
       "signature": "int TimeSeconds(datetime time)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "TimeToStruct(time, dt); ... dt.sec",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "No MQL5 equivalent"
-      }
+      },
+      "description": "Returns the amount of seconds elapsed from the beginning of the minute of the specified time."
     },
     "PositionsTotal": {
       "signature": "int PositionsTotal()",
@@ -218,43 +238,53 @@
     },
     "TerminalInfoInteger": {
       "signature": "int TerminalInfoInteger(int property_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of a corresponding property of the mql4 program environment."
     },
     "TerminalInfoDouble": {
       "signature": "double TerminalInfoDouble(int property_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of a corresponding property of the mql4 program environment."
     },
     "TerminalInfoString": {
       "signature": "string TerminalInfoString(int property_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of a corresponding property of the mql4 program environment. The property must be of string type."
     },
     "MQLInfoInteger": {
       "signature": "int MQLInfoInteger(int property_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of a corresponding property of a running mql4 program."
     },
     "MQLInfoString": {
       "signature": "string MQLInfoString(int property_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of a corresponding property of a running MQL4 program."
     },
     "CharToString": {
       "signature": "string CharToString(uchar char_value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Converting a symbol code into a one-character string."
     },
     "DoubleToString": {
       "signature": "string DoubleToString(double value, int digits)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Converting numeric value into text string."
     },
     "IntegerToString": {
       "signature": "string IntegerToString(int number, int str_len, ushort fill_symbol)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "This function converts value of integer type into a string of a specified length and returns the obtained string."
     },
     "StringToDouble": {
       "signature": "double StringToDouble(string value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function converts string containing a symbol representation of number into number of double type."
     },
     "StringToInteger": {
       "signature": "int StringToInteger(string value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function converts string containing a symbol representation of number into number of int (integer) type."
     },
     "StringToDateTime": {
       "signature": "datetime StringToDateTime(string value)",
@@ -262,83 +292,103 @@
     },
     "StringSplit": {
       "signature": "int StringSplit(string string_value, ushort separator, string& result[])",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Gets substrings by a specified separator from the specified string, returns the number of substrings obtained."
     },
     "StringReplace": {
       "signature": "int StringReplace(string& string_var, string find, string replacement)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It replaces all the found substrings of a string by a set sequence of symbols."
     },
     "StringTrimLeft": {
       "signature": "string StringTrimLeft(string string_var)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function cuts line feed characters, spaces and tabs in the left part of the string till the first meaningful symbol. The string is modified at place."
     },
     "StringTrimRight": {
       "signature": "string StringTrimRight(string string_var)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function cuts line feed characters, spaces and tabs in the right part of the string after the last meaningful symbol. The string is modified at place."
     },
     "StringFormat": {
       "signature": "string StringFormat(string format, ...)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function formats obtained parameters and returns a string."
     },
     "ArrayInitialize": {
       "signature": "int ArrayInitialize(void& array[], double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function initializes a numeric array by a preset value."
     },
     "ArrayCopy": {
       "signature": "int ArrayCopy(void& dst_array[], const void& src_array[], int dst_start, int src_start, int count)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It copies an array into another one."
     },
     "ArrayFill": {
       "signature": "void ArrayFill(void& array[], int start, int count, double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function fills an array with the specified value."
     },
     "iOpen": {
       "signature": "double iOpen(string symbol, int timeframe, int shift)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns Open price value for the bar of specified symbol with timeframe and shift."
     },
     "iHigh": {
       "signature": "double iHigh(string symbol, int timeframe, int shift)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns High price value for the bar of specified symbol with timeframe and shift."
     },
     "iLow": {
       "signature": "double iLow(string symbol, int timeframe, int shift)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns Low price value for the bar of indicated symbol with timeframe and shift."
     },
     "iVolume": {
       "signature": "long iVolume(string symbol, int timeframe, int shift)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns Tick Volume value for the bar of specified symbol with timeframe and shift."
     },
     "iBarShift": {
       "signature": "int iBarShift(string symbol, int timeframe, datetime time)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Search for a bar by its time. The function returns the index of the bar which covers the specified time."
     },
     "iHighest": {
       "signature": "int iHighest(string symbol, int timeframe, int type, int count, int start)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the shift of the maximum value over a specific number of bars depending on type."
     },
     "iLowest": {
       "signature": "int iLowest(string symbol, int timeframe, int type, int count, int start)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the shift of the lowest value over a specific number of bars depending on type."
     },
     "PlaySound": {
       "signature": "bool PlaySound(string filename)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It plays a sound file."
     },
     "SendMail": {
       "signature": "bool SendMail(string subject, string some_text)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sends an email at the address specified in the settings window of the \"Email\" tab."
     },
     "SendNotification": {
       "signature": "bool SendNotification(string some_text)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sends push notifications to the mobile terminals, whose MetaQuotes IDs are specified in the \"Notifications\" tab."
     },
     "CryptEncode": {
       "signature": "int CryptEncode(ENUM_CRYPT_METHOD function, const uchar& src[], const uchar& key[], uchar& dst[])",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Transforms the data from array with the specified method."
     },
     "CryptDecode": {
       "signature": "int CryptDecode(ENUM_CRYPT_METHOD function, const uchar& data[], const uchar& key[], uchar& result[])",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Performs the inverse transformation of the data from array, tranformed by CryptEncode()."
     },
     "CryptMethod": {
       "signature": "ENUM_CRYPT_METHOD CryptMethod(const string method_name)",
@@ -346,19 +396,23 @@
     },
     "CharArrayToString": {
       "signature": "string CharArrayToString(uchar& array[], int start, int count, ushort codepage)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It copies and converts part of array of uchar type into a returned string."
     },
     "ENUM_CRYPT_METHOD": {
       "signature": "Crypt methods enumeration",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The ENUM_CRYPT_METHOD enumeration is used to specify the data transformation method, used in CryptEncode() and CryptDecode() functions."
     },
     "CRYPT_DES": {
       "signature": "CRYPT method: DES 56-bit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "DES encryption with 56 bit key (7 bytes)"
     },
     "CRYPT_AES128": {
       "signature": "CRYPT method: AES 128-bit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "AES encryption with 128 bit key (16 bytes)"
     },
     "CRYPT_AES192": {
       "signature": "CRYPT method: AES 192-bit",
@@ -366,96 +420,114 @@
     },
     "CRYPT_AES256": {
       "signature": "CRYPT method: AES 256-bit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "AES encryption with 256 bit key (32 bytes)"
     },
     "CRYPT_HASH_SHA1": {
       "signature": "CRYPT hash method: SHA1",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "SHA1 HASH calculation"
     },
     "CRYPT_HASH_SHA256": {
       "signature": "CRYPT hash method: SHA256",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "SHA256 HASH calculation"
     },
     "CRYPT_ARCH_ZIP": {
       "signature": "CRYPT archiving method: ZIP",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "ZIP archives"
     },
     "AccountInfoInteger": {
       "signature": "long AccountInfoInteger(int prop_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of the properties of the account."
     },
     "AccountInfoDouble": {
       "signature": "double AccountInfoDouble(int prop_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of the corresponding account property."
     },
     "AccountInfoString": {
       "signature": "string AccountInfoString(int prop_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of the corresponding account property."
     },
     "GlobalVariableTemp": {
       "signature": "bool GlobalVariableTemp(string name)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function attempts to create a temporary global variable. If the variable doesn't exist, the system creates a new temporary global variable."
     },
     "IsStopped": {
       "signature": "bool IsStopped()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Checks the forced shutdown of an mql4 program."
     },
     "IsDllsAllowed": {
       "signature": "bool IsDllsAllowed()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Checks if the DLL function call is allowed for the Expert Advisor."
     },
     "IsOptimization": {
       "signature": "bool IsOptimization()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "MQLInfoInteger(MQL_OPTIMIZATION)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only"
-      }
+      },
+      "description": "Checks if Expert Advisor runs in the Strategy Tester optimization mode."
     },
     "IsVisualMode": {
       "signature": "bool IsVisualMode()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "MQLInfoInteger(MQL_VISUAL_MODE)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only"
-      }
+      },
+      "description": "Checks if the Expert Advisor is tested in visual mode."
     },
     "IsTesting": {
       "signature": "bool IsTesting()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "MQLInfoInteger(MQL_TESTER)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only"
-      }
+      },
+      "description": "Checks if the Expert Advisor runs in the testing mode."
     },
     "MB_ICONINFORMATION": {
       "signature": "MessageBox flag: information icon",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The encircled i sign"
     },
     "ACCOUNT_COMPANY": {
       "signature": "Account property: company",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Name of a company that serves the account"
     },
     "ACCOUNT_LOGIN": {
       "signature": "Account property: login",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Account number"
     },
     "ACCOUNT_NAME": {
       "signature": "Account property: name",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Client name"
     },
     "CRYPT_BASE64": {
       "signature": "CRYPT method: Base64 encoding (MQL4 ENUM_CRYPT_METHOD value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "BASE64"
     },
     "CRYPT_HASH_SHA512": {
       "signature": "CRYPT hash method: SHA512",
@@ -483,47 +555,58 @@
     },
     "ACCOUNT_SERVER": {
       "signature": "Account property: trade server name",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Trade server name"
     },
     "ACCOUNT_CURRENCY": {
       "signature": "Account property: deposit currency",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Account currency"
     },
     "ACCOUNT_BALANCE": {
       "signature": "Account property: balance",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Account balance in the deposit currency"
     },
     "ACCOUNT_EQUITY": {
       "signature": "Account property: equity",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Account equity in the deposit currency"
     },
     "ACCOUNT_PROFIT": {
       "signature": "Account property: floating profit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Current profit of an account in the deposit currency"
     },
     "ACCOUNT_LEVERAGE": {
       "signature": "Account property: leverage",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Account leverage"
     },
     "ACCOUNT_MARGIN": {
       "signature": "Account property: used margin",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Account margin used in the deposit currency"
     },
     "ACCOUNT_MARGIN_FREE": {
       "signature": "Account property: free margin",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Free margin of an account in the deposit currency"
     },
     "ACCOUNT_MARGIN_LEVEL": {
       "signature": "Account property: margin level",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Account margin level in percents"
     },
     "ACCOUNT_MARGIN_SO_SO": {
       "signature": "Account property: margin stop-out level",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Margin stop out level. Depending on the set ACCOUNT_MARGIN_SO_MODE is expressed in percents or in the deposit currency"
     },
     "ACCOUNT_MARGIN_SO_CALL": {
       "signature": "Account property: margin call level",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Margin call level. Depending on the set ACCOUNT_MARGIN_SO_MODE is expressed in percents or in the deposit currency"
     },
     "ACCOUNT_MARGIN_SO_STOP": {
       "signature": "Account property: margin stop-out level",
@@ -531,39 +614,48 @@
     },
     "ACCOUNT_MARGIN_SO_MODE": {
       "signature": "Account property: stop-out mode",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Mode for setting the minimal allowed margin"
     },
     "ACCOUNT_CREDIT": {
       "signature": "Account property: credit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Account credit in the deposit currency"
     },
     "ACCOUNT_TRADE_ALLOWED": {
       "signature": "Account property: trade allowed for this account",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Allowed trade for the current account"
     },
     "ACCOUNT_TRADE_EXPERT": {
       "signature": "Account property: EA trade allowed for this account",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Allowed trade for an Expert Advisor"
     },
     "ACCOUNT_TRADE_MODE": {
       "signature": "Account property: account trade mode",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Account trade mode"
     },
     "ACCOUNT_TRADE_MODE_DEMO": {
       "signature": "Account trade mode: demo",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Demo account"
     },
     "ACCOUNT_TRADE_MODE_CONTEST": {
       "signature": "Account trade mode: contest",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Contest account"
     },
     "ACCOUNT_TRADE_MODE_REAL": {
       "signature": "Account trade mode: real",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Real account"
     },
     "ACCOUNT_LIMIT_ORDERS": {
       "signature": "Account property: maximum pending orders",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Maximum allowed number of open positions and active pending orders (in total), 0 — unlimited"
     },
     "ACCOUNT_TRADE_STOPOUT_LEVEL": {
       "signature": "Account property: stop-out level in percent",
@@ -571,31 +663,38 @@
     },
     "ACCOUNT_ASSETS": {
       "signature": "Account property: assets",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Not supported"
     },
     "ACCOUNT_LIABILITIES": {
       "signature": "Account property: liabilities",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Not supported"
     },
     "ACCOUNT_COMMISSION_BLOCKED": {
       "signature": "Account property: blocked commission",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Not supported"
     },
     "TERMINAL_DLLS_ALLOWED": {
       "signature": "Terminal property: DLL imports allowed",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Permission to use DLL"
     },
     "TERMINAL_DATA_PATH": {
       "signature": "Terminal property: data directory path",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Folder in which terminal data are stored"
     },
     "TERMINAL_CONNECTED": {
       "signature": "Terminal property: connection to the server",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Connection to a trade server"
     },
     "TERMINAL_TRADE_ALLOWED": {
       "signature": "Terminal property: trading allowed",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Permission to trade"
     },
     "TERMINAL_EXPERTS_ALLOWED": {
       "signature": "Terminal property: EA trading allowed",
@@ -603,23 +702,28 @@
     },
     "TERMINAL_COMMONDATA_PATH": {
       "signature": "Terminal property: common data directory",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Common path for all of the terminals installed on a computer"
     },
     "TERMINAL_LANGUAGE": {
       "signature": "Terminal property: interface language",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Language of the terminal"
     },
     "TERMINAL_BUILD": {
       "signature": "Terminal property: build number",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The client terminal build number"
     },
     "TERMINAL_NAME": {
       "signature": "Terminal property: terminal name",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Terminal name"
     },
     "TERMINAL_PATH": {
       "signature": "Terminal property: executable directory",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Folder from which the terminal is started"
     },
     "TERMINAL_EMAIL": {
       "signature": "Terminal property: email configured",
@@ -627,203 +731,253 @@
     },
     "TERMINAL_FTP_ENABLED": {
       "signature": "Terminal property: FTP publishing enabled",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Permission to send reports using FTP-server and login, specified in the terminal settings"
     },
     "IsExpertEnabled": {
       "signature": "bool IsExpertEnabled()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Checks if Expert Advisors are enabled for running."
     },
     "MathRand": {
       "signature": "int MathRand()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns a pseudorandom integer within the range of 0 to 32767."
     },
     "MathSrand": {
       "signature": "void MathSrand(int seed)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sets the starting point for generating a series of pseudorandom integers."
     },
     "MODE_MINLOT": {
       "signature": "MarketInfo property: minimum lot size",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Minimum permitted amount of a lot"
     },
     "MODE_MAXLOT": {
       "signature": "MarketInfo property: maximum lot size",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Maximum permitted amount of a lot"
     },
     "MODE_LOTSIZE": {
       "signature": "MarketInfo property: contract lot size",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Lot size in the base currency"
     },
     "MODE_LOTSTEP": {
       "signature": "MarketInfo property: lot size step",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Step for changing lots"
     },
     "MODE_POINT": {
       "signature": "MarketInfo property: point size",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Point size in the quote currency. For the current symbol, it is stored in the predefined variable Point"
     },
     "MODE_DIGITS": {
       "signature": "MarketInfo property: decimal digits",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Count of digits after decimal point in the symbol prices. For the current symbol, it is stored in the predefined variable Digits"
     },
     "MODE_SPREAD": {
       "signature": "MarketInfo property: current spread",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Spread value in points"
     },
     "MODE_STOPLEVEL": {
       "signature": "MarketInfo property: minimum stop distance",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Stop level in points A zero value of MODE_STOPLEVEL means either absence of any restrictions on the minimal distance for Stop Loss/Take Profit or the fact that a trade server utilizes some external mechanisms for dynamic level control, which cannot be translated in the client terminal. In the second case, GetLastError() can return error 130, because MODE_STOPLEVEL is actually \"floating\" here."
     },
     "MODE_FREEZELEVEL": {
       "signature": "MarketInfo property: freeze distance",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Order freeze level in points. If the execution price lies within the range defined by the freeze level, the order cannot be modified, cancelled or closed"
     },
     "MODE_BID": {
       "signature": "MarketInfo property: current bid",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Last incoming bid price. For the current symbol, it is stored in the predefined variable Bid"
     },
     "MODE_ASK": {
       "signature": "MarketInfo property: current ask",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Last incoming ask price. For the current symbol, it is stored in the predefined variable Ask"
     },
     "MODE_HIGH": {
       "signature": "MarketInfo property: day high",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "High day price"
     },
     "MODE_LOW": {
       "signature": "MarketInfo property: day low",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Low day price"
     },
     "MODE_TIME": {
       "signature": "MarketInfo property: last quote time",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The last incoming tick time (last known server time)"
     },
     "MODE_TRADEALLOWED": {
       "signature": "MarketInfo property: trading allowed for the symbol",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Trade is allowed for the symbol"
     },
     "MathAbs": {
       "signature": "double MathAbs(double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the absolute value (modulus) of the specified numeric value."
     },
     "MathMax": {
       "signature": "double MathMax(double value1, double value2)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the maximal value of two values."
     },
     "MathMin": {
       "signature": "double MathMin(double value1, double value2)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the minimal value of two values."
     },
     "MathPow": {
       "signature": "double MathPow(double base, double exponent)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function raises a base to a specified power."
     },
     "MathSqrt": {
       "signature": "double MathSqrt(double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the square root of a number."
     },
     "MathLog": {
       "signature": "double MathLog(double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns a natural logarithm."
     },
     "MathExp": {
       "signature": "double MathExp(double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the value of e raised to the power of d."
     },
     "MathSin": {
       "signature": "double MathSin(double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the sine of a specified angle."
     },
     "MathCos": {
       "signature": "double MathCos(double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the cosine of an angle."
     },
     "MathTan": {
       "signature": "double MathTan(double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns a tangent of a number."
     },
     "StringLen": {
       "signature": "int StringLen(string string)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the number of symbols in a string."
     },
     "StringSubstr": {
       "signature": "string StringSubstr(string string, int start, int count)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Extracts a substring from a text string starting from the specified position."
     },
     "StringFind": {
       "signature": "int StringFind(string string, string match, int start)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Search for a substring in a string."
     },
     "StringGetCharacter": {
       "signature": "ushort StringGetCharacter(string string, int pos)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns value of a symbol, located in the specified position of a string."
     },
     "StringSetCharacter": {
       "signature": "string StringSetCharacter(string string, int pos, ushort character)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns true is a symbol is successfully inserted to the passed string."
     },
     "StringGetChar": {
       "signature": "ushort StringGetChar(string string_value, int pos)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns character (code) from the specified position in the string."
     },
     "StringSetChar": {
       "signature": "string StringSetChar(string string_var, int pos, ushort char_value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the string copy with changed character in the specified position."
     },
     "StringToCharArray": {
       "signature": "int StringToCharArray(string text, uchar& array[], int start, int count, ushort codepage)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Symbol-wise copies a string converted from Unicode to ANSI, to a selected place of array of uchar type. It returns the number of copied elements."
     },
     "GlobalVariableCheck": {
       "signature": "bool GlobalVariableCheck(string name)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Checks the existence of a global variable with the specified name"
     },
     "WindowExpertName": {
       "signature": "string WindowExpertName()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the name of the executed Expert Advisor, script, custom indicator, or library."
     },
     "MessageBox": {
       "signature": "int MessageBox(string text, string caption, int flags)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It creates and shows a message box and manages it. A message box contains a message and header, any combination of predefined signs and command buttons."
     },
     "StringConcatenate": {
       "signature": "string StringConcatenate(...)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the string formed by concatenation of parameters transformed into string type."
     },
     "StringToUpper": {
       "signature": "string StringToUpper(string string)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Transforms all symbols of a selected string into capitals."
     },
     "StringToLower": {
       "signature": "string StringToLower(string string)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Transforms all symbols of a selected string into lowercase."
     },
     "iMA": {
       "signature": "int iMA(string symbol, int timeframe, int ma_period, int ma_shift, int ma_method, int applied_price)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Calculates the Moving Average indicator and returns its value."
     },
     "iRSI": {
       "signature": "int iRSI(string symbol, int timeframe, int period, int applied_price)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Calculates the Relative Strength Index indicator and returns its value."
     },
     "iMACD": {
       "signature": "int iMACD(string symbol, int timeframe, int fast_ema, int slow_ema, int signal, int applied_price)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Calculates the Moving Averages Convergence/Divergence indicator and returns its value."
     },
     "iBands": {
       "signature": "int iBands(string symbol, int timeframe, int period, double deviation, int bands_shift, int applied_price)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Calculates the Bollinger Bands® indicator and returns its value."
     },
     "iATR": {
       "signature": "int iATR(string symbol, int timeframe, int period)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Calculates the Average True Range indicator and returns its value."
     },
     "iStochastic": {
       "signature": "int iStochastic(string symbol, int timeframe, int Kperiod, int Dperiod, int slowing, int method, int field)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Calculates the Stochastic Oscillator and returns its value."
     },
     "iClose": {
       "signature": "double iClose(string symbol, int timeframe, int shift)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns Close price value for the bar of specified symbol with timeframe and shift."
     },
     "CopyBuffer": {
       "signature": "int CopyBuffer(int handle, int buffer_num, int start_pos, int count, double &buffer[])",
@@ -835,31 +989,38 @@
     },
     "SetIndexBuffer": {
       "signature": "bool SetIndexBuffer(int buffer, double &array[])",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function binds a specified indicator buffer with one-dimensional dynamic array of the double type. There are two variants of the function."
     },
     "SetIndexLabel": {
       "signature": "bool SetIndexLabel(int buffer, string text)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sets drawing line description for showing in the DataWindow and in the tooltip."
     },
     "SetIndexDrawBegin": {
       "signature": "void SetIndexDrawBegin(int buffer, int begin)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sets the bar number (from the data beginning) from which the drawing of the given indicator line must start."
     },
     "ArraySetAsSeries": {
       "signature": "bool ArraySetAsSeries(double &array[], bool set)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function sets the AS_SERIES flag to a selected object of a dynamic array, and elements will be indexed like in timeseries."
     },
     "IndicatorSetString": {
       "signature": "bool IndicatorSetString(int prop_id, int prop_index, string value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function sets the value of the corresponding indicator property. Indicator property must be of the string type. There are two variants of the function."
     },
     "FileOpen": {
       "signature": "int FileOpen(string filename, int mode, string delimiter)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function opens the file with the specified name and flag."
     },
     "FileClose": {
       "signature": "void FileClose(int handle)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Close the file previously opened by FileOpen()."
     },
     "FileRead": {
       "signature": "string FileRead(int handle)",
@@ -867,31 +1028,38 @@
     },
     "FileReadDouble": {
       "signature": "double FileReadDouble(int handle)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Reads a double-precision floating point number (double) from the current position of the binary file."
     },
     "FileWrite": {
       "signature": "int FileWrite(int handle, ...)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function is intended for writing of data into a CSV file, delimiter being inserted automatically unless it is equal to 0. After writing into the file, the line end character \"\\r\\n\" will be added."
     },
     "FileSeek": {
       "signature": "bool FileSeek(int handle, long offset, int origin)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function moves the position of the file pointer by a specified number of bytes relative to the specified position."
     },
     "FileSize": {
       "signature": "long FileSize(int handle)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the file size in bytes."
     },
     "FileIsEnding": {
       "signature": "bool FileIsEnding(int handle)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Defines the end of a file in the process of reading."
     },
     "ArrayResize": {
       "signature": "int ArrayResize(double &array[], int new_size)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function sets a new size for the first dimension"
     },
     "ArraySort": {
       "signature": "bool ArraySort(double &array[], int count, int start, int sort_dir)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sorts numeric arrays by first dimension. The AS_SERIES flag is taken into account in sorting."
     },
     "ArrayReverse": {
       "signature": "bool ArrayReverse(double &array[], int start, int count)",
@@ -899,7 +1067,8 @@
     },
     "ArraySize": {
       "signature": "int ArraySize(double &array[])",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the number of elements of a selected array."
     },
     "ArraySearch": {
       "signature": "int ArraySearch(double &array[], double value, int start, int count, int sort_dir)",
@@ -907,26 +1076,30 @@
     },
     "Print": {
       "signature": "void Print(... )",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It enters a message in the Expert Advisor log. Parameters can be of any type."
     },
     "Alert": {
       "signature": "void Alert(... )",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Displays a message in a separate window."
     },
     "Comment": {
       "signature": "void Comment(... )",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "This function outputs a comment defined by a user in the top left corner of a chart."
     },
     "IsTradeAllowed": {
       "signature": "bool IsTradeAllowed()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "TerminalInfoInteger(TERMINAL_TRADE_ALLOWED) && MQLInfoInteger(MQL_TRADE_ALLOWED)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only"
-      }
+      },
+      "description": "Checks if the Expert Advisor is allowed to trade and trading context is not busy. The second form of the function checks trade status for the specified symbol in the specified time."
     },
     "IsTradeAllowedWebRequest": {
       "signature": "bool IsTradeAllowedWebRequest(string url)",
@@ -934,91 +1107,113 @@
     },
     "GetLastError": {
       "signature": "int GetLastError()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the contents of the system variable _LastError."
     },
     "EnumToString": {
       "signature": "string EnumToString(Enum value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Converting an enumeration value of any type to a text form."
     },
     "Sleep": {
       "signature": "void Sleep(int milliseconds)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function suspends execution of the current Expert Advisor or script within a specified interval."
     },
     "ChartID": {
       "signature": "long ChartID()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the ID of the current chart."
     },
     "ChartGetInteger": {
       "signature": "long ChartGetInteger(long chart_id, int property_id, int sub_window=0)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of a corresponding property of the specified chart. Chart property must be of datetime, int or bool type. There are 2 variants of the function calls. 1. Returns the property value directly. 2. Returns true or false, depending on the success of a function. If successful, the value of the property is placed in a target variable long_var passed by reference."
     },
     "ChartSetInteger": {
       "signature": "bool ChartSetInteger(long chart_id, int property_id, long value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sets a value for a corresponding property of the specified chart. Chart property must be datetime, int, color, bool or char. The command is added to chart message queue and executed only after all previous commands have been processed. Sets a value for a corresponding property of the specified subwindow of the specified chart:"
     },
     "ChartGetString": {
       "signature": "string ChartGetString(long chart_id, int property_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of a corresponding property of the specified chart. Chart property must be of string type. There are 2 variants of the function call. 1. Returns the property value directly. 2. Returns true or false, depending on the success of a function. If successful, the value of the property is placed in a target variable string_var passed by reference."
     },
     "ChartGetDouble": {
       "signature": "double ChartGetDouble(long chart_id, int property_id)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of a corresponding property of the specified chart. Chart property must be of double type. There are 2 variants of the function calls. 1. Returns the property value directly. 2. Returns true or false, depending on the success of a function. If successful, the value of the property is placed in a target variable double_var passed by reference."
     },
     "ChartRedraw": {
       "signature": "void ChartRedraw(long chart_id=0)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "This function calls a forced redrawing of a specified chart."
     },
     "iTime": {
       "signature": "datetime iTime(string symbol, int timeframe, int shift)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns Time value for the bar of specified symbol with timeframe and shift."
     },
     "PrintFormat": {
       "signature": "void PrintFormat(string format, ...)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It formats and enters sets of symbols and values in the Expert Advisor log in accordance with a preset format."
     },
     "GlobalVariableSet": {
       "signature": "datetime GlobalVariableSet(string name, double value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sets a new value for a global variable. If the variable does not exist, the system creates a new global variable."
     },
     "GlobalVariableGet": {
       "signature": "double GlobalVariableGet(string name)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of an existing global variable of the client terminal. There are 2 variants of the function. 1. Immediately returns the value of the global variable. 2. Returns true or false depending on the success of the function run. If successful, the global variable of the client terminal is placed in a variable passed by reference in the second parameter. Parameters"
     },
     "StringToTime": {
       "signature": "datetime StringToTime(string value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function converts a string containing time or date in \"yyyy.mm.dd [hh:mi]\" format into datetime type."
     },
     "FileWriteInteger": {
       "signature": "uint FileWriteInteger(int handle, int value, int size=INT_VALUE)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function writes the value of the int parameter to a bin-file, starting from the current position of the file pointer."
     },
     "FileReadInteger": {
       "signature": "int FileReadInteger(int handle, int size=INT_VALUE)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function reads int, short or char value from the current position of the file pointer depending on the length specified in bytes."
     },
     "FileFlush": {
       "signature": "void FileFlush(int handle)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Writes to a disk all data remaining in the input/output file buffer."
     },
     "ZeroMemory": {
       "signature": "void ZeroMemory(void &variable)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function resets a variable passed to it by reference."
     },
     "TerminalClose": {
       "signature": "void TerminalClose(int result)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function commands the terminal to complete operation."
     },
     "ExpertRemove": {
       "signature": "void ExpertRemove()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function stops an Expert Advisor and unloads it from a chart."
     },
     "ObjectsTotal": {
       "signature": "int ObjectsTotal(long chart_id, int sub_window=-1, int type=-1)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the number of objects of the specified type in the specified chart. There are two variants of the function: The function returns the number of objects of the specified type:"
     },
     "ResetLastError": {
       "signature": "void ResetLastError()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sets the value of the predefined variable _LastError into zero."
     },
     "rand": {
       "signature": "int rand()",
@@ -1032,416 +1227,453 @@
       "signature": "void EventSetTimer(int seconds)",
       "apiTier": "build600",
       "docUrl": "https://docs.mql4.com/event_handling/eventsettimer",
-      "provenance": "issue-136-documented"
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function indicates to the client terminal, that for this indicator or Expert Advisor, events from the timer must be generated with the specified periodicity."
     },
     "EventKillTimer": {
       "signature": "void EventKillTimer()",
       "apiTier": "build600",
       "docUrl": "https://docs.mql4.com/event_handling/eventkilltimer",
-      "provenance": "issue-136-documented"
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Specifies the client terminal that is necessary to stop the generation of events from Timer."
     },
     "EventSetMillisecondTimer": {
       "signature": "bool EventSetMillisecondTimer(int milliseconds)",
       "apiTier": "build600",
       "docUrl": "https://docs.mql4.com/event_handling/eventsetmillisecondtimer",
-      "provenance": "issue-136-documented"
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function indicates to the client terminal that timer events should be generated at intervals less than one second for this Expert Advisor or indicator."
     },
     "StringInit": {
       "signature": "int StringInit(string &string_var, int new_len=0, ushort fill_symbol=' ')",
       "apiTier": "build600",
       "docUrl": "https://docs.mql4.com/strings/stringinit",
-      "provenance": "issue-136-documented"
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Initializes a string by specified symbols and provides the specified string size."
     },
     "iBars": {
       "signature": "int iBars(string symbol, int timeframe)",
       "apiTier": "legacy",
       "docUrl": "https://docs.mql4.com/series/ibars",
-      "provenance": "issue-136-documented",
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql5Mapping": {
         "replacement": "iBars(_Symbol, _Period)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "Name shared with MQL5 (function form); MQL4 bare series array Bars is the pre-600 form"
-      }
+      },
+      "description": "Returns the number of bars on the specified chart."
     },
     "GlobalVariableSetOnCondition": {
       "signature": "bool GlobalVariableSetOnCondition(string name, double value, double check_value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/globals/globalvariablesetoncondition",
-      "provenance": "issue-136-documented"
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sets the new value of the existing global variable if the current value equals to the third parameter check_value. If there is no global variable, the function will generate an error ERR_GLOBALVARIABLE_NOT_FOUND (4501) and return false."
     },
     "IsConnected": {
       "signature": "bool IsConnected()",
       "apiTier": "legacy",
       "docUrl": "https://docs.mql4.com/check/isconnected",
-      "provenance": "issue-136-documented",
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql5Mapping": {
         "replacement": "TerminalInfoInteger(TERMINAL_CONNECTED)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only"
       },
-      "mql4OnlyApi": true
+      "mql4OnlyApi": true,
+      "description": "Checks connection between client terminal and server."
     },
     "WindowFind": {
       "signature": "int WindowFind(string window_name)",
       "apiTier": "legacy",
       "docUrl": "https://docs.mql4.com/window/windowfind",
-      "provenance": "issue-136-documented",
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql5Mapping": {
         "replacement": "ChartWindowFind()",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only window index API"
       },
-      "mql4OnlyApi": true
+      "mql4OnlyApi": true,
+      "description": "Returns the window index containing this specified indicator."
     },
     "TimeToStr": {
       "signature": "string TimeToStr(datetime value, int mode=TIME_DATE|TIME_MINUTES)",
       "apiTier": "legacy",
       "docUrl": "https://docs.mql4.com/convert/timetostr",
-      "provenance": "issue-136-documented",
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql5Mapping": {
         "replacement": "TimeToString",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "Idéntica conversión, distinto nombre"
-      }
+      },
+      "description": "Converts value containing time in seconds that has passed since January 1, 1970, into a string of \"yyyy.mm.dd hh:mi\" format."
     },
     "StrToTime": {
       "signature": "datetime StrToTime(string value)",
       "apiTier": "legacy",
       "docUrl": "https://docs.mql4.com/convert/strtotime",
-      "provenance": "issue-136-documented",
+      "provenance": "issue-136-documented; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql5Mapping": {
         "replacement": "StringToTime",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "Idéntica conversión, distinto nombre"
-      }
+      },
+      "description": "Converts string in the format \"yyyy.mm.dd hh:mi\" to datetime type (the amount of seconds that have passed since 1 Jan., 1970)."
     },
     "TimeDayOfWeek": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "TimeToStruct(time, dt); ... dt.day_of_week",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "No MQL5 equivalent"
-      }
+      },
+      "description": "Returns the zero-based day of week (0 means Sunday,1,2,3,4,5,6) of the specified date."
     },
     "TimeDayOfYear": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "TimeToStruct(time, dt); ... dt.day_of_year",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "No MQL5 equivalent"
-      }
+      },
+      "description": "Returns the day of year of the specified date."
     },
     "RefreshRates": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "remove call; use SymbolInfoTick",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only; MQL5 refreshes quotes automatically"
-      }
+      },
+      "description": "Refreshing of data in pre-defined variables and series arrays."
     },
     "IndicatorCounted": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "prev_calculated parameter of OnCalculate",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only custom-indicator helper"
-      }
+      },
+      "description": "The function returns the amount of bars not changed after the indicator had been launched last."
     },
     "WindowRedraw": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "ChartRedraw()",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only"
-      }
+      },
+      "description": "Redraws the current chart forcedly."
     },
     "WindowOnDropped": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "ChartGetInteger(0, CHART_WINDOWS_TOTAL) family / CHART_WINDOW_XY events",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only"
-      }
+      },
+      "description": "Returns the window index where Expert Advisor, custom indicator or script was dropped."
     },
     "IsDemo": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_DEMO",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4-only"
-      }
+      },
+      "description": "Checks if the Expert Advisor runs on a demo account."
     },
     "OrderType": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetInteger(POSITION_TYPE) / HistoryOrderGetInteger(ticket, ORDER_TYPE)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns order operation type of the currently selected order."
     },
     "OrderLots": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetDouble(POSITION_VOLUME)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns amount of lots of the selected order."
     },
     "OrderMagicNumber": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetInteger(POSITION_MAGIC)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns an identifying (magic) number of the currently selected order."
     },
     "OrderSymbol": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetString(POSITION_SYMBOL)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns symbol name of the currently selected order."
     },
     "OrderComment": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetString(POSITION_COMMENT)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns comment of the currently selected order."
     },
     "OrderOpenPrice": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetDouble(POSITION_PRICE_OPEN)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns open price of the currently selected order."
     },
     "OrderClosePrice": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "HistoryDealGetDouble(deal, DEAL_PRICE)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns close price of the currently selected order."
     },
     "OrderCloseTime": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "HistoryDealGetInteger(deal, DEAL_TIME)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns close time of the currently selected order."
     },
     "OrderOpenTime": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetInteger(POSITION_TIME)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns open time of the currently selected order."
     },
     "OrderStopLoss": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetDouble(POSITION_SL)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns stop loss value of the currently selected order."
     },
     "OrderTakeProfit": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetDouble(POSITION_TP)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns take profit value of the currently selected order."
     },
     "OrderProfit": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetDouble(POSITION_PROFIT) / HistoryDealGetDouble(deal, DEAL_PROFIT)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns profit of the currently selected order."
     },
     "OrderSwap": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "HistoryDealGetDouble(deal, DEAL_SWAP)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns swap value of the currently selected order."
     },
     "OrderCommission": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "HistoryDealGetDouble(deal, DEAL_COMMISSION)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns calculated commission of the currently selected order."
     },
     "OrderTicket": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "PositionGetInteger(POSITION_TICKET)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns ticket number of the currently selected order."
     },
     "OrderExpiration": {
       "signature": "(documented MQL4 API; signature not yet captured)",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "OrderGetInteger(ticket, ORDER_TIME_EXPIRATION)",
         "kind": "rename",
         "semanticsChanged": false,
         "note": "MQL4 order-property getter; not in MQL5"
-      }
+      },
+      "description": "Returns expiration date of the selected pending order."
     },
     "NormalizeDouble": {
       "signature": "double NormalizeDouble(double value, int digits)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/convert",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Rounding floating point number to a specified accuracy."
     },
     "MathArccos": {
       "signature": "double MathArccos(double value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/math",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the arccosine of x within the range 0 to π in radians."
     },
     "MathArcsin": {
       "signature": "double MathArcsin(double value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/math",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the arc sine of x within the range of -π/2 to π/2 radians."
     },
     "MathArctan": {
       "signature": "double MathArctan(double value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/math",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the arc tangent of x. If x is equal to 0, the function returns 0."
     },
     "MathArctan2": {
       "signature": "double MathArctan2(double y, double x)",
@@ -1453,193 +1685,225 @@
       "signature": "double MathCeil(double value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/math",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns integer numeric value closest from above."
     },
     "MathFloor": {
       "signature": "double MathFloor(double value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/math",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns integer numeric value closest from below."
     },
     "MathLog10": {
       "signature": "double MathLog10(double value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/math",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the logarithm of a number by base 10."
     },
     "MathMod": {
       "signature": "double MathMod(double value1, double value2)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/math",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the real remainder of division of two numbers."
     },
     "MathIsValidNumber": {
       "signature": "bool MathIsValidNumber(double number)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/math",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It checks the correctness of a real number."
     },
     "GetTickCount": {
       "signature": "uint GetTickCount()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/common",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The GetTickCount() function returns the number of milliseconds that elapsed since the system start."
     },
     "SendFTP": {
       "signature": "bool SendFTP(string filename, string ftp_path=NULL)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/common",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Sends a file at the address, specified in the setting window of the \"FTP\" tab."
     },
     "Year": {
       "signature": "int Year()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/dateandtime",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the current year, i.e., the year of the last known server time."
     },
     "Month": {
       "signature": "int Month()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/dateandtime",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the current month as number (1-January,2,3,4,5,6,7,8,9,10,11,12), i.e., the number of month of the last known server time."
     },
     "Day": {
       "signature": "int Day()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/dateandtime",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the current day of the month, i.e., the day of month of the last known server time."
     },
     "DayOfWeek": {
       "signature": "int DayOfWeek()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/dateandtime",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the current zero-based day of the week (0-Sunday,1,2,3,4,5,6) of the last known server time."
     },
     "DayOfYear": {
       "signature": "int DayOfYear()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/dateandtime",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the current day of the year (1 means 1 January,..,365(6) does 31 December), i.e., the day of year of the last known server time."
     },
     "Hour": {
       "signature": "int Hour()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/dateandtime",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the hour (0,1,2,..23) of the last known server time by the moment of the program start."
     },
     "Minute": {
       "signature": "int Minute()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/dateandtime",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the current minute (0,1,2,..59) of the last known server time by the moment of the program start."
     },
     "Seconds": {
       "signature": "int Seconds()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/dateandtime",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the amount of seconds elapsed from the beginning of the current minute of the last known server time by the moment of the program start."
     },
     "TimeDaylightSavings": {
       "signature": "int TimeDaylightSavings(datetime value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/dateandtime",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns correction for daylight saving time in seconds, if the switch to summer time has been made. It depends on the time settings of your computer."
     },
     "ObjectCreate": {
       "signature": "bool ObjectCreate(long chart_id, string name, ENUM_OBJECT type, int sub_window, datetime time1, double price1)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function creates an object with the specified name, type, and the initial coordinates in the specified chart subwindow of the specified chart. There are two variants of the function: The function creates an object with the specified name, type, and the initial coordinates in the specified chart subwindow:"
     },
     "ObjectDelete": {
       "signature": "bool ObjectDelete(long chart_id, string name)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function removes the object with the specified name at the specified chart. There are two variants of the function: The function removes the object with the specified name:"
     },
     "ObjectGet": {
       "signature": "double ObjectGet(string name, int prop_id)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the value of the specified object property."
     },
     "ObjectGetDouble": {
       "signature": "double ObjectGetDouble(long chart_id, string name, ENUM_OBJECT_PROPERTY_DOUBLE prop_id, int prop_modifier=0)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the value of the corresponding object property. The object property must be of the double type. There are 2 variants of the function. 1. Immediately returns the property value. 2. Returns true or false, depending on the success of the function. If successful, the property value is placed to a receiving variable passed by reference by the last parameter."
     },
     "ObjectGetInteger": {
       "signature": "long ObjectGetInteger(long chart_id, string name, ENUM_OBJECT_PROPERTY_INTEGER prop_id, int prop_modifier=0)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the value of the corresponding object property. The object property must be of the datetime, int, color, bool or char type. There are 2 variants of the function. 1. Immediately returns the property value. 2. Returns true or false, depending on the success of the function. If successful, the property value is placed to a receiving variable passed by reference by the last parameter."
     },
     "ObjectGetString": {
       "signature": "string ObjectGetString(long chart_id, string name, ENUM_OBJECT_PROPERTY_STRING prop_id, int prop_modifier=0)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the value of the corresponding object property. The object property must be of the string type. There are 2 variants of the function. 1. Immediately returns the property value. 2. Returns true or false, depending on the success of the function. If successful, the property value is placed to a receiving variable passed by reference by the last parameter."
     },
     "ObjectFind": {
       "signature": "int ObjectFind(long chart_id, string name)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function searches for an object having the specified name. There are two variants of the function: The function searches the object with the specified name:"
     },
     "ObjectName": {
       "signature": "string ObjectName(long chart_id, int pos, int sub_window=-1, int type=-1)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the name of the corresponding object by its index in the objects list."
     },
     "ObjectSet": {
       "signature": "bool ObjectSet(string name, int prop_id, double value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Changes the value of the specified object property."
     },
     "ObjectSetDouble": {
       "signature": "bool ObjectSetDouble(long chart_id, string name, ENUM_OBJECT_PROPERTY_DOUBLE prop_id, double prop_value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function sets the value of the corresponding object property. The object property must be of the double type. There are 2 variants of the function."
     },
     "ObjectSetInteger": {
       "signature": "bool ObjectSetInteger(long chart_id, string name, ENUM_OBJECT_PROPERTY_INTEGER prop_id, long prop_value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function sets the value of the corresponding object property. The object property must be of the datetime, int, color, bool or char type. There are 2 variants of the function."
     },
     "ObjectSetString": {
       "signature": "bool ObjectSetString(long chart_id, string name, ENUM_OBJECT_PROPERTY_STRING prop_id, string prop_value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function sets the value of the corresponding object property. The object property must be of the string type. There are 2 variants of the function."
     },
     "ObjectSetText": {
       "signature": "bool ObjectSetText(string name, string text, int font_size=10, string font=NULL, color text_color=clrNONE)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function changes the object description."
     },
     "ObjectsDeleteAll": {
       "signature": "int ObjectsDeleteAll(long chart_id, int sub_window=-1, int type=-1)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/objects",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Removes all objects from the specified chart, specified chart subwindow, of the specified type. Removes all objects of the specified type from the specified chart subwindow. Removes all objects of the specified type using prefix in object names."
     },
     "SymbolInfoTick": {
       "signature": "bool SymbolInfoTick(string symbol, MqlTick &tick)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns current prices of a specified symbol in a variable of the MqlTick type."
     },
     "SymbolInfoSessionQuote": {
       "signature": "bool SymbolInfoSessionQuote(string name, ENUM_DAY_OF_WEEK day_of_week, uint session_index, datetime &from, datetime &to)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Allows receiving time of beginning and end of the specified quoting sessions for a specified symbol and day of week."
     },
     "SymbolInfoSessionOrder": {
       "signature": "bool SymbolInfoSessionOrder(string name, ENUM_DAY_OF_WEEK day_of_week, uint session_index, datetime &from, datetime &to)",
@@ -1651,55 +1915,64 @@
       "signature": "int SymbolsTotal(bool selected)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the number of available (selected in Market Watch or all) symbols."
     },
     "SymbolName": {
       "signature": "string SymbolName(int pos, bool selected)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the name of a symbol."
     },
     "SymbolSelect": {
       "signature": "bool SymbolSelect(string name, bool select)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Selects a symbol in the Market Watch window or removes a symbol from the window."
     },
     "OrdersHistoryTotal": {
       "signature": "int OrdersHistoryTotal()",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/series",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the number of closed orders in the account history loaded into the terminal."
     },
     "StringCompare": {
       "signature": "int StringCompare(const string &string1, const string &string2, bool case_sensitive=true)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/strings",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function compares two strings and returns the comparison result in form of an integer."
     },
     "MathRound": {
       "signature": "double MathRound(double value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/math",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns a value rounded off to the nearest integer of the specified numeric value."
     },
     "SymbolInfoString": {
       "signature": "string SymbolInfoString(string name, int prop_id)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the corresponding property of a specified symbol. There are 2 variants of the function. 1. Immediately returns the property value. 2. Returns true or false, depending on the success of a function. If successful, the value of the property is placed in a placeholder variable passed by reference in the last parameter."
     },
     "DoubleToStr": {
       "signature": "string DoubleToStr(double value, int digits)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/convert",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns text string with the specified numerical value converted into a specified precision format."
     },
     "StrToDouble": {
       "signature": "double StrToDouble(string value)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/convert",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Converts string representation of number to double type (double-precision format with floating point)."
     },
     "CharToStr": {
       "signature": "string CharToStr(uchar char_code)",
@@ -1710,7 +1983,8 @@
         "semanticsChanged": false,
         "note": "Deprecated MQL4 alias; MQL5 documents CharToString(uchar,char_code) with identical semantics"
       },
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Conversion of the symbol code into a one-character string."
     },
     "StrToInteger": {
       "signature": "int StrToInteger(string value)",
@@ -1721,138 +1995,170 @@
         "semanticsChanged": false,
         "note": "Deprecated MQL4 alias; StringToInteger(string) with identical semantics"
       },
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Converts string containing the value character representation into a value of the int (integer) type."
     },
     "FileDelete": {
       "signature": "bool FileDelete(const string file_name, int common_flag=0)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Deletes the specified file in a local folder of the client terminal."
     },
     "FileIsExist": {
       "signature": "bool FileIsExist(const string file_name, int common_flag=0)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Checks the existence of a file."
     },
     "TesterStatistics": {
       "signature": "double TesterStatistics(ENUM_STATISTICS statistic_id)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the value of the specified statistical parameter calculated based on testing results."
     },
     "TimeToStruct": {
       "signature": "bool TimeToStruct(datetime dt, MqlDateTime& dt_struct)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Converts a value of datetime type (number of seconds since 01.01.1970) into a structure variable MqlDateTime."
     },
     "ArrayFree": {
       "signature": "void ArrayFree(void& array[])",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It frees up a buffer of any dynamic array and sets the size of the zero dimension to 0."
     },
     "ShortArrayToString": {
       "signature": "string ShortArrayToString(ushort array[], int start=0, int count=-1)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "It copies part of array into a returned string."
     },
     "StringToShortArray": {
       "signature": "int StringToShortArray(string text, ushort& array[], int start=0, int count=-1)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function symbol-wise copies a string into a specified place of an array of ushort type. It returns the number of copied elements."
     },
     "ObjectMove": {
       "signature": "bool ObjectMove(long chart_id, string object_name, int point_index, datetime time, double price)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function changes coordinates of the specified anchor point of the object at the specified chart. There are two variants of the function: The function changes coordinates of the specified anchor point of the object."
     },
     "ObjectGetValueByShift": {
       "signature": "double ObjectGetValueByShift(string object_name, int shift)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function calculates and returns the price value for the specified bar (shift related to the current bar)."
     },
     "ChartClose": {
       "signature": "bool ChartClose(long chart_id=0)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Closes the specified chart."
     },
     "ChartFirst": {
       "signature": "long ChartFirst()",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the ID of the first chart of the client terminal."
     },
     "ChartNext": {
       "signature": "long ChartNext(long chart_id)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the chart ID of the chart next to the specified one."
     },
     "ChartOpen": {
       "signature": "long ChartOpen(string symbol, int period)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Opens a new chart with the specified symbol and period. The command is added to chart message queue and executed only after all previous commands have been processed."
     },
     "ChartXYToTimePrice": {
       "signature": "bool ChartXYToTimePrice(long chart_id, int x, int y, int sub_window, datetime& time, double& price)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Converts the X and Y coordinates on a chart to the time and price values."
     },
     "CopyTime": {
       "signature": "int CopyTime(string symbol_name, ENUM_TIMEFRAMES timeframe, datetime start_time, int count, datetime& time_array[])",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function gets to time_array history data of bar opening time for the specified symbol-period pair in the specified quantity. It should be noted that elements ordering is from present to past, i.e., starting position of 0 means the current bar. When copying the yet unknown amount of data, it is recommended to use dynamic array as a target array, because if the requested data count is less (or more) than the length of the target array, function tries to reallocate the memory so that the requested data fit entirely. If you know the amount of data you need to copy, it should better be done to a statically allocated buffer, in order to prevent the allocation of excessive memory. No matter what is the property of the target array - as_series=true or as_series=false. Data will be copied so that the oldest element will be located at the start of the physical memory allocated for the array. There are 3 variants of function calls."
     },
     "EventChartCustom": {
       "signature": "bool EventChartCustom(long chart_id, ushort eventid, long lparam, double dparam, string sparam)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function generates a custom event for the specified chart."
     },
     "HideTestIndicators": {
       "signature": "void HideTestIndicators(bool hide)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function sets a flag hiding indicators called by the Expert Advisor."
     },
     "TextGetSize": {
       "signature": "bool TextGetSize(string text, uint& width, uint& height)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function returns the line width and height at the current font settings."
     },
     "TextSetFont": {
       "signature": "bool TextSetFont(string name, int size=0, uint flags=0, int orientation=0)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function sets the font for displaying the text using drawing methods and returns the result of that operation. Arial font with the size -120 (12 pt) is used by default."
     },
     "WindowBarsPerChart": {
       "signature": "int WindowBarsPerChart()",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the amount of bars visible on the chart."
     },
     "WindowFirstVisibleBar": {
       "signature": "int WindowFirstVisibleBar()",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns index of the first visible bar in the current chart window."
     },
     "WindowHandle": {
       "signature": "int WindowHandle(string symbol, int timeframe)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the system handle of the chart window."
     },
     "WindowPriceMax": {
       "signature": "double WindowPriceMax(int shift=0)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the maximal value of the vertical scale of the specified subwindow of the current chart."
     },
     "WindowPriceMin": {
       "signature": "double WindowPriceMin(int shift=0)",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Returns the minimal value of the vertical scale of the specified subwindow of the current chart."
     },
     "FileWriteString": {
       "signature": "uint FileWriteString(int handle, string text, int length)",
       "docUrl": "https://docs.mql4.com/files/filewritestring",
-      "provenance": "issue-163-documented"
+      "provenance": "issue-163-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function writes the value of a string-type parameter into a BIN, CSV or TXT file starting from the current position of the file pointer. When writing to a CSV or TXT file: if there is a symbol in the string '\\n' (LF) without previous character '\\r' (CR), then before '\\n' the missing '\\r' is added."
     },
     "FileReadString": {
       "signature": "string FileReadString(int handle, int length)",
       "docUrl": "https://docs.mql4.com/files/filereadstring",
-      "provenance": "issue-163-documented"
+      "provenance": "issue-163-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function reads a string from the current position of a file pointer in a file."
     },
     "FolderCreate": {
       "signature": "bool FolderCreate(string folder_name, int common_flag)",
       "docUrl": "https://docs.mql4.com/files/foldercreate",
-      "provenance": "issue-163-documented"
+      "provenance": "issue-163-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function creates a folder in the Files directory (depending on the value of common_flag)."
     },
     "FolderDelete": {
       "signature": "bool FolderDelete(string folder_name, int common_flag)",
       "docUrl": "https://docs.mql4.com/files/folderdelete",
-      "provenance": "issue-163-documented"
+      "provenance": "issue-163-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function removes the specified directory. If the folder is not empty, then it can't be removed."
     },
     "FileCopy": {
       "signature": "bool FileCopy(string src_file_name, int common_flag, string dst_file_name, int mode_flags)",
       "docUrl": "https://docs.mql4.com/files/filecopy",
-      "provenance": "issue-163-documented"
+      "provenance": "issue-163-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The function copies the original file from a local or shared folder to another file."
     },
     "FileMove": {
       "signature": "bool FileMove(string src_file_name, int common_flag, string dst_file_name, int mode_flags)",
       "docUrl": "https://docs.mql4.com/files/filemove",
-      "provenance": "issue-163-documented"
+      "provenance": "issue-163-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "Moves a file from a local or shared folder to another folder."
     },
     "FileTell": {
       "signature": "ulong FileTell(int handle)",
       "docUrl": "https://docs.mql4.com/files/filetell",
-      "provenance": "issue-163-documented"
+      "provenance": "issue-163-documented; descriptions-official-mql4-reference-chm-2026-10-20",
+      "description": "The file returns the current position of the file pointer of an open file."
     }
   },
   "variables": {
@@ -3006,10 +3312,10 @@
       "provenance": "issue-136-documented"
     },
     "Close": {
-      "description": "(documented MQL4 API; signature not yet captured)",
+      "description": "Series array that contains close prices for each bar of the current chart. Series array elements are indexed in the reverse order, i.e., from the last one to the first one. The current bar which is the last in the array is indexed as 0. The oldest bar, the first in the chart, is indexed as Bars-1.",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "iClose(_Symbol, _Period, shift)",
@@ -3019,10 +3325,10 @@
       }
     },
     "High": {
-      "description": "(documented MQL4 API; signature not yet captured)",
+      "description": "Series array that contains the highest prices of each bar of the current chart. Series array elements are indexed in the reverse order, i.e., from the last one to the first one. The current bar which is the last in the array is indexed as 0. The oldest bar, the first in the chart, is indexed as Bars-1.",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "iHigh(_Symbol, _Period, shift)",
@@ -3032,10 +3338,10 @@
       }
     },
     "Low": {
-      "description": "(documented MQL4 API; signature not yet captured)",
+      "description": "Series array that contains the lowest prices of each bar of the current chart. Series array elements are indexed in the reverse order, i.e., from the last one to the first one. The current bar which is the last in the array is indexed as 0. The oldest bar, the first in the chart, is indexed as Bars-1.",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "iLow(_Symbol, _Period, shift)",
@@ -3045,10 +3351,10 @@
       }
     },
     "Open": {
-      "description": "(documented MQL4 API; signature not yet captured)",
+      "description": "Series array that contains open prices of each bar of the current chart. Series array elements are indexed in the reverse order, i.e., from the last one to the first one. The current bar which is the last in the array is indexed as 0. The oldest bar, the first in the chart, is indexed as Bars-1.",
       "apiTier": "legacy",
       "docUrl": null,
-      "provenance": "issue-34-migration-registry",
+      "provenance": "issue-34-migration-registry; descriptions-official-mql4-reference-chm-2026-10-20",
       "mql4OnlyApi": true,
       "mql5Mapping": {
         "replacement": "iOpen(_Symbol, _Period, shift)",
