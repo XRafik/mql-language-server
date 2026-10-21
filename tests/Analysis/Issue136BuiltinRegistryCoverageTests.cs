@@ -324,9 +324,14 @@ public class Issue136BuiltinRegistryCoverageTests
         Assert.True(functionsWithoutDescription <= 15,
             $"MQL5 golden list has {functionsWithoutDescription} functions without " +
             $"a description (baseline {baselineFunctionsWithoutDescription}).");
-        // The residual functions are MQL4-legacy names (AccountBalance,
-        // OrderClose, FileRead, ...) that have no page in the MQL5
-        // Reference PDF; they are reported with evidence in
+        // The MQL4-legacy names among the description-less entries
+        // (AccountBalance, OrderClose, CryptMethod, ...) were removed from
+        // the dataset by the MQL5-dataset-hygiene change (see
+        // odd/tasks/mql5-dataset-hygiene.md and
+        // tools/generate-golden-lists/data/mql5-dataset-audit.json). The
+        // remaining description-less names (FileRead — a documented dump
+        // hole — and other PDF-extraction residues) have no page in the
+        // MQL5 Reference PDF; they are reported with evidence in
         // tools/generate-golden-lists/data/mql5-descriptions.json.
     }
     // --- Issue #166: MQL4 golden-list description enrichment ---------------
@@ -466,6 +471,50 @@ public class Issue136BuiltinRegistryCoverageTests
             "MQL5-only names still present in data/builtins/mql4.json " +
             "(MQL4 Reference CHM has no MQL4 documentation for them; see " +
             "tools/generate-golden-lists/data/mql4-dataset-audit.json): " +
+            string.Join(", ", offenders));
+    }
+
+    // --- MQL4-only names removed from the MQL5 golden list -----------------
+    // --- evidence: tools/generate-golden-lists/data/mql5-dataset-audit.json --
+    // --- (deterministic dump-evidence report; see ---------------------------
+    // --- odd/tasks/mql5-dataset-hygiene.md). These names are documented in --
+    // --- the MQL4 Reference only: the MQL5 reference documents the ---------
+    // --- replacements (StringGetCharacter/StringSetCharacter, -------------
+    // --- MAIN_LINE/SIGNAL_LINE/UPPER_BAND/LOWER_BAND, AccountInfoDouble) ---
+    // --- and the Order* trade calls resolve via CTrade class methods -------
+    // --- (Standard Library, #150 scope convention); StringToDateTime and ---
+    // --- CryptMethod are phantom names with zero evidence in ANY dialect. --
+    private static readonly string[] Mql4OnlyNamesRemovedFromMql5Golden =
+    {
+        // functions (14)
+        "OrderClose", "OrderCloseBy", "OrderModify", "OrderDelete",
+        "WindowExpertName", "AccountBalance", "AccountEquity",
+        "AccountFreeMargin", "AccountMargin", "StringGetChar",
+        "StringSetChar", "CryptMethod", "DateTimeToString",
+        "StringToDateTime",
+        // variables (4)
+        "MODE_MAIN", "MODE_SIGNAL", "MODE_UPPER", "MODE_LOWER",
+    };
+
+    /// <summary>
+    /// Dataset-hygiene gate: MQL4-only names that leaked into the MQL5
+    /// golden list must stay out (see odd/tasks/mql5-dataset-hygiene.md and
+    /// the evidence report tools/generate-golden-lists/data/
+    /// mql5-dataset-audit.json).
+    /// </summary>
+    [Fact]
+    public void Mql5GoldenList_ExcludesMql4OnlyNames()
+    {
+        var (functions, variables) = LoadMql5Golden();
+
+        var offenders = Mql4OnlyNamesRemovedFromMql5Golden
+            .Where(n => functions.ContainsKey(n) || variables.ContainsKey(n))
+            .ToList();
+
+        Assert.True(offenders.Count == 0,
+            "MQL4-only names still present in data/builtins/mql5.json " +
+            "(the MQL5 reference does not document them; see " +
+            "tools/generate-golden-lists/data/mql5-dataset-audit.json): " +
             string.Join(", ", offenders));
     }
 

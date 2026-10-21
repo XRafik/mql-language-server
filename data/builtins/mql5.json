@@ -8,24 +8,6 @@
       "description": "The OrderSend() function is used for executing trade operations by sending requests to a trade server.",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "OrderClose": {
-      "signature": "bool OrderClose(ulong ticket)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "OrderCloseBy": {
-      "signature": "bool OrderCloseBy(ulong ticket, ulong opposite)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "OrderDelete": {
-      "signature": "bool OrderDelete(ulong ticket)",
-      "description": "Deletes the pending order.",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "OrderModify": {
-      "signature": "bool OrderModify(ulong ticket, double price, double stoploss, double takeprofit, datetime expiration)",
-      "description": "Modifies the pending order parameters.",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
     "OrderGetTicket": {
       "signature": "ulong OrderGetTicket(int index)",
       "description": "Returns ticket of a corresponding order and automatically selects the order for further working with it using functions.",
@@ -90,22 +72,6 @@
       "signature": "string PositionGetString(int prop_id)",
       "description": "The function returns the requested property of an open position, pre-selected using PositionGetSymbol or PositionSelect. The position property should be of the string type. There are 2 variants of the function. 1. Immediately returns the property value.",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "AccountBalance": {
-      "signature": "double AccountBalance()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountEquity": {
-      "signature": "double AccountEquity()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountMargin": {
-      "signature": "double AccountMargin()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountFreeMargin": {
-      "signature": "double AccountFreeMargin()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "AccountInfoDouble": {
       "signature": "double AccountInfoDouble(int prop_id)",
@@ -422,14 +388,6 @@
       "description": "The function converts string containing a symbol representation of number into number of long (integer) type.",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "StringToDateTime": {
-      "signature": "datetime StringToDateTime(string value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "DateTimeToString": {
-      "signature": "string DateTimeToString(datetime value, int mode)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "StringSplit": {
       "signature": "int StringSplit(string string_value, ushort separator, string& result[])",
       "description": "Gets substrings by a specified separator from the specified string, returns the number of substrings obtained.",
@@ -555,10 +513,6 @@
       "description": "Performs the inverse transformation of the data from array, tranformed by CryptEncode(). int CryptEncode( ENUM_CRYPT_METHOD method, // method const uchar& data[], // source array const uchar& key[], // key uchar& result[] // destination array",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "CryptMethod": {
-      "signature": "ENUM_CRYPT_METHOD CryptMethod(const string method_name)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "CharArrayToString": {
       "signature": "string CharArrayToString(uchar& array[], int start, int count, ushort codepage)",
       "description": "It copies and converts part of array of uchar type into a returned string.",
@@ -589,18 +543,10 @@
       "description": "It creates and shows a message box and manages it. A message box contains a message and header, any combination of predefined signs and command buttons.",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "StringGetChar": {
-      "signature": "ushort StringGetChar(string string_value, int pos)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "StringGetCharacter": {
       "signature": "ushort StringGetCharacter(string string_value, int pos)",
       "description": "Returns value of a symbol, located in the specified position of a string.",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "StringSetChar": {
-      "signature": "string StringSetChar(string string_var, int pos, ushort char_value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "StringToCharArray": {
       "signature": "int StringToCharArray(string text, uchar& array[], int start, int count, ushort codepage)",
@@ -611,10 +557,6 @@
       "signature": "bool GlobalVariableCheck(string name)",
       "description": "Checks the existence of a globalvariable with the specified name",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "WindowExpertName": {
-      "signature": "string WindowExpertName()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "TERMINAL_DLLS_ALLOWED": {
       "signature": "Terminal property: DLL imports allowed",
@@ -4434,22 +4376,6 @@
     },
     "STYLE_DASHDOTDOT": {
       "description": "ENUM_LINE_STYLE constant: dash-dot-dot line",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "MODE_MAIN": {
-      "description": "Indicator line identifier: main line (MQL5 indicator line; in MQL4 an indicator-buffer mode)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "MODE_SIGNAL": {
-      "description": "Indicator line identifier: signal line (MQL5 indicator line; in MQL4 an indicator-buffer mode)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "MODE_UPPER": {
-      "description": "Indicator line identifier: upper band (MQL5 indicator line; in MQL4 an indicator-buffer mode)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "MODE_LOWER": {
-      "description": "Indicator line identifier: lower band (MQL5 indicator line; in MQL4 an indicator-buffer mode)",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "MODE_PLUSDI": {

@@ -21,10 +21,15 @@ public class Issue109BuiltinRegistryCoverageTests
 
     // A broader sweep of common standard-library names that the same grep
     // audit found missing from both dialects. StringToDateTime and
-    // CryptMethod are asserted separately: they are MQL5-only (the MQL4
-    // Reference CHM has no MQL4 documentation for them) and were removed
-    // from the MQL4 golden list by the MQL4-dataset-hygiene change (see
-    // tools/generate-golden-lists/data/mql4-dataset-audit.json).
+    // CryptMethod are asserted separately: they are phantom names with
+    // zero evidence in ANY dialect reference, removed from the MQL4
+    // golden list by the MQL4-dataset-hygiene change (see
+    // tools/generate-golden-lists/data/mql4-dataset-audit.json) and from
+    // the MQL5 golden list by the MQL5-dataset-hygiene change (see
+    // tools/generate-golden-lists/data/mql5-dataset-audit.json).
+    // StringGetChar/StringSetChar/WindowExpertName are MQL4-only since
+    // the MQL5-dataset-hygiene change and are pinned in
+    // Mql4OnlySecondSweepNames_AreMql4Only_AfterMql5DatasetHygiene.
     private readonly Mql5Builtins _mql5 = new();
 
     private static readonly string[] AdditionalBothDialects =
@@ -36,9 +41,11 @@ public class Issue109BuiltinRegistryCoverageTests
         "MQLInfoInteger", "MQLInfoString",
         // crypto family (MQL5 builtin since the compiler bundles Crypt.mqh)
         "CryptEncode", "CryptDecode", "CharArrayToString",
-        // second sweep (real-project analyze findings)
-        "StringGetChar", "StringGetCharacter", "StringSetChar",
-        "StringToCharArray", "GlobalVariableCheck", "WindowExpertName", "MessageBox"
+        // second sweep (real-project analyze findings). StringGetChar,
+        // StringSetChar and WindowExpertName left this both-dialects list:
+        // they are MQL4-only since the MQL5-dataset-hygiene change and
+        // are pinned in Mql4OnlySecondSweepNames_AreMql4Only_AfterMql5DatasetHygiene.
+        "StringGetCharacter", "StringToCharArray", "GlobalVariableCheck", "MessageBox"
     };
 
     [Fact]
@@ -78,17 +85,37 @@ public class Issue109BuiltinRegistryCoverageTests
     }
 
     [Fact]
-    public void Mql5OnlySweepNames_AreMql5Only_AfterMql4DatasetHygiene()
+    public void PhantomSweepNames_AreAbsentFromBothDialects()
     {
-        // StringToDateTime and CryptMethod stay registered for MQL5 (issue
-        // #109 sweep) but must not come back as MQL4 built-ins: the MQL4
-        // Reference CHM has no MQL4 documentation for them (see
-        // tools/generate-golden-lists/data/mql4-dataset-audit.json).
+        // StringToDateTime and CryptMethod were phantom names with zero
+        // evidence in ANY dialect reference: removed from the MQL4 golden
+        // list by the MQL4-dataset-hygiene change (see
+        // tools/generate-golden-lists/data/mql4-dataset-audit.json) and
+        // from the MQL5 golden list by the MQL5-dataset-hygiene change
+        // (see tools/generate-golden-lists/data/mql5-dataset-audit.json).
         foreach (var name in new[] { "StringToDateTime", "CryptMethod" })
         {
-            Assert.True(_mql5.IsBuiltin(name), $"MQL5 registry is missing '{name}' (issue #109)");
+            Assert.False(_mql5.IsBuiltin(name),
+                $"{name} should not be registered as MQL5 built-in (phantom name; see mql5-dataset-audit.json)");
             Assert.False(Mql4Builtins.IsBuiltin(name),
-                $"{name} should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
+                $"{name} should not be registered as MQL4 built-in (phantom name; see mql4-dataset-audit.json)");
+        }
+    }
+
+    [Fact]
+    public void Mql4OnlySecondSweepNames_AreMql4Only_AfterMql5DatasetHygiene()
+    {
+        // StringGetChar/StringSetChar are documented in the MQL4 Reference
+        // only (MQL5 documents StringGetCharacter/StringSetCharacter
+        // instead) and WindowExpertName has no MQL5 reference page; they
+        // were removed from the MQL5 golden list by the
+        // MQL5-dataset-hygiene change (see
+        // tools/generate-golden-lists/data/mql5-dataset-audit.json).
+        foreach (var name in new[] { "StringGetChar", "StringSetChar", "WindowExpertName" })
+        {
+            Assert.True(Mql4Builtins.IsBuiltin(name), $"MQL4 registry is missing '{name}' (issue #109)");
+            Assert.False(_mql5.IsBuiltin(name),
+                $"{name} should not be registered as MQL5 built-in (MQL4-only; see mql5-dataset-audit.json)");
         }
     }
 
