@@ -21,9 +21,13 @@ namespace MqlLanguageServer.Tests.Analysis;
 public class Issue163BuiltinRegistryCoverageTests
 {
     // --- MQL5 file operations reported on issue #163 ------------------------
+    // FileRead is asserted separately: it is MQL5-only (the MQL4 Reference
+    // CHM has no MQL4 documentation for it) and was removed from the MQL4
+    // golden list by the MQL4-dataset-hygiene change (see
+    // tools/generate-golden-lists/data/mql4-dataset-audit.json).
     private static readonly string[] Mql5FileFunctions =
     {
-        "FileOpen", "FileClose", "FileRead", "FileWrite", "FileWriteString",
+        "FileOpen", "FileClose", "FileWrite", "FileWriteString",
         "FileReadString", "FileIsEnding", "FolderCreate", "FolderDelete",
         "FileDelete", "FileCopy", "FileMove", "FileSeek", "FileSize",
         "FileTell", "FileFlush",
@@ -70,6 +74,19 @@ public class Issue163BuiltinRegistryCoverageTests
     {
         Assert.True(Mql4Builtins.IsBuiltinVariable(name), $"MQL4 registry is missing file/time constant '{name}'");
         Assert.True(new Mql5Builtins().IsBuiltinVariable(name), $"MQL5 registry is missing file/time constant '{name}' (issue #163)");
+    }
+
+    [Fact]
+    public void FileRead_IsMql5Only_AfterMql4DatasetHygiene()
+    {
+        // FileRead stays registered for MQL5 (documented there, issue #163)
+        // but must not come back as an MQL4 built-in: the MQL4 Reference CHM
+        // has no dedicated page or identifier evidence for it (see
+        // tools/generate-golden-lists/data/mql4-dataset-audit.json).
+        Assert.True(new Mql5Builtins().IsBuiltinFunction("FileRead"),
+            "MQL5 registry is missing file function 'FileRead' (issue #163)");
+        Assert.False(Mql4Builtins.IsBuiltinFunction("FileRead"),
+            "FileRead should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
     }
 
     // --- End-to-end: the issue #163 repro snippet must be diagnostic-free ---

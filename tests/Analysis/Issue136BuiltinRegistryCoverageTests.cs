@@ -387,9 +387,13 @@ public class Issue136BuiltinRegistryCoverageTests
     /// own page and 60 constant-family members are covered by grouped
     /// constant tables (15 MODE_*, 10 TERMINAL_*, 26 ACCOUNT_* incl. the
     /// ENUM value entries, 7 CRYPT_* + ENUM_CRYPT_METHOD, 1
-    /// MB_ICONINFORMATION); the remaining 44 names are absent from this
-    /// CHM build (MQL5-only leaks, undocumented legacy aliases, event
-    /// handler names, and constants newer than the CHM) and stay
+    /// MB_ICONINFORMATION); 20 further names were MQL5-only leaks and have
+    /// been removed from the dataset entirely (MQL4-dataset-hygiene; see
+    /// odd/tasks/mql4-dataset-hygiene.md and
+    /// tools/generate-golden-lists/data/mql4-dataset-audit.json). The
+    /// remaining 24 names are absent from this CHM build (undocumented
+    /// legacy aliases, event handlers documented in events.htm rather than
+    /// per-function pages, and constants newer than the CHM) and stay
     /// description-less with page-audit evidence instead of fabricated
     /// text.
     /// </summary>
@@ -397,7 +401,6 @@ public class Issue136BuiltinRegistryCoverageTests
     public void Mql4GoldenList_DescriptionCoverage_MeetsTarget()
     {
         var (functions, variables) = LoadMql4Golden();
-        const int baselineFunctionsWithoutDescription = 350;
         const int baselinePlaceholderVariables = 4;
 
         var functionsWithoutDescription = functions.Values
@@ -406,16 +409,64 @@ public class Issue136BuiltinRegistryCoverageTests
         var placeholderVariables = variables.Values
             .Count(d => PlaceholderDescriptions.Contains(d));
 
-        Assert.True(functionsWithoutDescription <= 44,
+        Assert.True(functionsWithoutDescription <= 24,
             $"MQL4 golden list has {functionsWithoutDescription} functions without " +
-            $"a description (baseline {baselineFunctionsWithoutDescription}).");
+            "a description (baseline 350; 20 MQL5-only leaks removed by " +
+            "MQL4-dataset-hygiene).");
         Assert.True(placeholderVariables <= baselinePlaceholderVariables * 0,
             $"MQL4 golden list still has {placeholderVariables} placeholder variable " +
             $"descriptions (baseline {baselinePlaceholderVariables}); target is all " +
             "predefined variables captured from predefined.htm.");
-        // The 44 residual functions have no page in the MQL4 Reference CHM
-        // (see the threshold justification above); they are reported with
+        // The 24 residual functions have no page in the MQL4 Reference CHM
+        // (see the threshold justification above); the 20 MQL5-only leaks
+        // were removed from the dataset in the MQL4-dataset-hygiene change
+        // (see odd/tasks/mql4-dataset-hygiene.md). They are reported with
         // evidence in tools/generate-golden-lists/data/mql4-descriptions.json.
+    }
+
+    // --- MQL5-only names removed from the MQL4 golden list -----------------
+    // --- evidence: tools/generate-golden-lists/data/mql4-dataset-audit.json --
+    // --- (deterministic CHM evidence report; see ----------------------------
+    // --- odd/tasks/mql4-dataset-hygiene.md). These names are documented in --
+    // --- the MQL5 reference but have no dedicated MQL4 Reference CHM page, --
+    // --- no events.htm handler entry and no identifier evidence in any -----
+    // --- non-mql5_* CHM page. ----------------------------------------------
+    private static readonly string[] Mql5OnlyNamesRemovedFromMql4Golden =
+    {
+        // functions (20)
+        "OrderGetDouble", "OrderGetInteger", "OrderGetString",
+        "PositionsTotal", "PositionSelect", "PositionGetDouble",
+        "PositionGetString", "PositionGetInteger", "HistorySelect",
+        "HistoryOrderSelect", "HistoryDealSelect", "StringToDateTime",
+        "CryptMethod", "FileRead", "ArrayReverse", "MathArctan2",
+        "CopyBuffer", "IndicatorRelease", "OnTrade", "OnTradeTransaction",
+        // variables (12)
+        "POSITION_TYPE_BUY", "POSITION_TYPE_SELL", "TRADE_ACTION_DEAL",
+        "TRADE_ACTION_PENDING", "TRADE_ACTION_SLTP", "OBJ_ELLIOTWAVE5",
+        "OBJ_ELLIOTWAVE3", "OBJPROP_DEGREE", "OBJPROP_COMMENT",
+        "CHART_SHOW_TICKER", "SYMBOL_TIME_MSC", "ACCOUNT_MARGIN_MODE",
+    };
+
+    /// <summary>
+    /// Dataset-hygiene gate: MQL5-only names that leaked into the MQL4
+    /// golden list must stay out (see odd/tasks/mql4-dataset-hygiene.md and
+    /// the evidence report tools/generate-golden-lists/data/
+    /// mql4-dataset-audit.json).
+    /// </summary>
+    [Fact]
+    public void Mql4GoldenList_ExcludesMql5OnlyNames()
+    {
+        var (functions, variables) = LoadMql4Golden();
+
+        var offenders = Mql5OnlyNamesRemovedFromMql4Golden
+            .Where(n => functions.ContainsKey(n) || variables.ContainsKey(n))
+            .ToList();
+
+        Assert.True(offenders.Count == 0,
+            "MQL5-only names still present in data/builtins/mql4.json " +
+            "(MQL4 Reference CHM has no MQL4 documentation for them; see " +
+            "tools/generate-golden-lists/data/mql4-dataset-audit.json): " +
+            string.Join(", ", offenders));
     }
 
     public static TheoryData<string> CoreFunctionNames() => ToTheoryData(CoreFunctionsBothDialects);

@@ -20,18 +20,22 @@ public class Issue109BuiltinRegistryCoverageTests
     };
 
     // A broader sweep of common standard-library names that the same grep
-    // audit found missing from both dialects.
+    // audit found missing from both dialects. StringToDateTime and
+    // CryptMethod are asserted separately: they are MQL5-only (the MQL4
+    // Reference CHM has no MQL4 documentation for them) and were removed
+    // from the MQL4 golden list by the MQL4-dataset-hygiene change (see
+    // tools/generate-golden-lists/data/mql4-dataset-audit.json).
     private readonly Mql5Builtins _mql5 = new();
 
     private static readonly string[] AdditionalBothDialects =
     {
         "TerminalInfoDouble", "TerminalInfoString", "DoubleToString",
-        "StringReplace", "StringFormat", "StringToInteger", "StringToDateTime",
+        "StringReplace", "StringFormat", "StringToInteger",
         "ArrayInitialize", "ArrayFill", "iOpen", "iHigh", "iLow", "iBarShift",
         "iHighest", "iLowest", "PlaySound", "SendMail", "SendNotification",
         "MQLInfoInteger", "MQLInfoString",
         // crypto family (MQL5 builtin since the compiler bundles Crypt.mqh)
-        "CryptEncode", "CryptDecode", "CryptMethod", "CharArrayToString",
+        "CryptEncode", "CryptDecode", "CharArrayToString",
         // second sweep (real-project analyze findings)
         "StringGetChar", "StringGetCharacter", "StringSetChar",
         "StringToCharArray", "GlobalVariableCheck", "WindowExpertName", "MessageBox"
@@ -70,6 +74,21 @@ public class Issue109BuiltinRegistryCoverageTests
         foreach (var name in AdditionalBothDialects)
         {
             Assert.True(_mql5.IsBuiltin(name), $"MQL5 registry is missing '{name}' (issue #109)");
+        }
+    }
+
+    [Fact]
+    public void Mql5OnlySweepNames_AreMql5Only_AfterMql4DatasetHygiene()
+    {
+        // StringToDateTime and CryptMethod stay registered for MQL5 (issue
+        // #109 sweep) but must not come back as MQL4 built-ins: the MQL4
+        // Reference CHM has no MQL4 documentation for them (see
+        // tools/generate-golden-lists/data/mql4-dataset-audit.json).
+        foreach (var name in new[] { "StringToDateTime", "CryptMethod" })
+        {
+            Assert.True(_mql5.IsBuiltin(name), $"MQL5 registry is missing '{name}' (issue #109)");
+            Assert.False(Mql4Builtins.IsBuiltin(name),
+                $"{name} should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
         }
     }
 
