@@ -232,8 +232,10 @@ stacked chain, `ask-on-risk`).
   `line 1:12 no viable alternative at input 'inputgro…'`, 19 pre-existing
   tests green) → GREEN after `K_GROUP` lexer keyword +
   `translationUnit › inputGroupDirective` rule (`K_INPUT K_GROUP STRING`);  
-  21/21 `Mql5GrammarTests` + Release build clean (0 warnings). Commit:
-  _pending (recorded at unit close)_.
+  21/21 `Mql5GrammarTests` + Release build clean (0 warnings). Full suite
+  1668/1668. Commit: `5120ef8 fix(parser): accept input group directives in
+  MQL5 (#176)` (g4 + tests + CHANGELOG + this doc; `src/Parser/Generated/` is
+  gitignored — regenerated via normal build only).
 - T2: pending
 - T3: pending
 - T4: pending
