@@ -60,23 +60,34 @@ functions — placement defect, follow-up, not a leak).
 
 ## Tasks
 
-- [ ] T1: `tools/generate-golden-lists/audit_mql5_dataset.py` (mirror of the
+- [x] T1: `tools/generate-golden-lists/audit_mql5_dataset.py` (mirror of the
   MQL4 audit; function evidence = PDF-dump occurrence with documented-hole
   caveat; constants = judgment-adjudicated only) + generated
   `data/mql5-dataset-audit.json` (untracked evidence per convention).
-- [ ] T2 (RED): gate test `Mql5GoldenList_ExcludesMql4OnlyNames` in
+- [x] T2 (RED): gate test `Mql5GoldenList_ExcludesMql4OnlyNames` in
   `tests/Analysis/Issue136BuiltinRegistryCoverageTests.cs` (or sibling file).
-- [ ] T3 (GREEN): remove the 18 entries from `data/builtins/mql5.json`
+- [x] T3 (GREEN): remove the 18 entries from `data/builtins/mql5.json`
   (verify exact before/after counts; deletions-only diff).
-- [ ] T4: flip stale assertions asserting these names as MQL5 builtins
+- [x] T4: flip stale assertions asserting these names as MQL5 builtins
   (search tests for each name in IsBuiltin/registry contexts; expected hits:
   MODE_MAIN/MODE_SIGNAL in Mql5EnumConstants-style pins, OrderClose/
   WindowExpertName/StringGetChar elsewhere; do NOT touch fixtures; fixtures
   using CTrade methods are member calls and unaffected).
-- [ ] T5: focused + full suite + Release build (independent verify).
-- [ ] T6: CHANGELOG [Unreleased] paragraph + work-unit commits on
+- [x] T5: focused + full suite + Release build (independent verify).
+- [x] T6: CHANGELOG [Unreleased] paragraph + work-unit commits on
   `feat/mql5-dataset-hygiene`.
 
 ## Commits
 
-(recorded as work units land)
+- 6df621a feat(tools): reference-dump audit for MQL5 golden-list dataset hygiene
+- 4c8ff67 fix(dataset): remove MQL4-only entries from the MQL5 golden list
+
+## Notes
+
+- T5 (independent gentle-ai-verify): PASS 8/8 — build 0/0, focused 437/437,
+  full suite 1664/1664; diff deletions-only (74 lines), counts 802/1999;
+  sweep clean (no stale MQL5-True assertions for the 18 names).
+- Off-surface edit ratified: tests/Mql5/Builtins/Mql5BuiltinsTests.cs
+  (exactly the MODE_* membership assertions, permitted by the report-back
+  rule).
+- Actual variable count: 2003->1999 as predicted; functions 816->802.
