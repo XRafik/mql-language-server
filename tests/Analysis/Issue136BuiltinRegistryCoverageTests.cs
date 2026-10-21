@@ -234,6 +234,101 @@ public class Issue136BuiltinRegistryCoverageTests
         Assert.True(new Mql5Builtins().IsBuiltinFunction(name), $"MQL5 registry is missing documented function '{name}'");
     }
 
+    // --- Issue #166: MQL5 golden-list description enrichment ---------------
+    // --- representative description pins: the golden list is the source of --
+    // --- truth; these names must carry real (non-placeholder) hover text. --
+    private static readonly string[] Mql5DescriptionPins =
+    {
+        // ENUM_SYMBOL_INFO_* (SymbolInfoInteger/Double/String)
+        "SYMBOL_BID", "SYMBOL_TRADE_TICK_SIZE",
+        // ENUM_POSITION_*
+        "POSITION_VOLUME", "POSITION_REASON_EXPERT",
+        // ENUM_ORDER_*
+        "ORDER_TIME_GTC", "ORDER_REASON_EXPERT",
+        // ENUM_ACCOUNT_*
+        "ACCOUNT_MARGIN_MODE_RETAIL_HEDGING", "ACCOUNT_TRADE_EXPERT",
+        // ENUM_MQL_INFO_*
+        "MQL_TESTER", "MQL_DEBUG",
+        // runtime errors
+        "ERR_SUCCESS", "ERR_INTERNAL_ERROR",
+        // ENUM_TERMINAL_* / ENUM_SERIES_INFO_*
+        "TERMINAL_CONNECTED", "SERIES_BARS_COUNT",
+        // ENUM_* type names (documented enumeration sections)
+        "ENUM_ACCOUNT_MARGIN_MODE", "ENUM_BOOK_TYPE", "ENUM_APPLIED_VOLUME",
+        // web colors (synthetic deterministic descriptions)
+        "clrRed", "clrBlue",
+    };
+
+    // --- Issue #166: MQL5 documented functions must carry a real description --
+    // --- (prose under the page heading, before the captured signature) ------
+    private static readonly string[] Mql5FunctionDescriptionPins =
+    {
+        // indicators
+        "iCustom",
+        // trade
+        "OrderCalcMargin", "HistorySelect",
+        // chart / objects
+        "ChartScreenShot",
+        // series / data access
+        "CopyTicks",
+        // files / strings / math / common
+        "FileReadDouble", "MathSrand",
+        // calendar / socket / database / onnx
+        "SocketCreate", "DatabaseOpen", "OnnxRun",
+    };
+
+    [Theory]
+    [MemberData(nameof(Mql5DescriptionPinNames))]
+    public void Mql5Descriptions_AreCaptured(string name)
+    {
+        var description = new Mql5Builtins().GetBuiltinVariableDescription(name);
+        Assert.False(string.IsNullOrWhiteSpace(description),
+            $"MQL5 golden list has no description for '{name}'");
+        Assert.NotEqual("(description not yet captured)", description);
+    }
+
+    [Theory]
+    [MemberData(nameof(Mql5FunctionDescriptionPinNames))]
+    public void Mql5FunctionDescriptions_AreCaptured(string name)
+    {
+        var descriptions = LoadMql5GoldenFunctionDescriptions();
+        Assert.True(descriptions.TryGetValue(name, out var description)
+                    && !string.IsNullOrWhiteSpace(description),
+            $"MQL5 golden list has no description for function '{name}'");
+        Assert.NotEqual("(description not yet captured)", description);
+    }
+
+    /// <summary>
+    /// Issue #166 coverage gate: at least 95% of the 1,644 baseline
+    /// placeholder descriptions are replaced with real text, and virtually
+    /// every documented function carries a description. Unrecoverable
+    /// entries keep their placeholder and are reported by the extraction
+    /// evidence instead of being silently dropped.
+    /// </summary>
+    [Fact]
+    public void Mql5GoldenList_DescriptionCoverage_MeetsTarget()
+    {
+        var (functions, variables) = LoadMql5Golden();
+        const int baselinePlaceholders = 1644;
+        const int baselineFunctionsWithoutDescription = 816;
+
+        var placeholders = variables.Values
+            .Count(v => v == "(description not yet captured)");
+        var functionsWithoutDescription = functions.Values
+            .Count(v => string.IsNullOrWhiteSpace(v)
+                        || v == "(description not yet captured)");
+
+        Assert.True(placeholders <= (int)(baselinePlaceholders * 0.05),
+            $"MQL5 golden list still has {placeholders} placeholder descriptions " +
+            $"(baseline {baselinePlaceholders}); target is >= 95% captured.");
+        Assert.True(functionsWithoutDescription <= 15,
+            $"MQL5 golden list has {functionsWithoutDescription} functions without " +
+            $"a description (baseline {baselineFunctionsWithoutDescription}).");
+        // The residual functions are MQL4-legacy names (AccountBalance,
+        // OrderClose, FileRead, ...) that have no page in the MQL5
+        // Reference PDF; they are reported with evidence in
+        // tools/generate-golden-lists/data/mql5-descriptions.json.
+    }
     // --- Issue #166: MQL4 golden-list description enrichment ---------------
     // --- representative description pins: the golden list is the source of --
     // --- truth; these names must carry real (non-placeholder) hover text. --
@@ -331,6 +426,8 @@ public class Issue136BuiltinRegistryCoverageTests
     public static TheoryData<string> CorpusEnrichmentConstantNames() => ToTheoryData(Mql4CorpusEnrichmentConstants);
     public static TheoryData<string> Mql5EnumConstantNames() => ToTheoryData(Mql5EnumConstants);
     public static TheoryData<string> Mql5DocumentedFunctionNames() => ToTheoryData(Mql5DocumentedFunctions);
+    public static TheoryData<string> Mql5DescriptionPinNames() => ToTheoryData(Mql5DescriptionPins);
+    public static TheoryData<string> Mql5FunctionDescriptionPinNames() => ToTheoryData(Mql5FunctionDescriptionPins);
     public static TheoryData<string> Mql4DescriptionPinNames() => ToTheoryData(Mql4DescriptionPins);
     public static TheoryData<string> Mql4PredefinedVariablePinNames() => ToTheoryData(Mql4PredefinedVariablePins);
 
@@ -343,6 +440,27 @@ public class Issue136BuiltinRegistryCoverageTests
         }
         Assert.NotNull(dir);
         return dir!.FullName;
+    }
+
+    private static (Dictionary<string, string> Functions, Dictionary<string, string> Variables) LoadMql5Golden()
+    {
+        var path = Path.Combine(FindRepoRoot(), "data", "builtins", "mql5.json");
+        using var doc = JsonDocument.Parse(File.ReadAllText(path));
+        var functions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in doc.RootElement.GetProperty("functions").EnumerateObject())
+        {
+            functions[entry.Name] = entry.Value.TryGetProperty("description", out var desc)
+                ? desc.GetString() ?? string.Empty
+                : string.Empty;
+        }
+        foreach (var entry in doc.RootElement.GetProperty("variables").EnumerateObject())
+        {
+            variables[entry.Name] = entry.Value.TryGetProperty("description", out var desc)
+                ? desc.GetString() ?? string.Empty
+                : "(description not yet captured)";
+        }
+        return (functions, variables);
     }
 
     private static (Dictionary<string, string> Functions, Dictionary<string, string> Variables) LoadMql4Golden()
@@ -366,6 +484,19 @@ public class Issue136BuiltinRegistryCoverageTests
         return (functions, variables);
     }
 
+    private static Dictionary<string, string> LoadMql5GoldenFunctionDescriptions()
+    {
+        var path = Path.Combine(FindRepoRoot(), "data", "builtins", "mql5.json");
+        using var doc = JsonDocument.Parse(File.ReadAllText(path));
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in doc.RootElement.GetProperty("functions").EnumerateObject())
+        {
+            result[entry.Name] = entry.Value.TryGetProperty("description", out var desc)
+                ? desc.GetString() ?? string.Empty
+                : string.Empty;
+        }
+        return result;
+    }
     private static Dictionary<string, string> LoadMql4GoldenFunctionDescriptions()
         => LoadMql4Golden().Functions;
 
