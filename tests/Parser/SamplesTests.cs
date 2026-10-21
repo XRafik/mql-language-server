@@ -203,7 +203,7 @@ public class SamplesTests
         Assert.True(_parser.IsBuiltin("SymbolInfoDouble"), "SymbolInfoDouble should be detected as builtin");
         Assert.True(_parser.IsBuiltin("Symbol"), "Symbol should be detected as builtin");
         Assert.True(_parser.IsBuiltin("Period"), "Period should be detected as builtin");
-        Assert.True(_parser.IsBuiltin("PositionsTotal"), "PositionsTotal should be detected as builtin");
+        Assert.False(_parser.IsBuiltin("PositionsTotal"), "PositionsTotal should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
         Assert.True(_parser.IsBuiltin("Point"), "Point should be detected as builtin");
 
         // Arrange & Act - Test with Custom Indicators

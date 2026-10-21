@@ -328,11 +328,18 @@ public class Mql4AdvancedFeaturesTests
         Assert.Contains(file.Symbols, s => s.Name == "OnTrade");
         Assert.Contains(file.Symbols, s => s.Name == "OnTradeTransaction");
 
-        // Verify they are detected as built-ins
-        foreach (var handler in new[] { "OnInit", "OnTick", "OnDeinit", "OnTimer", "OnTrade", "OnTradeTransaction" })
+        // Verify they are detected as built-ins. OnTrade and
+        // OnTradeTransaction are MQL5-only (MQL4 CHM events.htm documents
+        // only the eight MQL4 handlers) and are no longer registered as
+        // MQL4 built-ins (see mql4-dataset-audit.json).
+        foreach (var handler in new[] { "OnInit", "OnTick", "OnDeinit", "OnTimer" })
         {
             Assert.True(Mql4Builtins.IsBuiltin(handler), $"{handler} should be detected as built-in");
         }
+        Assert.False(Mql4Builtins.IsBuiltin("OnTrade"),
+            "OnTrade should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
+        Assert.False(Mql4Builtins.IsBuiltin("OnTradeTransaction"),
+            "OnTradeTransaction should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
     }
 
     [Fact]
@@ -460,10 +467,10 @@ public class Mql4AdvancedFeaturesTests
 
         Assert.NotNull(file);
         Assert.Contains(file.Symbols, s => s.Name == "OnTick");
-        Assert.True(Mql4Builtins.IsBuiltin("PositionsTotal"), "PositionsTotal should be detected as built-in");
         Assert.True(Mql4Builtins.IsBuiltin("PositionSelectByIndex"), "PositionSelectByIndex should be detected as built-in");
-        Assert.True(Mql4Builtins.IsBuiltin("PositionGetString"), "PositionGetString should be detected as built-in");
-        Assert.True(Mql4Builtins.IsBuiltin("PositionGetDouble"), "PositionGetDouble should be detected as built-in");
+        Assert.False(Mql4Builtins.IsBuiltin("PositionsTotal"), "PositionsTotal should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
+        Assert.False(Mql4Builtins.IsBuiltin("PositionGetString"), "PositionGetString should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
+        Assert.False(Mql4Builtins.IsBuiltin("PositionGetDouble"), "PositionGetDouble should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
     }
 
     [Fact]
@@ -487,8 +494,8 @@ public class Mql4AdvancedFeaturesTests
         Assert.Contains(file.Symbols, s => s.Name == "OnTick");
         Assert.True(Mql4Builtins.IsBuiltin("OrdersTotal"), "OrdersTotal should be detected as built-in");
         Assert.True(Mql4Builtins.IsBuiltin("OrderSelect"), "OrderSelect should be detected as built-in");
-        Assert.True(Mql4Builtins.IsBuiltin("OrderGetString"), "OrderGetString should be detected as built-in");
-        Assert.True(Mql4Builtins.IsBuiltin("OrderGetDouble"), "OrderGetDouble should be detected as built-in");
+        Assert.False(Mql4Builtins.IsBuiltin("OrderGetString"), "OrderGetString should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
+        Assert.False(Mql4Builtins.IsBuiltin("OrderGetDouble"), "OrderGetDouble should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
     }
 
     #endregion
@@ -519,7 +526,7 @@ public class Mql4AdvancedFeaturesTests
         Assert.Contains(file.Symbols, s => s.Name == "OnInit");
         Assert.Contains(file.Symbols, s => s.Name == "OnTick");
         Assert.True(Mql4Builtins.IsBuiltin("iMA"), "iMA should be detected as built-in");
-        Assert.True(Mql4Builtins.IsBuiltin("CopyBuffer"), "CopyBuffer should be detected as built-in");
+        Assert.False(Mql4Builtins.IsBuiltin("CopyBuffer"), "CopyBuffer should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
         Assert.True(Mql4Builtins.IsBuiltin("ArraySetAsSeries"), "ArraySetAsSeries should be detected as built-in");
     }
 
@@ -771,8 +778,12 @@ public class Mql4AdvancedFeaturesTests
         Assert.Contains(file.Symbols, s => s.Name == "OnTick");
         Assert.True(Mql4Builtins.IsBuiltin("ArrayResize"), "ArrayResize should be detected as built-in");
         Assert.True(Mql4Builtins.IsBuiltin("ArraySort"), "ArraySort should be detected as built-in");
-        Assert.True(Mql4Builtins.IsBuiltin("ArrayReverse"), "ArrayReverse should be detected as built-in");
         Assert.True(Mql4Builtins.IsBuiltin("ArraySize"), "ArraySize should be detected as built-in");
+        // ArrayReverse is MQL5-only (removed from the MQL4 golden list;
+        // see mql4-dataset-audit.json). ArraySearch stays registered: it is
+        // kept as a corpus-admitted legacy alias (zero CHM evidence but not
+        // provably MQL5-only).
+        Assert.False(Mql4Builtins.IsBuiltin("ArrayReverse"), "ArrayReverse should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
         Assert.True(Mql4Builtins.IsBuiltin("ArraySearch"), "ArraySearch should be detected as built-in");
     }
 
