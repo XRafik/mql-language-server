@@ -329,6 +329,94 @@ public class Issue136BuiltinRegistryCoverageTests
         // Reference PDF; they are reported with evidence in
         // tools/generate-golden-lists/data/mql5-descriptions.json.
     }
+    // --- Issue #166: MQL4 golden-list description enrichment ---------------
+    // --- representative description pins: the golden list is the source of --
+    // --- truth; these names must carry real (non-placeholder) hover text. --
+    private static readonly string[] Mql4DescriptionPins =
+    {
+        // trading / account
+        "OrderClose", "OrderSend", "OrdersTotal", "AccountInfoDouble",
+        // strings / files / arrays / math / datetime+series / indicators
+        "StringFind", "FileOpen", "ArraySort", "MathAbs", "TimeCurrent", "iMA",
+    };
+
+    // --- predefined variables (predefined.htm Variable/Value table) --------
+    private static readonly string[] Mql4PredefinedVariablePins =
+    {
+        "Open", "High", "Low", "Close",
+    };
+
+    // --- Golden-list descriptions captured from the official MQL4 Reference
+    // --- CHM carry one of the known placeholder texts; anything else is ---
+    // --- considered captured prose. ---------------------------------------
+    private static readonly string[] PlaceholderDescriptions =
+    {
+        "(description not yet captured)",
+        "(documented MQL4 API; signature not yet captured)",
+    };
+
+    [Theory]
+    [MemberData(nameof(Mql4DescriptionPinNames))]
+    public void Mql4Descriptions_AreCaptured(string name)
+    {
+        var descriptions = LoadMql4GoldenFunctionDescriptions();
+        Assert.True(descriptions.TryGetValue(name, out var description)
+                    && !string.IsNullOrWhiteSpace(description),
+            $"MQL4 golden list has no description for function '{name}'");
+        Assert.False(PlaceholderDescriptions.Contains(description),
+            $"MQL4 golden list still has a placeholder description for function '{name}'");
+    }
+
+    [Theory]
+    [MemberData(nameof(Mql4PredefinedVariablePinNames))]
+    public void Mql4PredefinedVariableDescriptions_AreCaptured(string name)
+    {
+        var variables = LoadMql4GoldenVariableDescriptions();
+        Assert.True(variables.TryGetValue(name, out var description),
+            $"MQL4 golden list has no predefined variable '{name}'");
+        Assert.False(string.IsNullOrWhiteSpace(description) || PlaceholderDescriptions.Contains(description),
+            $"MQL4 golden list has no real description for predefined variable '{name}'");
+    }
+
+    /// <summary>
+    /// Issue #166 coverage gate: virtually every documented MQL4 function
+    /// carries a description from the official MQL4 Reference CHM, and all
+    /// four predefined variables (Open/High/Low/Close) lost their
+    /// placeholder. Threshold justification (measured 2026-10-19 page
+    /// audit over the CHM): of the 350 dataset functions, 246 have their
+    /// own page and 60 constant-family members are covered by grouped
+    /// constant tables (15 MODE_*, 10 TERMINAL_*, 26 ACCOUNT_* incl. the
+    /// ENUM value entries, 7 CRYPT_* + ENUM_CRYPT_METHOD, 1
+    /// MB_ICONINFORMATION); the remaining 44 names are absent from this
+    /// CHM build (MQL5-only leaks, undocumented legacy aliases, event
+    /// handler names, and constants newer than the CHM) and stay
+    /// description-less with page-audit evidence instead of fabricated
+    /// text.
+    /// </summary>
+    [Fact]
+    public void Mql4GoldenList_DescriptionCoverage_MeetsTarget()
+    {
+        var (functions, variables) = LoadMql4Golden();
+        const int baselineFunctionsWithoutDescription = 350;
+        const int baselinePlaceholderVariables = 4;
+
+        var functionsWithoutDescription = functions.Values
+            .Count(d => string.IsNullOrWhiteSpace(d)
+                        || PlaceholderDescriptions.Contains(d));
+        var placeholderVariables = variables.Values
+            .Count(d => PlaceholderDescriptions.Contains(d));
+
+        Assert.True(functionsWithoutDescription <= 44,
+            $"MQL4 golden list has {functionsWithoutDescription} functions without " +
+            $"a description (baseline {baselineFunctionsWithoutDescription}).");
+        Assert.True(placeholderVariables <= baselinePlaceholderVariables * 0,
+            $"MQL4 golden list still has {placeholderVariables} placeholder variable " +
+            $"descriptions (baseline {baselinePlaceholderVariables}); target is all " +
+            "predefined variables captured from predefined.htm.");
+        // The 44 residual functions have no page in the MQL4 Reference CHM
+        // (see the threshold justification above); they are reported with
+        // evidence in tools/generate-golden-lists/data/mql4-descriptions.json.
+    }
 
     public static TheoryData<string> CoreFunctionNames() => ToTheoryData(CoreFunctionsBothDialects);
     public static TheoryData<string> Mql4FunctionNames() => ToTheoryData(Mql4Functions);
@@ -340,6 +428,8 @@ public class Issue136BuiltinRegistryCoverageTests
     public static TheoryData<string> Mql5DocumentedFunctionNames() => ToTheoryData(Mql5DocumentedFunctions);
     public static TheoryData<string> Mql5DescriptionPinNames() => ToTheoryData(Mql5DescriptionPins);
     public static TheoryData<string> Mql5FunctionDescriptionPinNames() => ToTheoryData(Mql5FunctionDescriptionPins);
+    public static TheoryData<string> Mql4DescriptionPinNames() => ToTheoryData(Mql4DescriptionPins);
+    public static TheoryData<string> Mql4PredefinedVariablePinNames() => ToTheoryData(Mql4PredefinedVariablePins);
 
     private static string FindRepoRoot()
     {
@@ -373,6 +463,27 @@ public class Issue136BuiltinRegistryCoverageTests
         return (functions, variables);
     }
 
+    private static (Dictionary<string, string> Functions, Dictionary<string, string> Variables) LoadMql4Golden()
+    {
+        var path = Path.Combine(FindRepoRoot(), "data", "builtins", "mql4.json");
+        using var doc = JsonDocument.Parse(File.ReadAllText(path));
+        var functions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in doc.RootElement.GetProperty("functions").EnumerateObject())
+        {
+            functions[entry.Name] = entry.Value.TryGetProperty("description", out var desc)
+                ? desc.GetString() ?? string.Empty
+                : string.Empty;
+        }
+        foreach (var entry in doc.RootElement.GetProperty("variables").EnumerateObject())
+        {
+            variables[entry.Name] = entry.Value.TryGetProperty("description", out var desc)
+                ? desc.GetString() ?? string.Empty
+                : "(description not yet captured)";
+        }
+        return (functions, variables);
+    }
+
     private static Dictionary<string, string> LoadMql5GoldenFunctionDescriptions()
     {
         var path = Path.Combine(FindRepoRoot(), "data", "builtins", "mql5.json");
@@ -386,6 +497,11 @@ public class Issue136BuiltinRegistryCoverageTests
         }
         return result;
     }
+    private static Dictionary<string, string> LoadMql4GoldenFunctionDescriptions()
+        => LoadMql4Golden().Functions;
+
+    private static Dictionary<string, string> LoadMql4GoldenVariableDescriptions()
+        => LoadMql4Golden().Variables;
 
     private static TheoryData<string> ToTheoryData(string[] names)
     {
