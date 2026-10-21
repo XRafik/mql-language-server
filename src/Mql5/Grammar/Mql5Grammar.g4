@@ -72,6 +72,9 @@ K_STATIC    : 'static';
 K_EXTERN    : 'extern';
 K_INPUT     : 'input';
 K_SINPUT    : 'sinput';
+// Issue #176: `group` keyword for the documented input-parameter grouping
+// (`input group "text"`, MQL5 Reference, inputs).
+K_GROUP     : 'group';
 K_CONST     : 'const';
 K_VIRTUAL   : 'virtual';
 K_OVERRIDE  : 'override';
@@ -189,6 +192,7 @@ compilationUnit
 translationUnit
     : templateDefinition
     | directive
+    | inputGroupDirective
     | classDeclaration
     | structDeclaration
     | unionDeclaration
@@ -213,6 +217,13 @@ directive
     | PRE_IMPORT
     | PRE_RESOURCE
     | PRE_PACK
+    ;
+
+// Issue #176: documented input-parameter grouping (`input group "text"`,
+// MQL5 Reference, inputs). Exact documented form: no trailing semicolon;
+// `sinput group` is not documented and stays rejected (#141 honesty rule).
+inputGroupDirective
+    : K_INPUT K_GROUP STRING
     ;
 
 // --- Types ---

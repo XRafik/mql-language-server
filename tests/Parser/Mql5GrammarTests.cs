@@ -97,6 +97,23 @@ public class Mql5GrammarTests
         ParseWithoutErrors("#resource \"res/icon.bmp\" as bitmap MyIcon;");
     }
 
+    // Issue #176: documented input-parameter grouping. The MQL5 Reference
+    // "input variables" chapter (local dump:
+    // tools/generate-golden-lists/data/pdf/mql5-reference.md) documents
+    // `input group "text"` — no trailing semicolon. `sinput group` is not
+    // documented and stays rejected (issue #141 honesty rule).
+    [Fact]
+    public void InputGroup_String_IsAccepted()
+    {
+        ParseWithoutErrors("input group \"Trend Filters\"\ninput int InpX = 1;");
+    }
+
+    [Fact]
+    public void InputGroup_BeforeInputs_ParsesAllFollowingInputs()
+    {
+        ParseWithoutErrors("input group \"X\"\ninput int InpA = 1;\ninput double InpB = 2.0;");
+    }
+
     [Fact]
     public void Parses_ClassInheritance()
     {
