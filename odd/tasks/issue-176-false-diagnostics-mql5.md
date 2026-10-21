@@ -250,8 +250,9 @@ stacked chain, `ask-on-risk`).
   `MqlTradeCheckResult`/`MqlCalendar*` beyond the minimum gate set; full
   documented macro set incl. `__MQL5BUILD__` alias), provenance
   `mql5-reference-structs-macros-2026-10-21`, JSON round-trip byte-stable
-  (indent=2). 286/286 filtered + Release clean. Full suite + commit: _pending
-  (recorded at unit close)_.
+  (indent=2). 286/286 filtered + Release clean. Full suite 1695/1695. Commit:
+  `903cce6 fix(data): add MQL5 builtin struct types and predefined macros
+  (#176)`.
 - T4: pending
 - T5: pending
 
