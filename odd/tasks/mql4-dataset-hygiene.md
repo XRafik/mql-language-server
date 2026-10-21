@@ -60,26 +60,36 @@ separate follow-up.
 
 ## Tasks
 
-- [ ] T1: Add `tools/generate-golden-lists/audit_mql4_dataset.py` + generated
-  `data/mql4-dataset-audit.json` (deterministic CHM evidence report).
-- [ ] T2 (RED): gate test `Mql4GoldenList_ExcludesMql5OnlyNames` in
-  `tests/Analysis/Issue136BuiltinRegistryCoverageTests.cs` — the 32 names must
-  be absent from mql4.json. Must fail before T3.
-- [ ] T3 (GREEN): remove the 32 entries from `data/builtins/mql4.json`
-  (functions 350→330, variables 621→609).
-- [ ] T4: Update stale assertions:
-  `Mql4AdvancedFeaturesTests` (PositionsTotal/PositionGetString/
-  PositionGetDouble/OrderGetString/OrderGetDouble/CopyBuffer IsBuiltin
-  True→False; PositionSelectByIndex stays True),
-  `ProgramAndBuiltinsTests` CopyBuffer InlineData,
-  `Issue136BuiltinRegistryCoverageTests.Mql4GoldenList_DescriptionCoverage_MeetsTarget`
-  threshold 44→24 + narrative.
-- [ ] T5: Focused suite + full suite + Release build; review fixture-based
-  diagnostic tests (ExpertAdvisor.mq4 uses CopyBuffer) — expected behavior
-  change only.
-- [ ] T6: CHANGELOG [Unreleased] entry; work-unit commit(s) on feature branch
-  `feat/mql4-dataset-hygiene`; Engram evidence.
+- [x] T1: `tools/generate-golden-lists/audit_mql4_dataset.py` + generated
+  `data/mql4-dataset-audit.json` (deterministic CHM evidence report; JSON
+  stays untracked per repo convention, like the sibling description dumps).
+- [x] T2 (RED): gate test `Mql4GoldenList_ExcludesMql5OnlyNames` in
+  `tests/Analysis/Issue136BuiltinRegistryCoverageTests.cs` — verified RED
+  (32 offenders named) before T3, GREEN after.
+- [x] T3 (GREEN): removed the 32 entries from `data/builtins/mql4.json`
+  (functions 350→330, variables 621→609; diff = 134 deleted lines, 0 added).
+- [x] T4: Stale assertions updated in 6 test files (Mql4AdvancedFeatures,
+  ProgramAndBuiltins, SamplesTests, Issue136/Issue109/Issue163 coverage
+  tests); description-coverage threshold 44→24 with new narrative.
+- [x] T5: Independent verification (gentle-ai-verify): build 0 errors/
+  0 warnings; focused 441/441; full suite 1662/1662; diff = exactly the 32
+  deletions; no stale MQL4-True assertions for removed names remain.
+- [x] T6: CHANGELOG [Unreleased] entry; two work-unit commits on
+  `feat/mql4-dataset-hygiene` (below); Engram evidence.
 
 ## Commits
 
-(recorded as work units land)
+- 4742631 feat(tools): CHM-evidence audit for MQL4 golden-list dataset hygiene
+  (script + task doc)
+- 66fcf16 fix(dataset): remove MQL5-only entries from the MQL4 golden list
+  (dataset + 6 test files + CHANGELOG)
+
+## Notes
+
+- The writer found 3 stale assertions outside the original edit surfaces
+  (SamplesTests, Issue109, Issue163) — ratified by the parent; each was a
+  direct consequence of the T4 rule.
+- Reverse leaks (MQL4-only names in mql5.json: OrderClose, OrderModify,
+  OrderDelete, WindowExpertName, ...) remain a separate follow-up.
+- Fixtures using CopyBuffer (.mq4) now produce 1070 diagnostics by design;
+  no fixture-based test asserted their absence.
