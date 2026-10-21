@@ -38,9 +38,13 @@ LITERAL_COLOR : 'C\'' ~[']* '\'';
 
 // --- Numbers ---
 HEX           : '0' [xX] [0-9a-fA-F]+;
-DOUBLE        : [0-9]+ '.' [0-9]* EXP?
-              | '.' [0-9]+ EXP?
-              | [0-9]+ EXP
+// Issue #176: optional f/F suffix on real literals (C-style; MetaEditor
+// accepts `0.0f`/`1e3f` — official MQL5 Reference samples use f-suffixed
+// float literals, e.g. the matrixf examples). Integer `123f` still lexes as
+// INTEGER + IDENTIFIER.
+DOUBLE        : [0-9]+ '.' [0-9]* EXP? [fF]?
+              | '.' [0-9]+ EXP? [fF]?
+              | [0-9]+ EXP [fF]?
               ;
 INTEGER       : [0-9]+;
 

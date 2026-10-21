@@ -236,7 +236,14 @@ stacked chain, `ask-on-risk`).
   1668/1668. Commit: `5120ef8 fix(parser): accept input group directives in
   MQL5 (#176)` (g4 + tests + CHANGELOG + this doc; `src/Parser/Generated/` is
   gitignored — regenerated via normal build only).
-- T2: pending
+- T2: DONE — RED observed (2 failing: `RealLiteral_FSuffix_IsAccepted`,
+  `ParseVariable_RealLiteralFSuffix_ParsesWithoutErrors`; error
+  `extraneous input 'f' expecting ';'` ×3 — DOUBLE+IDENTIFIER lexing split)
+  → GREEN after `[fF]?` on all three DOUBLE branches in MQL5 + MQL4 mirror
+  (dump evidence: constants chapter silent on the suffix, official matrixf
+  samples use `1.0f`-style literals; 123f stays rejected). 48/48 filtered
+  tests + Release clean. Full suite + commit: _pending (recorded at unit
+  close)_.
 - T3: pending
 - T4: pending
 - T5: pending
