@@ -242,8 +242,8 @@ stacked chain, `ask-on-risk`).
   → GREEN after `[fF]?` on all three DOUBLE branches in MQL5 + MQL4 mirror
   (dump evidence: constants chapter silent on the suffix, official matrixf
   samples use `1.0f`-style literals; 123f stays rejected). 48/48 filtered
-  tests + Release clean. Full suite + commit: _pending (recorded at unit
-  close)_.
+  tests + Release clean. Full suite 1670/1670. Commit: `90f139c fix(parser):
+  accept f/F real-literal suffixes (#176)`.
 - T3: pending
 - T4: pending
 - T5: pending
