@@ -255,7 +255,7 @@ public class TypeHierarchyHandler : LanguageAwareHandlerBase<TypeHierarchyPrepar
             .Where(IsTypeCandidate)
             .OrderBy(s => SameSelection(s, item) ? 0 : 1)
             .FirstOrDefault()
-            ?? SymbolIndex.Index.GetFileSymbols(filePath)
+            ?? SymbolIndex.Index.GetFileSymbols(filePath, language)
                 ?.Where(IsTypeCandidate)
                 .FirstOrDefault(s => string.Equals(s.Name, item.Name, StringComparison.OrdinalIgnoreCase));
     }

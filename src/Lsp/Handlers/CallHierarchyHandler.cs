@@ -422,9 +422,23 @@ public class CallHierarchyHandler : LanguageAwareHandlerBase<CallHierarchyPrepar
         return false;
     }
 
+    /// <summary>
+    /// Issue #172: per-file symbol lookup for a query-time file path. The
+    /// index keys symbols by (file, language), so the language must be
+    /// resolved with the same machinery used at indexing time
+    /// (open-document store → .mqh includer routing → disk sniffing) instead
+    /// of the 1-arg GetFileSymbols overload, which defaults to Mql4 and
+    /// returns null for every MQL5 file.
+    /// </summary>
+    private List<MqlSymbol>? GetFileSymbolsForQuery(string filePath)
+    {
+        var language = ResolveLanguage(new Uri("file://" + filePath));
+        return SymbolIndex.Index.GetFileSymbols(filePath, language);
+    }
+
     private MqlSymbol? FindEnclosingFunction(string filePath, int line, int column)
     {
-        var symbols = SymbolIndex.Index.GetFileSymbols(filePath);
+        var symbols = GetFileSymbolsForQuery(filePath);
         if (symbols == null)
         {
             return null;
@@ -474,7 +488,7 @@ public class CallHierarchyHandler : LanguageAwareHandlerBase<CallHierarchyPrepar
 
     private CallHierarchyItem? BuildItemFromIndex(string filePath, string selectionKey)
     {
-        var symbols = SymbolIndex.Index.GetFileSymbols(filePath);
+        var symbols = GetFileSymbolsForQuery(filePath);
         if (symbols == null)
         {
             return null;
