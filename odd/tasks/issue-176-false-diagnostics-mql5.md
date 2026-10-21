@@ -244,7 +244,14 @@ stacked chain, `ask-on-risk`).
   samples use `1.0f`-style literals; 123f stays rejected). 48/48 filtered
   tests + Release clean. Full suite 1670/1670. Commit: `90f139c fix(parser):
   accept f/F real-literal suffixes (#176)`.
-- T3: pending
+- T3: DONE — RED observed (25 failing: 12 struct pins + 12 macro pins +
+  end-to-end `Mql5Document_WithStructTypesAndPredefinedMacros_DoesNotFlagThem`)
+  → GREEN after +24 `variables` entries (12 struct types incl.
+  `MqlTradeCheckResult`/`MqlCalendar*` beyond the minimum gate set; full
+  documented macro set incl. `__MQL5BUILD__` alias), provenance
+  `mql5-reference-structs-macros-2026-10-21`, JSON round-trip byte-stable
+  (indent=2). 286/286 filtered + Release clean. Full suite + commit: _pending
+  (recorded at unit close)_.
 - T4: pending
 - T5: pending
 

@@ -12107,6 +12107,102 @@
     "_IsX64": {
       "description": "The _IsX64 variable allows finding out the bit version of the terminal, in which an MQL5 application is running",
       "provenance": "official-mql5-reference-pdf (predefined variables section); descriptions-official-mql5-reference-pdf-2026-10-19"
+    },
+    "MqlDateTime": {
+      "description": "Structure of the datetime type: date and time stored as eight int fields (year, mon, day, hour, min, sec, day_of_week, day_of_year).",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlTradeRequest": {
+      "description": "Structure of a trade request passed to OrderSend(); the processing result is represented by the MqlTradeResult structure.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlTradeResult": {
+      "description": "Predefined structure representing the result of a trade request processing (OrderSend()).",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlTradeTransaction": {
+      "description": "Structure describing a trade transaction, passed to the OnTradeTransaction() handler.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlTradeCheckResult": {
+      "description": "Structure that receives the result of a preliminary trade request check (OrderCheck()).",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlTick": {
+      "description": "Structure with the most requested information about current prices of a symbol.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlRates": {
+      "description": "Structure storing information about the prices, volumes and spread of a bar.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlBookInfo": {
+      "description": "Structure providing information about the market depth (order book) data.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlParam": {
+      "description": "Structure describing an indicator or input parameter (type from ENUM_DATATYPE plus value), used with IndicatorCreate().",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlCalendarCountry": {
+      "description": "Structure of an economic calendar country description, filled by CalendarCountryById() and CalendarCountries().",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlCalendarEvent": {
+      "description": "Structure of an economic calendar event description, filled by CalendarEventByCountry() and CalendarEventByCurrency().",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "MqlCalendarValue": {
+      "description": "Structure of an economic calendar event value, filled by CalendarValueLast() and related functions.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__CPU_ARCHITECTURE__": {
+      "description": "Predefined macro: name of the architecture (instruction set) the EX5 file was compiled for.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__DATE__": {
+      "description": "Predefined macro: file compilation date without time (hours, minutes and seconds are equal to 0).",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__DATETIME__": {
+      "description": "Predefined macro: file compilation date and time.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__LINE__": {
+      "description": "Predefined macro: line number in the source code, in which the macro is located.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__FILE__": {
+      "description": "Predefined macro: name of the currently compiled file.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__PATH__": {
+      "description": "Predefined macro: absolute path to the file that is currently being compiled.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__FUNCTION__": {
+      "description": "Predefined macro: name of the function, in whose body the macro is located.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__FUNCSIG__": {
+      "description": "Predefined macro: signature of the function in whose body the macro is located.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__MQLBUILD__": {
+      "description": "Predefined macro: compiler build number.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__MQL5BUILD__": {
+      "description": "Predefined macro: compiler build number (alias spelling of __MQLBUILD__).",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__COUNTER__": {
+      "description": "Predefined macro: the compiler substitutes the counter value from 0 to N-1, where N is the number of uses in the code.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "__RANDOM__": {
+      "description": "Predefined macro: the compiler inserts a random ulong value for each declaration.",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
     }
   }
 }
