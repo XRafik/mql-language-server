@@ -282,4 +282,13 @@ stacked chain, `ask-on-risk`).
 - T3: `903cce6 fix(data): add MQL5 builtin struct types and predefined macros (#176)` + `01c3d5d`
 - T4: `5a7ccb8 fix(lsp): stop flagging MQL4-only names inside strings and trailing comments (#176)` + `2e49b48`
 
-## Feature status: IMPLEMENTATION COMPLETE (delivery pending user decision)
+## Feature status: DELIVERED — PR #177 (single PR, user decision)
+
+- 2026-10-22: user chose single-PR delivery (`ask-on-risk`). Native review ran
+  twice under the RDD switch and terminated `native_stop_required` both times
+  (host-relay capture defect — see Engram observation
+  `gentle-ai-review/host-relay-capture-defect-2026-10-22`); user chose `D`
+  (clone-scoped disable) and delivery under ordinary policy. Issue #176 got
+  `status:approved` (user's explicit delivery decision). PR:
+  https://github.com/davalillo/mql-language-server/pull/177 (`type:bug`,
+  Closes #176).
