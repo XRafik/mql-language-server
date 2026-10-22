@@ -202,7 +202,6 @@ public class ProgramAndBuiltinsTests
     [InlineData("ArrayResize")]
     [InlineData("ArraySort")]
     [InlineData("ArraySize")]
-    [InlineData("ArraySearch")]
     public void IsBuiltin_WithArrayFunctions_ShouldReturnTrue(string functionName)
     {
         // Act

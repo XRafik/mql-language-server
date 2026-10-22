@@ -176,13 +176,9 @@
       },
       "description": "Returns the amount of seconds elapsed from the beginning of the minute of the specified time."
     },
-    "PositionSelectByIndex": {
-      "signature": "bool PositionSelectByIndex(int index)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "HistoryTotal": {
       "signature": "int HistoryTotal()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-documented-obsolete-alias-2026-10-22"
     },
     "TerminalInfoInteger": {
       "signature": "int TerminalInfoInteger(int property_id)",
@@ -994,10 +990,6 @@
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "The function returns the number of elements of a selected array."
     },
-    "ArraySearch": {
-      "signature": "int ArraySearch(double &array[], double value, int start, int count, int sort_dir)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "Print": {
       "signature": "void Print(... )",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
@@ -1024,10 +1016,6 @@
         "note": "MQL4-only"
       },
       "description": "Checks if the Expert Advisor is allowed to trade and trading context is not busy. The second form of the function checks trade status for the specified symbol in the specified time."
-    },
-    "IsTradeAllowedWebRequest": {
-      "signature": "bool IsTradeAllowedWebRequest(string url)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "GetLastError": {
       "signature": "int GetLastError()",
@@ -1822,12 +1810,6 @@
       "docUrl": "https://docs.mql4.com/marketinformation",
       "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "Allows receiving time of beginning and end of the specified quoting sessions for a specified symbol and day of week."
-    },
-    "SymbolInfoSessionOrder": {
-      "signature": "bool SymbolInfoSessionOrder(string name, ENUM_DAY_OF_WEEK day_of_week, uint session_index, datetime &from, datetime &to)",
-      "apiTier": "shared",
-      "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
     },
     "SymbolsTotal": {
       "signature": "int SymbolsTotal(bool selected)",

@@ -467,7 +467,7 @@ public class Mql4AdvancedFeaturesTests
 
         Assert.NotNull(file);
         Assert.Contains(file.Symbols, s => s.Name == "OnTick");
-        Assert.True(Mql4Builtins.IsBuiltin("PositionSelectByIndex"), "PositionSelectByIndex should be detected as built-in");
+        Assert.False(Mql4Builtins.IsBuiltin("PositionSelectByIndex"), "PositionSelectByIndex should not be registered as MQL4 built-in (fabricated; zero CHM evidence; see mql4-dataset-audit.json)");
         Assert.False(Mql4Builtins.IsBuiltin("PositionsTotal"), "PositionsTotal should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
         Assert.False(Mql4Builtins.IsBuiltin("PositionGetString"), "PositionGetString should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
         Assert.False(Mql4Builtins.IsBuiltin("PositionGetDouble"), "PositionGetDouble should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
@@ -780,11 +780,12 @@ public class Mql4AdvancedFeaturesTests
         Assert.True(Mql4Builtins.IsBuiltin("ArraySort"), "ArraySort should be detected as built-in");
         Assert.True(Mql4Builtins.IsBuiltin("ArraySize"), "ArraySize should be detected as built-in");
         // ArrayReverse is MQL5-only (removed from the MQL4 golden list;
-        // see mql4-dataset-audit.json). ArraySearch stays registered: it is
-        // kept as a corpus-admitted legacy alias (zero CHM evidence but not
-        // provably MQL5-only).
+        // see mql4-dataset-audit.json). ArraySearch is fabricated (issue #173
+        // round-2 adjudication: zero evidence in the whole MQL4 Reference
+        // CHM; the documented search function is ArrayBsearch, which is a
+        // separate dataset-coverage gap, not part of this adjudication).
         Assert.False(Mql4Builtins.IsBuiltin("ArrayReverse"), "ArrayReverse should not be registered as MQL4 built-in (MQL5-only; see mql4-dataset-audit.json)");
-        Assert.True(Mql4Builtins.IsBuiltin("ArraySearch"), "ArraySearch should be detected as built-in");
+        Assert.False(Mql4Builtins.IsBuiltin("ArraySearch"), "ArraySearch should not be registered as MQL4 built-in (fabricated; zero CHM evidence; see mql4-dataset-audit.json)");
     }
 
     #endregion

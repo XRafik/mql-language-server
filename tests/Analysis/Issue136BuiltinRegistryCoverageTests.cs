@@ -515,6 +515,64 @@ public class Issue136BuiltinRegistryCoverageTests
             string.Join(", ", offenders));
     }
 
+    // --- MQL4 golden-list fabrication suspects adjudicated against the ------
+    // --- official MQL4 Reference CHM (issue #173 round-2): names with -------
+    // --- zero evidence in the whole CHM build (no page stem matching the ----
+    // --- name, no identifier or word occurrence in any of the 834 pages). ---
+    // --- HistoryTotal is NOT in this list: it is kept as a documented --------
+    // --- obsolete alias (obsolete.htm old-name table, MQL4.hhk). -------------
+    private static readonly string[] FabricatedNamesRemovedFromMql4Golden =
+    {
+        "ArraySearch", "PositionSelectByIndex", "IsTradeAllowedWebRequest",
+        "SymbolInfoSessionOrder",
+    };
+
+    /// <summary>
+    /// Dataset-hygiene gate: fabricated MQL4 names (issue #173 round-2
+    /// adjudication of the audit's unknown bucket) that have zero evidence in
+    /// the official MQL4 Reference CHM — no dedicated page, no identifier or
+    /// word occurrence in any page — must stay out of
+    /// data/builtins/mql4.json. Keeping them suppressed the
+    /// `1070 Undeclared symbol` diagnostic for code that cannot compile in
+    /// MetaEditor. Evidence: tools/generate-golden-lists/data/
+    /// mql4-dataset-audit.json.
+    /// </summary>
+    [Fact]
+    public void Mql4GoldenList_ExcludesFabricatedNames()
+    {
+        var (functions, variables) = LoadMql4Golden();
+
+        var offenders = FabricatedNamesRemovedFromMql4Golden
+            .Where(n => functions.ContainsKey(n) || variables.ContainsKey(n))
+            .ToList();
+
+        Assert.True(offenders.Count == 0,
+            "Fabricated names still present in data/builtins/mql4.json " +
+            "(zero evidence in the MQL4 Reference CHM; see " +
+            "tools/generate-golden-lists/data/mql4-dataset-audit.json): " +
+            string.Join(", ", offenders));
+    }
+
+    /// <summary>
+    /// Keep-pin for the #173 round-2 adjudication: HistoryTotal stays in the
+    /// MQL4 golden list. Unlike the four fabricated suspects, it is
+    /// documented on the official obsolete.htm page (old-name table:
+    /// HistoryTotal → OrdersHistoryTotal; "The old function names can be
+    /// used since the compiler will accept them in a proper way") and in
+    /// the CHM keyword index (MQL4.hhk), so code calling it still compiles
+    /// in MetaEditor.
+    /// </summary>
+    [Fact]
+    public void Mql4GoldenList_KeepsDocumentedObsoleteAlias_HistoryTotal()
+    {
+        var (functions, _) = LoadMql4Golden();
+
+        Assert.True(functions.ContainsKey("HistoryTotal"),
+            "HistoryTotal was removed from data/builtins/mql4.json but it is " +
+            "a documented obsolete MQL4 alias of OrdersHistoryTotal " +
+            "(obsolete.htm old-name table + MQL4.hhk keyword index).");
+    }
+
     // --- MQL4-only names removed from the MQL5 golden list -----------------
     // --- evidence: tools/generate-golden-lists/data/mql5-dataset-audit.json --
     // --- (deterministic dump-evidence report; see ---------------------------
