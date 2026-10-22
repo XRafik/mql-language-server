@@ -266,7 +266,8 @@ stacked chain, `ask-on-risk`).
   Close occurrence (preprocessor hidden channel 1). Phase-1 pins replaced
   with #176 justification comments. 24/24 filtered + Release clean. Two
   verified column corrections vs the task doc (Digits (1,13,6); Ask
-  (1,15,3)). Full suite + commit: _pending (recorded at unit close)_.
+  (1,15,3)). Full suite 1697/1697. Commit: `5a7ccb8 fix(lsp): stop flagging
+  MQL4-only names inside strings and trailing comments (#176)`.
 - T5: pending
 
 ## Next step
