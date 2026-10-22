@@ -268,9 +268,18 @@ stacked chain, `ask-on-risk`).
   verified column corrections vs the task doc (Digits (1,13,6); Ask
   (1,15,3)). Full suite 1697/1697. Commit: `5a7ccb8 fix(lsp): stop flagging
   MQL4-only names inside strings and trailing comments (#176)`.
-- T5: pending
+- T5: DONE — full suite 1697/1697 (baseline 1666 + 31 net new);
+  `dotnet build -c Release` clean on the final tree (0 warnings); end-to-end
+  JSON-RPC repro over the Release stdio server (`input group`, `0.01f`,
+  `1e3f`, `MqlTradeRequest`, `MqlDateTime`, `__FUNCTION__`, `Close` inside a
+  format string + trailing comment) → **DIAGNOSTICS: 0** (was 12 on main
+  f424007). CHANGELOG updated per unit. Delivery decision (single PR vs
+  stacked chain) put to the user per the `ask-on-risk` route declaration.
 
-## Next step
+## Unit commits (evidence)
+- T1: `5120ef8 fix(parser): accept input group directives in MQL5 (#176)` + `8b8e30f`
+- T2: `90f139c fix(parser): accept f/F real-literal suffixes (#176)` + `56ee1d2`
+- T3: `903cce6 fix(data): add MQL5 builtin struct types and predefined macros (#176)` + `01c3d5d`
+- T4: `5a7ccb8 fix(lsp): stop flagging MQL4-only names inside strings and trailing comments (#176)` + `2e49b48`
 
-Delegate T1 to `gentle-ai-worker` (RED-first protocol embedded in the task
-text); parent closes each unit with full suite + work-unit commit.
+## Feature status: IMPLEMENTATION COMPLETE (delivery pending user decision)
