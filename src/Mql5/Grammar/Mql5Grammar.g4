@@ -38,9 +38,13 @@ LITERAL_COLOR : 'C\'' ~[']* '\'';
 
 // --- Numbers ---
 HEX           : '0' [xX] [0-9a-fA-F]+;
-DOUBLE        : [0-9]+ '.' [0-9]* EXP?
-              | '.' [0-9]+ EXP?
-              | [0-9]+ EXP
+// Issue #176: optional f/F suffix on real literals (C-style; MetaEditor
+// accepts `0.0f`/`1e3f` — official MQL5 Reference samples use f-suffixed
+// float literals, e.g. the matrixf examples). Integer `123f` still lexes as
+// INTEGER + IDENTIFIER.
+DOUBLE        : [0-9]+ '.' [0-9]* EXP? [fF]?
+              | '.' [0-9]+ EXP? [fF]?
+              | [0-9]+ EXP [fF]?
               ;
 INTEGER       : [0-9]+;
 
@@ -72,6 +76,9 @@ K_STATIC    : 'static';
 K_EXTERN    : 'extern';
 K_INPUT     : 'input';
 K_SINPUT    : 'sinput';
+// Issue #176: `group` keyword for the documented input-parameter grouping
+// (`input group "text"`, MQL5 Reference, inputs).
+K_GROUP     : 'group';
 K_CONST     : 'const';
 K_VIRTUAL   : 'virtual';
 K_OVERRIDE  : 'override';
@@ -189,6 +196,7 @@ compilationUnit
 translationUnit
     : templateDefinition
     | directive
+    | inputGroupDirective
     | classDeclaration
     | structDeclaration
     | unionDeclaration
@@ -213,6 +221,13 @@ directive
     | PRE_IMPORT
     | PRE_RESOURCE
     | PRE_PACK
+    ;
+
+// Issue #176: documented input-parameter grouping (`input group "text"`,
+// MQL5 Reference, inputs). Exact documented form: no trailing semicolon;
+// `sinput group` is not documented and stays rejected (#141 honesty rule).
+inputGroupDirective
+    : K_INPUT K_GROUP STRING
     ;
 
 // --- Types ---

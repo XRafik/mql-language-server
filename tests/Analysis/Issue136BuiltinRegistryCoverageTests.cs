@@ -205,6 +205,47 @@ public class Issue136BuiltinRegistryCoverageTests
         Assert.True(new Mql5Builtins().IsBuiltinVariable(name), $"MQL5 registry is missing documented enum constant '{name}'");
     }
 
+    // --- MQL5 documented builtin struct types (issue #176) -----------------
+    // Struct types ride the variables table like the ENUM_* type names; the
+    // golden list is the source of truth (#136 contract). Every name below
+    // has a definition page in the local MQL5 Reference dump.
+    private static readonly string[] Mql5StructTypes =
+    {
+        "MqlDateTime", "MqlTradeRequest", "MqlTradeResult",
+        "MqlTradeTransaction", "MqlTradeCheckResult", "MqlTick",
+        "MqlRates", "MqlBookInfo", "MqlParam",
+        "MqlCalendarCountry", "MqlCalendarEvent", "MqlCalendarValue"
+    };
+
+    public static TheoryData<string> Mql5StructTypeNames => ToTheoryData(Mql5StructTypes);
+
+    [Theory]
+    [MemberData(nameof(Mql5StructTypeNames))]
+    public void Mql5StructTypes_AreRegistered(string name)
+    {
+        Assert.True(new Mql5Builtins().IsBuiltinVariable(name), $"MQL5 registry is missing documented struct type '{name}' (issue #176)");
+    }
+
+    // --- MQL5 predefined macro substitutions (issue #176) ------------------
+    // Full documented set from the MQL5 Reference "Predefined Macro
+    // Substitutions" chapter. __MQLBUILD__ and __MQL5BUILD__ are one
+    // documented row with two accepted spellings.
+    private static readonly string[] Mql5PredefinedMacros =
+    {
+        "__CPU_ARCHITECTURE__", "__DATE__", "__DATETIME__", "__LINE__",
+        "__FILE__", "__PATH__", "__FUNCTION__", "__FUNCSIG__",
+        "__MQLBUILD__", "__MQL5BUILD__", "__COUNTER__", "__RANDOM__"
+    };
+
+    public static TheoryData<string> Mql5PredefinedMacroNames => ToTheoryData(Mql5PredefinedMacros);
+
+    [Theory]
+    [MemberData(nameof(Mql5PredefinedMacroNames))]
+    public void Mql5PredefinedMacros_AreRegistered(string name)
+    {
+        Assert.True(new Mql5Builtins().IsBuiltinVariable(name), $"MQL5 registry is missing documented predefined macro '{name}' (issue #176)");
+    }
+
     // --- MQL5 documented stdlib functions missing from the golden list -----
     // --- (2026-10-18 audit: only 155 of ~760 documented functions were -----
     // --- registered; same 5070 false-positive class as the constants). -----

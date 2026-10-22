@@ -103,6 +103,17 @@ public class Mql4ParserTests
         Assert.All(file.Symbols, s => Assert.NotNull(s.Range));
     }
 
+    // Issue #176 mirror: `f`/`F` suffix on real literals is valid in MQL4 too
+    // (same C-style lexing; both grammars share the DOUBLE rule shape).
+    [Fact]
+    public void ParseVariable_RealLiteralFSuffix_ParsesWithoutErrors()
+    {
+        var file = _parser.ParseFile("double a = 0.0f; double b = 1.5F; double c = 1e3f;", "test.mq4");
+
+        Assert.NotNull(file);
+        Assert.Empty(file.SyntaxErrors);
+    }
+
     [Fact]
     public void ParseVariable_WithInputModifier_ParsesSuccessfully()
     {

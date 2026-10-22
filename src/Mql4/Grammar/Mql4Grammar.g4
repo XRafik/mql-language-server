@@ -36,9 +36,11 @@ LITERAL_COLOR : 'C\'' ~[']* '\'';
 
 // --- Numbers ---
 HEX           : '0' [xX] [0-9a-fA-F]+;
-DOUBLE        : [0-9]+ '.' [0-9]* EXP?
-              | '.' [0-9]+ EXP?
-              | [0-9]+ EXP
+// Issue #176 mirror: optional f/F suffix on real literals (same C-style
+// lexing as the MQL5 grammar; MQL4 documents the same real-constant forms).
+DOUBLE        : [0-9]+ '.' [0-9]* EXP? [fF]?
+              | '.' [0-9]+ EXP? [fF]?
+              | [0-9]+ EXP [fF]?
               ;
 INTEGER       : [0-9]+;
 

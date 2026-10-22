@@ -286,6 +286,32 @@ public class UnresolvedSymbolRuleTests
     }
 
     [Fact]
+    public void Mql5Document_WithStructTypesAndPredefinedMacros_DoesNotFlagThem()
+    {
+        // Issue #176 acceptance: documented builtin struct types and predefined
+        // macro substitutions resolve against the MQL5 registry — no false 5070
+        // on the issue repro snippet.
+        const string content = "MqlTradeRequest request;\nMqlDateTime now;\nPrint(__FUNCTION__);\n";
+        var file = new MqlFile
+        {
+            Occurrences = new List<TokenOccurrence>
+            {
+                new("MqlTradeRequest", 0, 0, 14),
+                new("MqlDateTime", 1, 0, 11),
+                new("__FUNCTION__", 2, 6, 12)
+            }
+        };
+
+        var diagnostics = _rule.Check(Context(
+            file,
+            content,
+            MqlLanguage.Mql5,
+            new IMqlBuiltins[] { new Mql5Builtins() })).ToList();
+
+        Assert.Empty(diagnostics);
+    }
+
+    [Fact]
     public void Mql4OnlyConstant_InMql5Document_StillFlagged_ByDialectFilter()
     {
         // Issue #46 acceptance (b): OP_BUY is MQL4-only and NOT present in
