@@ -14,10 +14,16 @@ namespace MqlLanguageServer.Analysis.Rules;
 /// replacement — the reverse direction of <see cref="LanguageMisuseRule"/>
 /// (issue #28, base+40), which it mirrors structurally.
 ///
-/// Detection is a case-sensitive identifier-boundary scan per line; no type
-/// inference, no regex. Occurrences inside whole-line comments are skipped,
-/// string literals and trailing comments are not (phase-1 limitation
-/// inherited from #28 by design). Semantics-changed entries (Bars, Digits,
+/// Detection is occurrence-driven (issue #176): the rule walks the identifier
+/// token occurrences captured during parsing
+/// (<see cref="MqlFile.Occurrences"/>, filled by TokenOccurrenceCapture) and
+/// flags those whose text matches a registry key. String-literal contents and
+/// comments are excluded by construction — the capture emits only
+/// default-channel IDENTIFIER tokens (comment and preprocessor text live on
+/// hidden lexer channels) — so no textual stripping or per-line heuristic is
+/// needed. No type inference, no regex. A null file degrades to no
+/// diagnostics (same contract as <see cref="UnresolvedSymbolRule"/>).
+/// Semantics-changed entries (Bars, Digits,
 /// Point — still valid MQL5 names) skip valid MQL5 call forms `Name(...)`
 /// and flag only MQL4-style bare reads, with an honest "changed semantics"
 /// message instead of "not available". The rule emits nothing for MQL4
@@ -39,86 +45,81 @@ public sealed class Mql4OnlyApiRule : ISemanticRule
             yield break;
         }
 
+        var occurrences = context.File?.Occurrences;
+        if (occurrences is null)
+        {
+            // No parsed file (or occurrences not captured): degrade to no
+            // diagnostics, mirroring UnresolvedSymbolRule.
+            yield break;
+        }
+
         var entries = Mql4OnlyApiRegistry.Entries;
         var lines = context.Content.Split('\n');
 
-        for (int i = 0; i < lines.Length; i++)
+        for (var i = 0; i < occurrences.Count; i++)
         {
             if (i % 100 == 0)
             {
                 context.Token.ThrowIfCancellationRequested();
             }
 
-            var line = lines[i];
-            var trimmed = line.TrimStart();
+            var occurrence = occurrences[i];
 
-            // Skip whole-line comments (simple heuristic; trailing comments
-            // and string contents are not stripped in phase 1 — inherited
-            // from #28's LanguageMisuseRule).
-            if (trimmed.StartsWith("//", StringComparison.Ordinal))
+            // Case-sensitive (Ordinal) lookup against the curated registry:
+            // MQL identifiers are case-sensitive like C++, so `TimeHour` and
+            // `timehour` are distinct identifiers (REQ-MA-02/03).
+            if (!entries.TryGetValue(occurrence.Text, out var entry))
             {
                 continue;
             }
 
-            foreach (var (name, entry) in entries)
+            // Defensive: an occurrence must land inside the document text.
+            if (occurrence.Line < 0 || occurrence.Line >= lines.Length)
             {
-                // Per-registry-key cancellation on long lines (mirrors #28).
-                if (line.Length > 512)
-                {
-                    context.Token.ThrowIfCancellationRequested();
-                }
-
-                var searchStart = 0;
-                while (true)
-                {
-                    var index = line.IndexOf(name, searchStart, StringComparison.Ordinal);
-                    if (index < 0)
-                    {
-                        break;
-                    }
-
-                    searchStart = index + name.Length;
-
-                    // Identifier-boundary check: the match must not be
-                    // embedded in a longer identifier (REQ-MA-03). Identifier
-                    // chars are letters, digits and '_' — MQL is
-                    // case-sensitive like C++, so the Ordinal match above
-                    // already pins the spelling.
-                    if (index > 0 && IsIdentChar(line[index - 1]))
-                    {
-                        continue;
-                    }
-
-                    if (searchStart < line.Length && IsIdentChar(line[searchStart]))
-                    {
-                        continue;
-                    }
-
-                    // Option C (Judgment-Day ledger JD-1): semantics-changed
-                    // names (Bars/Digits/Point) still exist in MQL5 as
-                    // functions. A call form `Name(...)` is valid MQL5 and
-                    // must not warn; only MQL4-style bare reads are defects.
-                    // The next non-whitespace character after the identifier
-                    // disambiguates without type info.
-                    if (entry.SemanticsChanged && NextNonSpaceCharIsOpenParen(line, searchStart))
-                    {
-                        continue;
-                    }
-
-                    var message = entry.SemanticsChanged
-                        ? $"MQL5 {entry.Kind.ToString().ToLowerInvariant()} '{name}' has changed semantics: {entry.Reason}. Use {entry.Replacement} instead."
-                        : $"MQL4-only {entry.Kind.ToString().ToLowerInvariant()} '{name}' is not available in MQL5; {entry.Reason}. Use {entry.Replacement} instead.";
-
-                    yield return new Diagnostic
-                    {
-                        Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(i, index, i, index + name.Length),
-                        Severity = DiagnosticSeverity.Warning,
-                        Message = message,
-                        Code = (context.BaseCode + Mql4OnlyApiInMql5Offset).ToString(),
-                        Source = "mql-lsp"
-                    };
-                }
+                continue;
             }
+
+            var line = lines[occurrence.Line];
+
+            // Identifier-boundary checks (REQ-MA-03), retained defensively:
+            // occurrences are whole IDENTIFIER tokens so they are never
+            // embedded in a longer identifier, but a stale or hand-built
+            // occurrence must not flag. Identifier chars are letters, digits
+            // and '_'.
+            var before = occurrence.Column - 1;
+            if (before >= 0 && before < line.Length && IsIdentChar(line[before]))
+            {
+                continue;
+            }
+
+            var after = occurrence.Column + occurrence.Length;
+            if (after < line.Length && IsIdentChar(line[after]))
+            {
+                continue;
+            }
+
+            // Option C (Judgment-Day ledger JD-1): semantics-changed names
+            // (Bars/Digits/Point) still exist in MQL5 as functions. A call
+            // form `Name(...)` is valid MQL5 and must not warn; only
+            // MQL4-style bare reads are defects. The next non-whitespace
+            // character after the identifier disambiguates without type info.
+            if (entry.SemanticsChanged && NextNonSpaceCharIsOpenParen(line, after))
+            {
+                continue;
+            }
+
+            var message = entry.SemanticsChanged
+                ? $"MQL5 {entry.Kind.ToString().ToLowerInvariant()} '{occurrence.Text}' has changed semantics: {entry.Reason}. Use {entry.Replacement} instead."
+                : $"MQL4-only {entry.Kind.ToString().ToLowerInvariant()} '{occurrence.Text}' is not available in MQL5; {entry.Reason}. Use {entry.Replacement} instead.";
+
+            yield return new Diagnostic
+            {
+                Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(occurrence.Line, occurrence.Column, occurrence.Line, occurrence.Column + occurrence.Length),
+                Severity = DiagnosticSeverity.Warning,
+                Message = message,
+                Code = (context.BaseCode + Mql4OnlyApiInMql5Offset).ToString(),
+                Source = "mql-lsp"
+            };
         }
     }
 

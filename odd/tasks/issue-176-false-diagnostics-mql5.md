@@ -253,7 +253,20 @@ stacked chain, `ask-on-risk`).
   (indent=2). 286/286 filtered + Release clean. Full suite 1695/1695. Commit:
   `903cce6 fix(data): add MQL5 builtin struct types and predefined macros
   (#176)`.
-- T4: pending
+- T4: DONE (delegated to gentle-ai-worker at context backstop; writer
+  verified line-by-line). RED observed (with HEAD text-scan rule temporarily
+  restored: 3 failing — `StringLiteral_Mention_IsNotFlagged`,
+  `TrailingComment_Mention_IsNotFlagged`, `MacroBody_CaptureContract_IsPinned`;
+  representative: `5060 (0,17)-(0,22) MQL4-only variable 'Close' …` inside the
+  format literal) → GREEN: `Check` walks `context.File?.Occurrences`
+  (null → yield break), Ordinal registry lookup, defensive boundary checks,
+  JD-1 call-position skip retained, whole-line-comment skip deleted as dead
+  code, messages/severity/code unchanged, ranges derived from lexer
+  positions. Capture contract observed + pinned: `#define X Close` yields NO
+  Close occurrence (preprocessor hidden channel 1). Phase-1 pins replaced
+  with #176 justification comments. 24/24 filtered + Release clean. Two
+  verified column corrections vs the task doc (Digits (1,13,6); Ask
+  (1,15,3)). Full suite + commit: _pending (recorded at unit close)_.
 - T5: pending
 
 ## Next step
