@@ -101,6 +101,44 @@ KEEP_EXCEPTIONS = {
     "ENUM_APPLIED_PRICE": "Weak prose evidence only; kept ambiguous.",
     "OBJPROP_DIRECTION": "Weak prose evidence only; kept ambiguous.",
     "TIME_SECONDS": "Weak prose evidence only; kept ambiguous.",
+    # --- Issue #173 round-3 unknown-bucket adjudication (2026-10-22) ---------
+    "CRYPT_ARCH_RLE": "Constant newer than this CHM build (CRYPT_* family, "
+                      "same rationale as CRYPT_AES192).",
+    "CRYPT_HASH_SHA3_256": "Constant newer than this CHM build (CRYPT_* "
+                           "family).",
+    "CRYPT_HASH_SHA3_512": "Constant newer than this CHM build (CRYPT_* "
+                           "family).",
+    "DeepSkyBlue": "Old-MQL4 bare web-color name; exact keyword index entry "
+                   "in MQL4.hhk -> webcolors.htm (the table documents only "
+                   "clr* forms).",
+    "HotPink": "Old-MQL4 bare web-color name; exact keyword index entry in "
+               "MQL4.hhk -> webcolors.htm.",
+    "clrSeaShell": "Case-variant of the documented clrSeashell (webcolors.htm "
+                   "normative table cell, constant_indices.htm, MQL4.hhk); "
+                   "identifiers compare case-insensitively.",
+    "clrAzure": "Color in the webcolors.htm 140-color keyword list and "
+                "MQL4.hhk; the page's normative 132-cell table predates it.",
+    "clrCyan": "Color in the webcolors.htm 140-color keyword list and "
+               "MQL4.hhk; the page's normative 132-cell table predates it.",
+    "clrDarkCyan": "Color in the webcolors.htm 140-color keyword list and "
+                   "MQL4.hhk; the page's normative 132-cell table predates it.",
+    "clrDarkMagenta": "Color in the webcolors.htm 140-color keyword list and "
+                      "MQL4.hhk; the page's normative 132-cell table predates "
+                      "it.",
+    "clrDarkRed": "Color in the webcolors.htm 140-color keyword list and "
+                  "MQL4.hhk; the page's normative 132-cell table predates it.",
+    "clrFloralWhite": "Color in the webcolors.htm 140-color keyword list and "
+                      "MQL4.hhk; the page's normative 132-cell table predates "
+                      "it.",
+    "clrFuchsia": "Color in the webcolors.htm 140-color keyword list and "
+                  "MQL4.hhk; the page's normative 132-cell table predates it.",
+    "clrGhostWhite": "Color in the webcolors.htm 140-color keyword list and "
+                     "MQL4.hhk; the page's normative 132-cell table predates "
+                     "it.",
+    "MODE_DESCEND": "Documented in the ArraySort/ArrayBsearch parameter "
+                    "descriptions ('MODE_DESCEND sort in descend direction') "
+                    "and their code examples; prose positions, not table "
+                    "cells.",
 }
 
 

@@ -516,15 +516,25 @@ public class Issue136BuiltinRegistryCoverageTests
     }
 
     // --- MQL4 golden-list fabrication suspects adjudicated against the ------
-    // --- official MQL4 Reference CHM (issue #173 round-2): names with -------
-    // --- zero evidence in the whole CHM build (no page stem matching the ----
-    // --- name, no identifier or word occurrence in any of the 834 pages). ---
-    // --- HistoryTotal is NOT in this list: it is kept as a documented --------
-    // --- obsolete alias (obsolete.htm old-name table, MQL4.hhk). -------------
+    // --- official MQL4 Reference CHM (issue #173 round-2 + round-3 unknown --
+    // --- bucket): names with zero evidence in the whole CHM build (no page --
+    // --- stem matching the name, no identifier or word occurrence in any of --
+    // --- the 834 pages, incl. MQL4.hhk and obsolete.htm). HistoryTotal is ---
+    // --- NOT in this list: it is kept as a documented -----------------------
+    // --- obsolete alias (obsolete.htm old-name table, MQL4.hhk). Round-3 ---
+    // --- keeps with CHM evidence are recorded as KEEP_EXCEPTIONS in ---------
+    // --- tools/generate-golden-lists/audit_mql4_dataset.py instead. ----------
     private static readonly string[] FabricatedNamesRemovedFromMql4Golden =
     {
         "ArraySearch", "PositionSelectByIndex", "IsTradeAllowedWebRequest",
         "SymbolInfoSessionOrder",
+        // round-3 adjudication of the 18 zero-evidence unknown-bucket names
+        // (2026-10-22): no occurrence anywhere in the CHM build; keeps and
+        // their evidence live in the audit report's unknown_bucket.
+        "ACCOUNT_MARGIN_SO_STOP", "ACCOUNT_TRADE_STOPOUT_LEVEL",
+        "AccountSymbol", "BarsIsTradeAllowed", "False", "IDCLOSE",
+        "LastError", "MQL_TRADE_EXPERT", "MQL_TRADE_MODE", "TERMINAL_EMAIL",
+        "TERMINAL_EXPERTS_ALLOWED", "clrLightGoldenrodYellow",
     };
 
     /// <summary>
