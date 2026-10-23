@@ -139,6 +139,9 @@ KEEP_EXCEPTIONS = {
                     "descriptions ('MODE_DESCEND sort in descend direction') "
                     "and their code examples; prose positions, not table "
                     "cells.",
+    # --- Documented math alias (client report, issue #173 thread, 2026-10-23)-
+    "pow": "Documented math alias of MathPow (MQL4.hhk exact keyword entry "
+           "pow -> mathpow.htm; no dedicated page stem in this CHM build).",
 }
 
 

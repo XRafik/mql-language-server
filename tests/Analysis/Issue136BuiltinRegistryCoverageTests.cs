@@ -583,6 +583,35 @@ public class Issue136BuiltinRegistryCoverageTests
             "(obsolete.htm old-name table + MQL4.hhk keyword index).");
     }
 
+    // --- documented math alias pow (client report, issue #173 thread) --------
+    // --- MQL5 Reference "Math Functions" table has a dedicated pow row; ------
+    // --- MQL4 CHM lists pow as a keyword of mathpow.htm (MQL4.hhk exact ------
+    // --- entry), the same evidence class that kept DeepSkyBlue/HotPink. ------
+    [Fact]
+    public void Mql5GoldenList_DocumentsPowAlias()
+    {
+        var builtins = new Mql5Builtins();
+
+        Assert.True(builtins.IsBuiltinFunction("pow"),
+            "MQL5 registry is missing the documented math alias 'pow' " +
+            "(MQL5 Reference Math Functions table: 'pow — Raises the base to " +
+            "the specified power'; alternative spelling of MathPow)");
+        var signature = builtins.GetBuiltinFunctionSignature("pow");
+        Assert.NotNull(signature);
+        Assert.Contains("exponent", signature);
+    }
+
+    [Fact]
+    public void Mql4GoldenList_DocumentsPowAlias()
+    {
+        Assert.True(Mql4Builtins.IsBuiltinFunction("pow"),
+            "MQL4 registry is missing the documented math alias 'pow' " +
+            "(MQL4.hhk exact keyword entry pow -> mathpow.htm)");
+        var signature = Mql4Builtins.GetBuiltinFunctionSignature("pow");
+        Assert.NotNull(signature);
+        Assert.Contains("exponent", signature);
+    }
+
     // --- MQL4-only names removed from the MQL5 golden list -----------------
     // --- evidence: tools/generate-golden-lists/data/mql5-dataset-audit.json --
     // --- (deterministic dump-evidence report; see ---------------------------
