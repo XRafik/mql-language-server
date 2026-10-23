@@ -148,6 +148,20 @@ public class HoverHandler : LanguageAwareHandlerBase<HoverParams, Hover?>, IHove
                 return null;
             }
 
+            // Issue #180: the builtin registry documents tokens, not only resolved
+            // symbols. When the identifier under the cursor is a registered builtin
+            // of this dialect but resolution produced a different symbol (a covering
+            // declaration of non-function kind) or nothing at all, answer from the
+            // registry instead of returning the wrong symbol or null. User symbols
+            // named exactly like the token keep the existing resolution path.
+            var token = ExtractIdentifierAt(content, line - 1, character - 1);
+            if (!string.IsNullOrEmpty(token)
+                && builtins.IsBuiltin(token)
+                && (symbol == null || !string.Equals(symbol.Name, token, StringComparison.Ordinal)))
+            {
+                return BuildBuiltinHover(token, builtins, language, line - 1, character - 1);
+            }
+
             if (symbol == null)
             {
                 _logger.LogDebug("[{CorrelationId}] No symbol found at position {Line}:{Character}", correlationId, line, character);
@@ -160,7 +174,13 @@ public class HoverHandler : LanguageAwareHandlerBase<HoverParams, Hover?>, IHove
                 var symbolType = isPredefined ? $"MQL{(language == MqlLanguage.Mql5 ? "5" : "4")} Built-in" : "User Defined";
 
                 var signature = builtins.GetBuiltinFunctionSignature(symbol.Name);
-                var markdownContent = BuildHoverContent(symbol, signature, isPredefined, symbolType, language);
+
+                // Issue #180: surface the registered variable description for
+                // builtin variables; the legacy pseudo-symbol path resolved them
+                // with Kind=Function and never read the variable descriptions.
+                var isBuiltinVariable = isPredefined && !builtins.IsBuiltinFunction(symbol.Name);
+                var builtinDescription = builtins.GetBuiltinVariableDescription(symbol.Name);
+                var markdownContent = BuildHoverContent(symbol, signature, isPredefined, symbolType, language, builtinDescription, isBuiltinVariable);
 
                 var hover = new Hover
                 {
@@ -191,7 +211,8 @@ public class HoverHandler : LanguageAwareHandlerBase<HoverParams, Hover?>, IHove
         }
     }
 
-    private StringBuilder BuildHoverContent(MqlSymbol symbol, string? signature, bool isPredefined, string symbolType, MqlLanguage language)
+    private StringBuilder BuildHoverContent(MqlSymbol symbol, string? signature, bool isPredefined, string symbolType, MqlLanguage language,
+        string? builtinDescription = null, bool isBuiltinVariable = false)
     {
         var markdownContent = new StringBuilder();
         markdownContent.AppendLine($"## {symbol.Name}");
@@ -206,7 +227,12 @@ public class HoverHandler : LanguageAwareHandlerBase<HoverParams, Hover?>, IHove
         }
 
         markdownContent.AppendLine($"**Type:** {symbolType}");
-        markdownContent.AppendLine($"**Kind:** {symbol.Kind}");
+        markdownContent.AppendLine($"**Kind:** {(isBuiltinVariable ? SymbolKind.Variable : symbol.Kind)}");
+
+        if (!string.IsNullOrEmpty(builtinDescription))
+        {
+            markdownContent.AppendLine($"**Description:** {builtinDescription}");
+        }
 
         if (!string.IsNullOrEmpty(symbol.Detail))
         {
@@ -236,6 +262,96 @@ public class HoverHandler : LanguageAwareHandlerBase<HoverParams, Hover?>, IHove
 
         return markdownContent;
     }
+
+    /// <summary>
+    /// Issue #180: build a hover for a registered builtin token straight from
+    /// the dialect registry — signature for functions, description for
+    /// variables — with the range covering the identifier occurrence under
+    /// the cursor. Formatting mirrors the resolved-symbol builtin path.
+    /// </summary>
+    private Hover BuildBuiltinHover(string token, IMqlBuiltins builtins, MqlLanguage language, int zeroBasedLine, int zeroBasedCharacter)
+    {
+        var symbolType = $"MQL{(language == MqlLanguage.Mql5 ? "5" : "4")} Built-in";
+        var isFunction = builtins.IsBuiltinFunction(token);
+        var signature = builtins.GetBuiltinFunctionSignature(token);
+        var description = builtins.GetBuiltinVariableDescription(token);
+        var range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(
+            new Position(zeroBasedLine, zeroBasedCharacter),
+            new Position(zeroBasedLine, zeroBasedCharacter + token.Length));
+
+        var pseudoSymbol = new MqlSymbol
+        {
+            Name = token,
+            Kind = isFunction ? SymbolKind.Function : SymbolKind.Variable,
+            Detail = symbolType,
+            Range = range
+        };
+
+        var markdownContent = BuildHoverContent(
+            pseudoSymbol, signature, isPredefined: true, symbolType, language,
+            description, isBuiltinVariable: !isFunction);
+
+        return new Hover
+        {
+            Contents = new MarkedStringsOrMarkupContent(
+                new MarkupContent { Kind = MarkupKind.Markdown, Value = markdownContent.ToString() }
+            ),
+            Range = range
+        };
+    }
+
+    /// <summary>
+    /// Issue #180: extract the identifier token covering the cursor position
+    /// (0-based line/character), tolerating a cursor on the token boundary or
+    /// on the whitespace right after it. Returns null when no identifier is
+    /// under the cursor.
+    /// </summary>
+    private static string? ExtractIdentifierAt(string content, int zeroBasedLine, int zeroBasedCharacter)
+    {
+        if (string.IsNullOrEmpty(content) || zeroBasedLine < 0 || zeroBasedCharacter < 0)
+        {
+            return null;
+        }
+
+        var lines = content.Split('\n');
+        if (zeroBasedLine >= lines.Length)
+        {
+            return null;
+        }
+
+        var text = lines[zeroBasedLine].TrimEnd('\r');
+        if (text.Length == 0)
+        {
+            return null;
+        }
+
+        var index = Math.Min(zeroBasedCharacter, text.Length - 1);
+        if (!IsIdentifierCharacter(text[index]))
+        {
+            if (index == 0 || !IsIdentifierCharacter(text[index - 1]))
+            {
+                return null;
+            }
+
+            index--;
+        }
+
+        var start = index;
+        while (start > 0 && IsIdentifierCharacter(text[start - 1]))
+        {
+            start--;
+        }
+
+        var end = index;
+        while (end < text.Length - 1 && IsIdentifierCharacter(text[end + 1]))
+        {
+            end++;
+        }
+
+        return text.Substring(start, end - start + 1);
+    }
+
+    private static bool IsIdentifierCharacter(char c) => char.IsLetterOrDigit(c) || c == '_';
 
     private string GetExampleUsage(string functionName, MqlLanguage language)
     {
