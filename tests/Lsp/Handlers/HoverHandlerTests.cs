@@ -7,6 +7,9 @@ using OmniSharp.Extensions.LanguageServer.Protocol;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using MqlLanguageServer.Lsp.Handlers;
 using MqlLanguageServer.Lsp.Server;
+using MqlLanguageServer.Mql4.Builtins;
+using MqlLanguageServer.Mql5.Builtins;
+using MqlLanguageServer.Mql5.Parser;
 using MqlLanguageServer.Parser;
 using Xunit;
 
@@ -114,6 +117,166 @@ public class HoverHandlerTests
             Assert.NotNull(nameResult);
             var nameContent = nameResult!.Contents.MarkupContent!.Value;
             Assert.Contains("## OnTick", nameContent);
+        }
+        finally
+        {
+            if (File.Exists(testFilePath)) File.Delete(testFilePath);
+        }
+    }
+
+    /// <summary>
+    /// Issue #180 regression: hovering a built-in FUNCTION must surface the
+    /// registered signature from the dialect registry through the handler.
+    /// </summary>
+    [Fact]
+    public async Task HoverHandler_Mql4_BuiltinFunction_IncludesRegisteredSignatureAsync()
+    {
+        // Arrange - MQL4 code calling a builtin function with a known signature
+        var content = "int OnInit()\n{\n    int total = HistoryTotal();\n    return 0;\n}\n";
+        var testFilePath = Path.Combine(Path.GetTempPath(), "TestHoverBuiltinFnMql4.mq4");
+        File.WriteAllText(testFilePath, content);
+
+        try
+        {
+            var documentStore = new OpenDocumentStore();
+            var handler = new HoverHandler(MockLogger<HoverHandler>(), new Mql4AntlrParser(), documentStore);
+
+            var request = new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(2, 16) // on HistoryTotal
+            };
+
+            // Act
+            var result = await handler.Handle(request, CancellationToken.None);
+
+            // Assert
+            Assert.NotNull(result);
+            var contentString = result!.Contents.MarkupContent!.Value;
+            Assert.Contains("HistoryTotal", contentString);
+            Assert.Contains("int HistoryTotal()", contentString);
+        }
+        finally
+        {
+            if (File.Exists(testFilePath)) File.Delete(testFilePath);
+        }
+    }
+
+    /// <summary>
+    /// Issue #180 regression: hovering a built-in VARIABLE must surface the
+    /// registered description from the dialect registry through the handler.
+    /// </summary>
+    [Fact]
+    public async Task HoverHandler_Mql4_BuiltinVariable_IncludesRegisteredDescriptionAsync()
+    {
+        // Arrange - MQL4 code reading a builtin variable with a known description
+        var content = "void OnTick()\n{\n    double price = Ask;\n}\n";
+        var testFilePath = Path.Combine(Path.GetTempPath(), "TestHoverBuiltinVarMql4.mq4");
+        File.WriteAllText(testFilePath, content);
+
+        try
+        {
+            var documentStore = new OpenDocumentStore();
+            var handler = new HoverHandler(MockLogger<HoverHandler>(), new Mql4AntlrParser(), documentStore);
+
+            var request = new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(2, 19) // on Ask
+            };
+
+            // Act
+            var result = await handler.Handle(request, CancellationToken.None);
+
+            // Assert
+            Assert.NotNull(result);
+            var contentString = result!.Contents.MarkupContent!.Value;
+            Assert.Contains("Ask", contentString);
+            Assert.Contains("Current Ask price", contentString);
+        }
+        finally
+        {
+            if (File.Exists(testFilePath)) File.Delete(testFilePath);
+        }
+    }
+
+    /// <summary>
+    /// Issue #180 (MQL5 symmetry): hovering a built-in FUNCTION in an .mq5
+    /// document must surface the registered MQL5 signature.
+    /// </summary>
+    [Fact]
+    public async Task HoverHandler_Mql5_BuiltinFunction_IncludesRegisteredSignatureAsync()
+    {
+        // Arrange - MQL5 code calling a builtin function with a known signature
+        var content = "int OnInit()\n{\n    double squared = MathPow(2.0, 3.0);\n    return 0;\n}\n";
+        var testFilePath = Path.Combine(Path.GetTempPath(), "TestHoverBuiltinFnMql5.mq5");
+        File.WriteAllText(testFilePath, content);
+
+        try
+        {
+            var documentStore = new OpenDocumentStore();
+            var handler = new HoverHandler(
+                MockLogger<HoverHandler>(),
+                new MqlLanguageService(new Mql4AntlrParser(), new Mql5AntlrParser()),
+                documentStore,
+                new IMqlBuiltins[] { new Mql4BuiltinsAdapter(), new Mql5Builtins() });
+
+            var request = new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(2, 21) // on MathPow
+            };
+
+            // Act
+            var result = await handler.Handle(request, CancellationToken.None);
+
+            // Assert
+            Assert.NotNull(result);
+            var contentString = result!.Contents.MarkupContent!.Value;
+            Assert.Contains("MathPow", contentString);
+            Assert.Contains("double MathPow(double base, double exponent)", contentString);
+        }
+        finally
+        {
+            if (File.Exists(testFilePath)) File.Delete(testFilePath);
+        }
+    }
+
+    /// <summary>
+    /// Issue #180 (MQL5 symmetry): hovering a built-in VARIABLE in an .mq5
+    /// document must surface the registered MQL5 description.
+    /// </summary>
+    [Fact]
+    public async Task HoverHandler_Mql5_BuiltinVariable_IncludesRegisteredDescriptionAsync()
+    {
+        // Arrange - MQL5 code reading a builtin variable with a known description
+        var content = "int OnInit()\n{\n    int digits = _Digits;\n    return 0;\n}\n";
+        var testFilePath = Path.Combine(Path.GetTempPath(), "TestHoverBuiltinVarMql5.mq5");
+        File.WriteAllText(testFilePath, content);
+
+        try
+        {
+            var documentStore = new OpenDocumentStore();
+            var handler = new HoverHandler(
+                MockLogger<HoverHandler>(),
+                new MqlLanguageService(new Mql4AntlrParser(), new Mql5AntlrParser()),
+                documentStore,
+                new IMqlBuiltins[] { new Mql4BuiltinsAdapter(), new Mql5Builtins() });
+
+            var request = new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(2, 17) // on _Digits
+            };
+
+            // Act
+            var result = await handler.Handle(request, CancellationToken.None);
+
+            // Assert
+            Assert.NotNull(result);
+            var contentString = result!.Contents.MarkupContent!.Value;
+            Assert.Contains("_Digits", contentString);
+            Assert.Contains("Number of decimal places in the current symbol prices", contentString);
         }
         finally
         {
