@@ -63,6 +63,21 @@ public class IncludePathResolverTests : IDisposable
     }
 
     [Fact]
+    public void Resolve_QuotedEntry_BackslashSeparator_ResolvesRelativeToIncluder()
+    {
+        // MQL convention uses the Windows separator in quoted includes too
+        // ("Lib\wfa.mqh"); the resolver must be separator-agnostic on POSIX
+        // hosts. Client report: quoted backslash includes failed to resolve
+        // on Linux, leaving user symbols falsely flagged 5070/1070.
+        Directory.CreateDirectory(Path.Combine(_tempDir, "Lib"));
+        File.WriteAllText(Path.Combine(_tempDir, "Lib", "wfa.mqh"), "int w = 5;\n");
+
+        var resolved = IncludePathResolver.Resolve(_includerPath, "Lib\\wfa.mqh");
+
+        Assert.Equal(Path.GetFullPath(Path.Combine(_tempDir, "Lib", "wfa.mqh")), resolved);
+    }
+
+    [Fact]
     public void Resolve_AbsoluteEntry_PassesThroughNormalized()
     {
         var absolute = Path.Combine(_tempDir, "abs.mqh");
@@ -139,6 +154,21 @@ public class IncludePathResolverTests : IDisposable
         var ok = IncludePathResolver.TryResolveContained(_includerPath, "Sub/Nested.mqh", out var resolved);
         Assert.True(ok);
         Assert.Equal(Path.Combine(sub, "Nested.mqh"), resolved);
+    }
+
+    [Fact]
+    public void TryResolveContained_QuotedBackslashSeparator_Resolves()
+    {
+        // Same separator-agnostic contract as Resolve, through the containment
+        // path the include-closure walker uses.
+        var sub = Path.Combine(_tempDir, "Lib");
+        Directory.CreateDirectory(sub);
+        File.WriteAllText(Path.Combine(sub, "wfa.mqh"), "int w = 5;\n");
+
+        var ok = IncludePathResolver.TryResolveContained(_includerPath, "Lib\\wfa.mqh", out var resolved);
+
+        Assert.True(ok);
+        Assert.Equal(Path.Combine(sub, "wfa.mqh"), resolved);
     }
 
     // --- System include roots (T3: angle-bracket resolution against configured roots) ---
