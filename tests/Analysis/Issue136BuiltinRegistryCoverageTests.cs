@@ -515,6 +515,103 @@ public class Issue136BuiltinRegistryCoverageTests
             string.Join(", ", offenders));
     }
 
+    // --- MQL4 golden-list fabrication suspects adjudicated against the ------
+    // --- official MQL4 Reference CHM (issue #173 round-2 + round-3 unknown --
+    // --- bucket): names with zero evidence in the whole CHM build (no page --
+    // --- stem matching the name, no identifier or word occurrence in any of --
+    // --- the 834 pages, incl. MQL4.hhk and obsolete.htm). HistoryTotal is ---
+    // --- NOT in this list: it is kept as a documented -----------------------
+    // --- obsolete alias (obsolete.htm old-name table, MQL4.hhk). Round-3 ---
+    // --- keeps with CHM evidence are recorded as KEEP_EXCEPTIONS in ---------
+    // --- tools/generate-golden-lists/audit_mql4_dataset.py instead. ----------
+    private static readonly string[] FabricatedNamesRemovedFromMql4Golden =
+    {
+        "ArraySearch", "PositionSelectByIndex", "IsTradeAllowedWebRequest",
+        "SymbolInfoSessionOrder",
+        // round-3 adjudication of the 18 zero-evidence unknown-bucket names
+        // (2026-10-22): no occurrence anywhere in the CHM build; keeps and
+        // their evidence live in the audit report's unknown_bucket.
+        "ACCOUNT_MARGIN_SO_STOP", "ACCOUNT_TRADE_STOPOUT_LEVEL",
+        "AccountSymbol", "BarsIsTradeAllowed", "False", "IDCLOSE",
+        "LastError", "MQL_TRADE_EXPERT", "MQL_TRADE_MODE", "TERMINAL_EMAIL",
+        "TERMINAL_EXPERTS_ALLOWED", "clrLightGoldenrodYellow",
+    };
+
+    /// <summary>
+    /// Dataset-hygiene gate: fabricated MQL4 names (issue #173 round-2
+    /// adjudication of the audit's unknown bucket) that have zero evidence in
+    /// the official MQL4 Reference CHM — no dedicated page, no identifier or
+    /// word occurrence in any page — must stay out of
+    /// data/builtins/mql4.json. Keeping them suppressed the
+    /// `1070 Undeclared symbol` diagnostic for code that cannot compile in
+    /// MetaEditor. Evidence: tools/generate-golden-lists/data/
+    /// mql4-dataset-audit.json.
+    /// </summary>
+    [Fact]
+    public void Mql4GoldenList_ExcludesFabricatedNames()
+    {
+        var (functions, variables) = LoadMql4Golden();
+
+        var offenders = FabricatedNamesRemovedFromMql4Golden
+            .Where(n => functions.ContainsKey(n) || variables.ContainsKey(n))
+            .ToList();
+
+        Assert.True(offenders.Count == 0,
+            "Fabricated names still present in data/builtins/mql4.json " +
+            "(zero evidence in the MQL4 Reference CHM; see " +
+            "tools/generate-golden-lists/data/mql4-dataset-audit.json): " +
+            string.Join(", ", offenders));
+    }
+
+    /// <summary>
+    /// Keep-pin for the #173 round-2 adjudication: HistoryTotal stays in the
+    /// MQL4 golden list. Unlike the four fabricated suspects, it is
+    /// documented on the official obsolete.htm page (old-name table:
+    /// HistoryTotal → OrdersHistoryTotal; "The old function names can be
+    /// used since the compiler will accept them in a proper way") and in
+    /// the CHM keyword index (MQL4.hhk), so code calling it still compiles
+    /// in MetaEditor.
+    /// </summary>
+    [Fact]
+    public void Mql4GoldenList_KeepsDocumentedObsoleteAlias_HistoryTotal()
+    {
+        var (functions, _) = LoadMql4Golden();
+
+        Assert.True(functions.ContainsKey("HistoryTotal"),
+            "HistoryTotal was removed from data/builtins/mql4.json but it is " +
+            "a documented obsolete MQL4 alias of OrdersHistoryTotal " +
+            "(obsolete.htm old-name table + MQL4.hhk keyword index).");
+    }
+
+    // --- documented math alias pow (client report, issue #173 thread) --------
+    // --- MQL5 Reference "Math Functions" table has a dedicated pow row; ------
+    // --- MQL4 CHM lists pow as a keyword of mathpow.htm (MQL4.hhk exact ------
+    // --- entry), the same evidence class that kept DeepSkyBlue/HotPink. ------
+    [Fact]
+    public void Mql5GoldenList_DocumentsPowAlias()
+    {
+        var builtins = new Mql5Builtins();
+
+        Assert.True(builtins.IsBuiltinFunction("pow"),
+            "MQL5 registry is missing the documented math alias 'pow' " +
+            "(MQL5 Reference Math Functions table: 'pow — Raises the base to " +
+            "the specified power'; alternative spelling of MathPow)");
+        var signature = builtins.GetBuiltinFunctionSignature("pow");
+        Assert.NotNull(signature);
+        Assert.Contains("exponent", signature);
+    }
+
+    [Fact]
+    public void Mql4GoldenList_DocumentsPowAlias()
+    {
+        Assert.True(Mql4Builtins.IsBuiltinFunction("pow"),
+            "MQL4 registry is missing the documented math alias 'pow' " +
+            "(MQL4.hhk exact keyword entry pow -> mathpow.htm)");
+        var signature = Mql4Builtins.GetBuiltinFunctionSignature("pow");
+        Assert.NotNull(signature);
+        Assert.Contains("exponent", signature);
+    }
+
     // --- MQL4-only names removed from the MQL5 golden list -----------------
     // --- evidence: tools/generate-golden-lists/data/mql5-dataset-audit.json --
     // --- (deterministic dump-evidence report; see ---------------------------

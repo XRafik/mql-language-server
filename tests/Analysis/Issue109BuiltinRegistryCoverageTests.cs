@@ -13,10 +13,15 @@ namespace MqlLanguageServer.Tests.Analysis;
 /// </summary>
 public class Issue109BuiltinRegistryCoverageTests
 {
-    // The exact names from the issue report.
+    // The exact names from the issue report. "False" left the MQL4 golden
+    // list in the issue #173 round-3 adjudication: zero evidence in the MQL4
+    // Reference CHM (which documents the lowercase keyword `false` only —
+    // see tools/generate-golden-lists/data/mql4-dataset-audit.json); bool
+    // literals lex as keywords (K_FALSE in Mql4Grammar.g4), so the registry
+    // entry was dead weight. The MQL5 table keeps lowercase `false`.
     private static readonly string[] ReportedNames =
     {
-        "True", "False", "TerminalInfoInteger", "CharToString", "StringSplit"
+        "True", "TerminalInfoInteger", "CharToString", "StringSplit"
     };
 
     // A broader sweep of common standard-library names that the same grep
@@ -133,15 +138,32 @@ public class Issue109BuiltinRegistryCoverageTests
     {
         // The MQL compiler accepts True/true/TRUE — the registries compare
         // OrdinalIgnoreCase, so one canonical entry per dialect covers all.
-        foreach (var variant in new[] { "true", "TRUE", "True", "false", "FALSE", "False" })
+        // MQL4 `False` left the registry in the issue #173 round-3
+        // adjudication (zero CHM evidence; the literals are grammar keywords,
+        // so no 1070 is produced without the registry entry); the MQL5 table
+        // keeps lowercase `false`.
+        foreach (var variant in new[] { "true", "TRUE", "True" })
         {
             Assert.True(Mql4Builtins.IsBuiltin(variant), $"MQL4 registry is missing boolean literal '{variant}'");
+        }
+        foreach (var variant in new[] { "true", "TRUE", "True", "false", "FALSE", "False" })
+        {
             Assert.True(_mql5.IsBuiltin(variant), $"MQL5 registry is missing boolean literal '{variant}'");
         }
+        Assert.False(Mql4Builtins.IsBuiltin("False"),
+            "MQL4 'False' should not be registry-covered (zero CHM evidence; see mql4-dataset-audit.json)");
     }
 
     // Fourth sweep: the exact names the published rc.4 binary still flagged on
-    // Botlidator_ver_2_90.mqh (22 diagnostics: 19x1070 + 3x1003).
+    // Botlidator_ver_2_90.mqh (22 diagnostics: 19x1070 + 3x1003). Four members
+    // left the list in the issue #173 round-3 adjudication —
+    // ACCOUNT_MARGIN_SO_STOP, ACCOUNT_TRADE_STOPOUT_LEVEL, TERMINAL_EMAIL and
+    // TERMINAL_EXPERTS_ALLOWED have zero evidence in the whole MQL4 Reference
+    // CHM build (terminalstatus.htm documents TERMINAL_EMAIL_ENABLED and
+    // TERMINAL_TRADE_ALLOWED; accountinfodouble.htm documents
+    // ACCOUNT_MARGIN_SO_SO/SO_CALL) and were removed from
+    // data/builtins/mql4.json — see
+    // tools/generate-golden-lists/data/mql4-dataset-audit.json.
     private static readonly string[] FourthSweepMql4 =
     {
         "CRYPT_BASE64", "CRYPT_HASH_SHA512", "CRYPT_HASH_SHA3_256", "CRYPT_HASH_SHA3_512",
@@ -149,15 +171,15 @@ public class Issue109BuiltinRegistryCoverageTests
         "ACCOUNT_SERVER", "ACCOUNT_CURRENCY", "ACCOUNT_BALANCE", "ACCOUNT_EQUITY",
         "ACCOUNT_PROFIT", "ACCOUNT_LEVERAGE", "ACCOUNT_MARGIN", "ACCOUNT_MARGIN_FREE",
         "ACCOUNT_MARGIN_LEVEL", "ACCOUNT_MARGIN_SO_SO", "ACCOUNT_MARGIN_SO_CALL",
-        "ACCOUNT_MARGIN_SO_STOP", "ACCOUNT_MARGIN_SO_MODE", "ACCOUNT_CREDIT",
+        "ACCOUNT_MARGIN_SO_MODE", "ACCOUNT_CREDIT",
         "ACCOUNT_TRADE_ALLOWED", "ACCOUNT_TRADE_EXPERT", "ACCOUNT_TRADE_MODE",
         "ACCOUNT_TRADE_MODE_DEMO", "ACCOUNT_TRADE_MODE_CONTEST", "ACCOUNT_TRADE_MODE_REAL",
-        "ACCOUNT_LIMIT_ORDERS", "ACCOUNT_TRADE_STOPOUT_LEVEL", "ACCOUNT_ASSETS",
+        "ACCOUNT_LIMIT_ORDERS", "ACCOUNT_ASSETS",
         "ACCOUNT_LIABILITIES", "ACCOUNT_COMMISSION_BLOCKED",
         "TERMINAL_DLLS_ALLOWED", "TERMINAL_DATA_PATH", "TERMINAL_CONNECTED",
-        "TERMINAL_TRADE_ALLOWED", "TERMINAL_EXPERTS_ALLOWED", "TERMINAL_COMMONDATA_PATH",
+        "TERMINAL_TRADE_ALLOWED", "TERMINAL_COMMONDATA_PATH",
         "TERMINAL_LANGUAGE", "TERMINAL_BUILD", "TERMINAL_NAME", "TERMINAL_PATH",
-        "TERMINAL_EMAIL", "TERMINAL_FTP_ENABLED",
+        "TERMINAL_FTP_ENABLED",
         "IsExpertEnabled", "MathRand", "MathSrand",
         "MODE_MINLOT", "MODE_MAXLOT", "MODE_LOTSIZE", "MODE_LOTSTEP", "MODE_POINT",
         "MODE_DIGITS", "MODE_SPREAD", "MODE_STOPLEVEL", "MODE_FREEZELEVEL",

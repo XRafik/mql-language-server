@@ -308,6 +308,11 @@
       "description": "The function raises a base to a specified power.",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
+    "pow": {
+      "signature": "double pow(double base, double exponent)",
+      "description": "Raises the base to the specified power.",
+      "provenance": "mql5-reference-math-functions-alias-2026-10-23"
+    },
     "MathSqrt": {
       "signature": "double MathSqrt(double value)",
       "description": "Returns the square root of a number.",

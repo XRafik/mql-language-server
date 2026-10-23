@@ -181,15 +181,21 @@ public static class IncludePathResolver
 
         try
         {
-            if (Path.IsPathRooted(relative))
+            // MQL convention uses the Windows separator in quoted includes
+            // too ("Lib\\wfa.mqh"); normalize both separators to the host
+            // separator so resolution works on POSIX hosts as well
+            // (client-reported false 5070/1070 on Linux).
+            var normalized = relative.Replace('\\', Path.DirectorySeparatorChar)
+                                     .Replace('/', Path.DirectorySeparatorChar);
+            if (Path.IsPathRooted(normalized))
             {
-                return Path.GetFullPath(relative);
+                return Path.GetFullPath(normalized);
             }
 
             var includingDir = Path.GetDirectoryName(includingFile);
             var combined = includingDir != null
-                ? Path.Combine(includingDir, relative)
-                : relative;
+                ? Path.Combine(includingDir, normalized)
+                : normalized;
             return Path.GetFullPath(combined);
         }
         catch

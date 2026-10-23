@@ -176,13 +176,9 @@
       },
       "description": "Returns the amount of seconds elapsed from the beginning of the minute of the specified time."
     },
-    "PositionSelectByIndex": {
-      "signature": "bool PositionSelectByIndex(int index)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "HistoryTotal": {
       "signature": "int HistoryTotal()",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-documented-obsolete-alias-2026-10-22"
     },
     "TerminalInfoInteger": {
       "signature": "int TerminalInfoInteger(int property_id)",
@@ -475,11 +471,11 @@
     },
     "CRYPT_HASH_SHA3_256": {
       "signature": "CRYPT hash method: SHA3-256",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-newer-than-chm-crypt-family-2026-10-22"
     },
     "CRYPT_HASH_SHA3_512": {
       "signature": "CRYPT hash method: SHA3-512",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-newer-than-chm-crypt-family-2026-10-22"
     },
     "CRYPT_ARCH_GZIP": {
       "signature": "CRYPT archiving method: GZIP",
@@ -491,7 +487,7 @@
     },
     "CRYPT_ARCH_RLE": {
       "signature": "CRYPT archiving method: RLE",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-newer-than-chm-crypt-family-2026-10-22"
     },
     "ACCOUNT_SERVER": {
       "signature": "Account property: trade server name",
@@ -548,10 +544,6 @@
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "Margin call level. Depending on the set ACCOUNT_MARGIN_SO_MODE is expressed in percents or in the deposit currency"
     },
-    "ACCOUNT_MARGIN_SO_STOP": {
-      "signature": "Account property: margin stop-out level",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "ACCOUNT_MARGIN_SO_MODE": {
       "signature": "Account property: stop-out mode",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
@@ -597,10 +589,6 @@
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "Maximum allowed number of open positions and active pending orders (in total), 0 — unlimited"
     },
-    "ACCOUNT_TRADE_STOPOUT_LEVEL": {
-      "signature": "Account property: stop-out level in percent",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "ACCOUNT_ASSETS": {
       "signature": "Account property: assets",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
@@ -636,10 +624,6 @@
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "Permission to trade"
     },
-    "TERMINAL_EXPERTS_ALLOWED": {
-      "signature": "Terminal property: EA trading allowed",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "TERMINAL_COMMONDATA_PATH": {
       "signature": "Terminal property: common data directory",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
@@ -664,10 +648,6 @@
       "signature": "Terminal property: executable directory",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "Folder from which the terminal is started"
-    },
-    "TERMINAL_EMAIL": {
-      "signature": "Terminal property: email configured",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "TERMINAL_FTP_ENABLED": {
       "signature": "Terminal property: FTP publishing enabled",
@@ -783,6 +763,10 @@
       "signature": "double MathPow(double base, double exponent)",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "The function raises a base to a specified power."
+    },
+    "pow": {
+      "signature": "double pow(double base, double exponent)",
+      "provenance": "mql4-chm-mathpow-alias-2026-10-23"
     },
     "MathSqrt": {
       "signature": "double MathSqrt(double value)",
@@ -994,10 +978,6 @@
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "The function returns the number of elements of a selected array."
     },
-    "ArraySearch": {
-      "signature": "int ArraySearch(double &array[], double value, int start, int count, int sort_dir)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "Print": {
       "signature": "void Print(... )",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
@@ -1024,10 +1004,6 @@
         "note": "MQL4-only"
       },
       "description": "Checks if the Expert Advisor is allowed to trade and trading context is not busy. The second form of the function checks trade status for the specified symbol in the specified time."
-    },
-    "IsTradeAllowedWebRequest": {
-      "signature": "bool IsTradeAllowedWebRequest(string url)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "GetLastError": {
       "signature": "int GetLastError()",
@@ -1823,12 +1799,6 @@
       "provenance": "mql4-reference-enrichment-rc2; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "Allows receiving time of beginning and end of the specified quoting sessions for a specified symbol and day of week."
     },
-    "SymbolInfoSessionOrder": {
-      "signature": "bool SymbolInfoSessionOrder(string name, ENUM_DAY_OF_WEEK day_of_week, uint session_index, datetime &from, datetime &to)",
-      "apiTier": "shared",
-      "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
-    },
     "SymbolsTotal": {
       "signature": "int SymbolsTotal(bool selected)",
       "apiTier": "shared",
@@ -2084,10 +2054,6 @@
       "description": "Boolean literal true",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
-    "False": {
-      "description": "Boolean literal false",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "Ask": {
       "description": "Current Ask price",
       "provenance": "hand-curated-registry-v2.5.1-rc.1",
@@ -2132,10 +2098,6 @@
         "note": "Semantics changed: MQL4 predefined var; MQL5 Point is a function call"
       }
     },
-    "LastError": {
-      "description": "Last error code",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "Period": {
       "description": "Current timeframe period",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
@@ -2150,10 +2112,6 @@
         "semanticsChanged": true,
         "note": "Semantics changed: MQL4 predefined var; MQL5 Bars is a function Bars(symbol, timeframe)"
       }
-    },
-    "BarsIsTradeAllowed": {
-      "description": "Trade context busy flag",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "Time": {
       "description": "Current time",
@@ -2239,10 +2197,6 @@
     },
     "AccountStopoutMode": {
       "description": "Stop out mode",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountSymbol": {
-      "description": "Current symbol",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "Symbol": {
@@ -3269,7 +3223,7 @@
       "description": "Web color constant (Azure)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-webcolors-meta-list-2026-10-22"
     },
     "clrBeige": {
       "description": "Web color constant (Beige)",
@@ -3365,7 +3319,7 @@
       "description": "Web color constant (Cyan)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-webcolors-meta-list-2026-10-22"
     },
     "clrDarkBlue": {
       "description": "Web color constant (DarkBlue)",
@@ -3377,7 +3331,7 @@
       "description": "Web color constant (DarkCyan)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-webcolors-meta-list-2026-10-22"
     },
     "clrDarkGoldenrod": {
       "description": "Web color constant (DarkGoldenrod)",
@@ -3407,7 +3361,7 @@
       "description": "Web color constant (DarkMagenta)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-webcolors-meta-list-2026-10-22"
     },
     "clrDarkOliveGreen": {
       "description": "Web color constant (DarkOliveGreen)",
@@ -3431,7 +3385,7 @@
       "description": "Web color constant (DarkRed)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-webcolors-meta-list-2026-10-22"
     },
     "clrDarkSalmon": {
       "description": "Web color constant (DarkSalmon)",
@@ -3503,7 +3457,7 @@
       "description": "Web color constant (FloralWhite)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-webcolors-meta-list-2026-10-22"
     },
     "clrForestGreen": {
       "description": "Web color constant (ForestGreen)",
@@ -3515,7 +3469,7 @@
       "description": "Web color constant (Fuchsia)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-webcolors-meta-list-2026-10-22"
     },
     "clrGainsboro": {
       "description": "Web color constant (Gainsboro)",
@@ -3527,7 +3481,7 @@
       "description": "Web color constant (GhostWhite)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-webcolors-meta-list-2026-10-22"
     },
     "clrGold": {
       "description": "Web color constant (Gold)",
@@ -3633,12 +3587,6 @@
     },
     "clrLightCyan": {
       "description": "Web color constant (LightCyan)",
-      "apiTier": "shared",
-      "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
-    },
-    "clrLightGoldenrodYellow": {
-      "description": "Web color constant (LightGoldenrodYellow)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
       "provenance": "mql4-reference-enrichment-rc2"
@@ -3965,7 +3913,7 @@
       "description": "Web color constant (SeaShell)",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/webcolors",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-case-variant-of-clrSeashell-2026-10-22"
     },
     "clrSienna": {
       "description": "Web color constant (Sienna)",
@@ -4399,12 +4347,6 @@
       "docUrl": "https://docs.mql4.com/common",
       "provenance": "mql4-reference-enrichment-rc2"
     },
-    "IDCLOSE": {
-      "description": "MessageBox result: Close button",
-      "apiTier": "shared",
-      "docUrl": "https://docs.mql4.com/common",
-      "provenance": "mql4-reference-enrichment-rc2"
-    },
     "SELECT_BY_POS": {
       "description": "OrderSelect flag: select by position",
       "apiTier": "shared",
@@ -4439,7 +4381,7 @@
       "description": "Series/array sorting: descending",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/series",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; adjudicated-array-parameter-doc-2026-10-22"
     },
     "MODE_ASK": {
       "description": "MarketInfo: current ask price",
@@ -4963,18 +4905,6 @@
       "docUrl": "https://docs.mql4.com/constants/environment_state/mqlinfointeger",
       "provenance": "mql4-reference-enrichment-rc2"
     },
-    "MQL_TRADE_EXPERT": {
-      "description": "ENUM_MQL_INFO_INTEGER: an EA is running",
-      "apiTier": "shared",
-      "docUrl": "https://docs.mql4.com/constants/environment_state/mqlinfointeger",
-      "provenance": "mql4-reference-enrichment-rc2"
-    },
-    "MQL_TRADE_MODE": {
-      "description": "ENUM_MQL_INFO_INTEGER: MQLInfo trade mode",
-      "apiTier": "shared",
-      "docUrl": "https://docs.mql4.com/constants/environment_state/mqlinfointeger",
-      "provenance": "mql4-reference-enrichment-rc2"
-    },
     "MQL_PROGRAM_NAME": {
       "description": "ENUM_MQL_INFO_STRING: program name",
       "apiTier": "shared",
@@ -5193,11 +5123,11 @@
     },
     "HotPink": {
       "description": "Web color constant #FF69B4",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; adjudicated-hhk-keyword-index-2026-10-22"
     },
     "DeepSkyBlue": {
       "description": "Web color constant #00BFFF",
-      "provenance": "issue152-corpus-enrichment"
+      "provenance": "issue152-corpus-enrichment; adjudicated-hhk-keyword-index-2026-10-22"
     },
     "White": {
       "description": "Web color constant #FFFFFF",
