@@ -31,7 +31,11 @@ export function parseChecksums(text: string): Map<string, string> {
       continue;
     }
     const hash = line.slice(0, separatorIndex).toLowerCase();
-    const filename = line.slice(separatorIndex).trim();
+    const rawFilename = line.slice(separatorIndex).trim();
+    // The release pipeline runs `sha256sum` over relative paths, so entries are
+    // published as "./mql-lsp-server-linux-x64". Key on the basename so callers
+    // can look up by asset name; a directory prefix is tolerated the same way.
+    const filename = rawFilename.split(/[\\/]/).pop() ?? "";
     if (
       hash.length !== HASH_LENGTH ||
       !HEX_RE.test(hash) ||

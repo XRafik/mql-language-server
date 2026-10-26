@@ -8,12 +8,12 @@ const CHECKSUMS_TEXT = [
   "# SHA256 checksums for v1.2.3",
   "# Generated: 2025-01-01",
   "",
-  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef  mql-lsp-server-linux-x64",
-  "1111111111111111111111111111111111111111111111111111111111111111  mql-lsp-server-linux-arm64",
-  "2222222222222222222222222222222222222222222222222222222222222222  mql-lsp-server-osx-x64",
-  "3333333333333333333333333333333333333333333333333333333333333333  mql-lsp-server-osx-arm64",
-  "4444444444444444444444444444444444444444444444444444444444444444  mql-lsp-server-win-x64.exe",
-  "5555555555555555555555555555555555555555555555555555555555555555  mql-lsp-server-win-arm64.exe",
+  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef  ./mql-lsp-server-linux-x64",
+  "1111111111111111111111111111111111111111111111111111111111111111  ./mql-lsp-server-linux-arm64",
+  "2222222222222222222222222222222222222222222222222222222222222222  ./mql-lsp-server-osx-x64",
+  "3333333333333333333333333333333333333333333333333333333333333333  ./mql-lsp-server-osx-arm64",
+  "4444444444444444444444444444444444444444444444444444444444444444  ./mql-lsp-server-win-x64.exe",
+  "5555555555555555555555555555555555555555555555555555555555555555  ./mql-lsp-server-win-arm64.exe",
   "",
 ].join("\r\n");
 
@@ -59,6 +59,20 @@ describe("parseChecksums", () => {
     expect(parseChecksums("").size).toBe(0);
   });
 });
+
+  it("keys on the basename when entries carry a relative or directory prefix", () => {
+    const text = [
+      "aaaa1111aaaa1111aaaa1111aaaa1111aaaa1111aaaa1111aaaa1111aaaa1111  ./mql-lsp-server-linux-x64",
+      "bbbb2222bbbb2222bbbb2222bbbb2222bbbb2222bbbb2222bbbb2222bbbb2222  dist/mql-lsp-server-win-x64.exe",
+    ].join("\n");
+    const checksums = parseChecksums(text);
+    expect(checksums.get("mql-lsp-server-linux-x64")).toBe(
+      "aaaa1111aaaa1111aaaa1111aaaa1111aaaa1111aaaa1111aaaa1111aaaa1111",
+    );
+    expect(checksums.get("mql-lsp-server-win-x64.exe")).toBe(
+      "bbbb2222bbbb2222bbbb2222bbbb2222bbbb2222bbbb2222bbbb2222bbbb2222",
+    );
+  });
 
 describe("verifyChecksum", () => {
   const expected = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
