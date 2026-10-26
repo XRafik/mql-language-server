@@ -423,20 +423,27 @@ namespace MqlLanguageServer
                             WorkspaceRoots.Set(workspaceFoldersSnapshot);
 
                             // System include roots (MQL4/MQL5 Standard Library):
-                            // optional initialization option
-                            // `systemIncludeRoots: [ "...MQL5/Include", ... ]`.
-                            // Angle-bracket includes (<Trade\Trade.mqh>) resolve
-                            // against these roots; resolved headers are lazily
-                            // parsed and indexed by didOpen. Fail open: absent or
-                            // malformed option keeps today's behavior exactly.
+                            // two explicit sources, in precedence order (issue
+                            // #179 S2): the `systemIncludeRoots: ["...MQL5/Include", ...]`
+                            // initialization option wins when non-empty; otherwise the
+                            // union of the .mql-lsp.json files at each workspace-folder
+                            // root (systemIncludeRoots key, relative entries resolved
+                            // against the config file's directory, read once per
+                            // session — no watcher). Angle-bracket includes
+                            // (<Trade\Trade.mqh>) resolve against the effective roots;
+                            // resolved headers are lazily parsed and indexed by
+                            // didOpen. Fail open: neither source (or malformed
+                            // configuration) keeps today's behavior exactly.
                             try
                             {
                                 var systemRoots = ParseSystemIncludeRoots(request.InitializationOptions);
-                                SystemIncludeRoots.Set(systemRoots);
+                                var effectiveRoots = ProjectConfiguration.ResolveEffectiveRoots(
+                                    systemRoots, workspaceFoldersSnapshot);
+                                SystemIncludeRoots.Set(effectiveRoots);
                                 IncludePathResolver.SetSystemIncludeRootsProvider(() => SystemIncludeRoots.Current);
-                                if (systemRoots.Count > 0)
+                                if (effectiveRoots.Count > 0)
                                 {
-                                    Log.Information("System include roots configured: {SystemRootCount} root(s)", systemRoots.Count);
+                                    Log.Information("System include roots configured: {SystemRootCount} root(s)", effectiveRoots.Count);
                                 }
                             }
                             catch (Exception systemRootsEx)
