@@ -4959,10 +4959,6 @@
       "description": "Chart property (MQL5): symbol of the chart data",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
-    "CHART_SCRIPT": {
-      "description": "Chart property (MQL5): name of the program executed on the chart",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "INDICATOR_DIGITS": {
       "description": "Indicator property: digits of accuracy for the indicator values",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
@@ -5685,10 +5681,6 @@
       "description": "Realaccount",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 889; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "ALANCE_DD": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 895"
-    },
     "ALIGN_CENTER": {
       "description": "Centered (only for the Edit object)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 714; descriptions-official-mql5-reference-pdf-2026-10-19"
@@ -5745,25 +5737,17 @@
       "description": "Anchor point above in the center",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 717; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "ARTEVENT_CLICK": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 690"
-    },
     "AS_SERIES": {
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1027"
     },
-    "ATE_ACTION": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 924"
+    "DEAL_REASON_CORPORATE_ACTION": {
+      "description": "The deal was executed as a result of a corporate action: merging or renaming a security, transferring a client to another account, etc.",
+      "provenance": "mql5-constants-audit-add-2026-10-26"
     },
     "BASE_LINE": {
       "description": "Main line",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 738; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "BJ_BITMAP_LABEL": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 705,706"
     },
     "BOOK_TYPE_BUY": {
       "description": "Buy order (Bid)",
@@ -6337,10 +6321,6 @@
       "description": "Deal identifier in an external trading system (on the Exchange)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 922; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "DEAL_REASON_CORPOR": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 924"
-    },
     "DEAL_TAX": {
       "description": "Taxcharges",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 923; descriptions-official-mql5-reference-pdf-2026-10-19"
@@ -6408,10 +6388,6 @@
     "DEAL_TYPE_SELL_CANCELED": {
       "description": "Canceled sell deal. There can be a situation when a previously executed sell deal is canceled. In this case, the type of the previously executed deal (DEAL_TYPE_SELL) is changed to DEAL_TYPE_SELL_CANCELED, and its profit/loss is zeroized. Previously obtained profit/loss is charged/withdrawn using a separated balance operation",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 923; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "DER_FILLING_RETURN": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 846"
     },
     "ELLIOTT_CYCLE": {
       "description": "Cycle",
@@ -7597,10 +7573,6 @@
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 885"
     },
-    "GIN_MODE_RETAIL_HEDGING": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1005"
-    },
     "INDICATOR_FIXED_MAXIMUM": {
       "description": "Fixed max imum for the indicator win dow . The prop erty",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 747; descriptions-official-mql5-reference-pdf-2026-10-19"
@@ -8729,21 +8701,9 @@
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 703"
     },
-    "OBJ_BITMAP_LA": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 702"
-    },
-    "OBJ_BUTTO": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 702,703,708"
-    },
     "OBJ_EDI": {
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 703,704,708"
-    },
-    "OBJ_ELLIPS": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 691"
     },
     "OBJ_NO_PERIODS": {
       "description": "The object is not drawn in all timeframes",
@@ -8833,10 +8793,6 @@
       "description": "The object is drawn in week charts",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 725; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "OBJ_RECTANGL": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 691"
-    },
     "OBJ_RECTANGLE_LABEL": {
       "description": "The \"Rectanglelabel\" object for creating and designing the custom graphicalinterface.",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 403,682,688,703,704 et al; descriptions-official-mql5-reference-pdf-2026-10-19"
@@ -8844,14 +8800,6 @@
     "ODE_RE": {
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 885"
-    },
-    "OL_ORDER_MODE": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 841"
-    },
-    "ON_GTC": {
-      "description": "(Good till canceled )",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 782; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
     "ORDER_COMMENT": {
       "description": "Order comment",
@@ -8880,10 +8828,6 @@
     "ORDER_FILLING_RETURN": {
       "description": "This policy is used only for market (ORDER_TYPE_BUY and ORDER_TYPE_SELL), limit and stop limit orders (ORDER_TYPE_BUY_LIMIT, ORDER_TYPE_SELL_LIMIT,",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 849,913; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "ORDER_LIMIT": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 842"
     },
     "ORDER_MAGIC": {
       "description": "ID of an Expert Advisor that has placed the order (designed to ensure that each Expert Advisor places its own unique number)",
@@ -9733,10 +9677,6 @@
       "description": "Exchange Bonds",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 868,869; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "SYMBOL_CALC_MODE_EXCH_FUTURE": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 861"
-    },
     "SYMBOL_CALC_MODE_EXCH_FUTURES": {
       "description": "Futures mode – calculation of marg in and profit for trading futures contracts on a stock exchange",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 861; descriptions-official-mql5-reference-pdf-2026-10-19"
@@ -9749,9 +9689,9 @@
       "description": "Forexmode - calculation of profit and marg in for Forex",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 858; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "SYMBOL_CALC_MODE_FOREX_NO_LEV": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 858"
+    "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE": {
+      "description": "Forex No Leverage mode – calculation of profit and margin for Forex symbols without taking into account the leverage",
+      "provenance": "mql5-constants-audit-add-2026-10-26"
     },
     "SYMBOL_CALC_MODE_FUTURES": {
       "description": "Futures mode - calculation of marg in and profit for futures",
@@ -10324,10 +10264,6 @@
     "SYMBOL_VOLUME_STEP": {
       "description": "Minimal volume change step for deal executi on",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 786; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "S_FORTS": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 861"
     },
     "TAIL_H": {
       "description": "(description not yet captured)",
@@ -11073,10 +11009,6 @@
       "description": "Trade is disabled",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1003; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "TRADE_TRANSACTION_DEAL": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 985"
-    },
     "TRADE_TRANSACTION_DEAL_ADD": {
       "description": "Adding a deal to the history. The action is performed as a result of an order execution or performing",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 937; descriptions-official-mql5-reference-pdf-2026-10-19"
@@ -11100,10 +11032,6 @@
     "TRADE_TRANSACTION_HISTORY_UPDATE": {
       "description": "Changing an order located in the orders history. This type is provided for enhancing functionality on a trade server side.",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 938; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "TRADE_TRANSACTION_ORDER": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 985"
     },
     "TRADE_TRANSACTION_ORDER_ADD": {
       "description": "Adding a newopenorder.",
@@ -11180,10 +11108,6 @@
     "TYPE_USHORT": {
       "description": "ushort MqlParam",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 753; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "T_DESCR": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 334"
     },
     "T_MAR": {
       "description": "(description not yet captured)",
@@ -11849,10 +11773,6 @@
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 (enum type name)"
     },
-    "ENUM_CHART_VOLUME_MOD": {
-      "description": "E CHART_SHOW_OBJEC T_DESCR Display textualdescriptions of objects (not available for allobjects) bool CHART_SHOW_TRADE_HISTORY Display trades from the trading history as entry/exit arrows on a chart. See the \"Show trading history\" option descriptions in the platform settings. bool",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 (enum type name); descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
     "ENUM_CHART_VOLUME_MODE": {
       "description": "Chart Representation",
       "provenance": "official-mql5-reference-pdf-2026-10-18 (enum type name); descriptions-official-mql5-reference-pdf-2026-10-19"
@@ -12208,6 +12128,10 @@
     "__RANDOM__": {
       "description": "Predefined macro: the compiler inserts a random ulong value for each declaration.",
       "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    "SYMBOL_CALC_MODE_EXCH_FUTURES_FORTS": {
+      "description": "FORTS Futures mode – calculation of margin and profit for trading futures contracts on FORTS. The margin may be reduced by the amount of MarginDiscount deviation according to the following rules:",
+      "provenance": "mql5-constants-audit-add-2026-10-26"
     }
   }
 }
