@@ -622,6 +622,33 @@ public class Issue136BuiltinRegistryCoverageTests
     // --- and the Order* trade calls resolve via CTrade class methods -------
     // --- (Standard Library, #150 scope convention); StringToDateTime and ---
     // --- CryptMethod are phantom names with zero evidence in ANY dialect. --
+    /// <summary>
+    /// Issue #173 (round 2): truncated fragments removed from the MQL5 golden list.
+    /// Produced by tools/generate-golden-lists/audit_mql5_constants.py (rule S3) and
+    /// applied by apply_mql5_constants_audit.py.
+    /// </summary>
+    private static readonly string[] PdfTruncatedFragmentsRemovedFromMql5Golden =
+    {
+        "ALANCE_DD", "ARTEVENT_CLICK", "ATE_ACTION", "BJ_BITMAP_LABEL",
+        "CHART_SCRIPT", "DEAL_REASON_CORPOR", "DER_FILLING_RETURN",
+        "ENUM_CHART_VOLUME_MOD", "GIN_MODE_RETAIL_HEDGING", "OBJ_BITMAP_LA",
+        "OBJ_BUTTO", "OBJ_ELLIPS", "OBJ_RECTANGL", "OL_ORDER_MODE", "ON_GTC",
+        "ORDER_LIMIT", "S_FORTS", "SYMBOL_CALC_MODE_EXCH_FUTURE",
+        "SYMBOL_CALC_MODE_FOREX_NO_LEV", "T_DESCR", "TRADE_TRANSACTION_DEAL",
+        "TRADE_TRANSACTION_ORDER",
+    };
+
+    /// <summary>
+    /// Issue #173 (round 2): documented constants the dataset only held in clipped
+    /// form, registered complete by the constants audit (rule S4).
+    /// </summary>
+    private static readonly string[] Mql5ConstantsAddedByConstantsAudit =
+    {
+        "DEAL_REASON_CORPORATE_ACTION",
+        "SYMBOL_CALC_MODE_EXCH_FUTURES_FORTS",
+        "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE",
+    };
+
     private static readonly string[] Mql4OnlyNamesRemovedFromMql5Golden =
     {
         // functions (14)
@@ -654,6 +681,61 @@ public class Issue136BuiltinRegistryCoverageTests
             "(the MQL5 reference does not document them; see " +
             "tools/generate-golden-lists/data/mql5-dataset-audit.json): " +
             string.Join(", ", offenders));
+    }
+
+    /// <summary>
+    /// Issue #173 (round 2) gate: the pdftotext pipeline clipped the MQL5 Reference
+    /// constant-table columns (and split identifiers with kerning, e.g.
+    /// "(S TAT_BALANCE_DD)"), which left truncated fragments registered as
+    /// constants. Each one suppressed a false-positive-free 5070 for a name that
+    /// MetaEditor does not accept, while the real documented name sat next to it in
+    /// the list. Evidence: tools/generate-golden-lists/data/mql5-constants-audit.json
+    /// (audit rule S3: a fragment is removed only when its documented parent is
+    /// already a dataset entry, so no real name loses its coverage).
+    /// </summary>
+    [Fact]
+    public void Mql5GoldenList_ExcludesTruncatedFragments()
+    {
+        var (_, variables) = LoadMql5Golden();
+
+        var offenders = PdfTruncatedFragmentsRemovedFromMql5Golden
+            .Where(variables.ContainsKey)
+            .ToList();
+
+        Assert.True(offenders.Count == 0,
+            "truncated PDF-extraction fragments are still registered as MQL5 constants " +
+            "(each one silences a 5070 for a name MetaEditor rejects): " +
+            string.Join(", ", offenders));
+    }
+
+    /// <summary>
+    /// Issue #173 (round 2) gate: the three constants whose documented names the
+    /// dataset only ever held in clipped form are now registered complete, with the
+    /// description captured from their own evidence row. This is the false-positive
+    /// half of the same defect: code using DEAL_REASON_CORPORATE_ACTION compiled
+    /// clean in MetaEditor while the server reported 5070.
+    /// </summary>
+    [Fact]
+    public void Mql5GoldenList_DocumentsAuditAdditions()
+    {
+        var builtins = new Mql5Builtins();
+        var (_, variables) = LoadMql5Golden();
+
+        foreach (var name in Mql5ConstantsAddedByConstantsAudit)
+        {
+            Assert.True(variables.ContainsKey(name),
+                $"MQL5 golden list is missing the documented constant '{name}' " +
+                "(HTML authority row captured by audit_mql5_constants.py)");
+            Assert.True(builtins.IsBuiltinVariable(name),
+                $"'{name}' is not registered as an MQL5 builtin variable — the registry " +
+                "projection did not pick the golden-list addition up");
+            var description = builtins.GetBuiltinVariableDescription(name);
+            Assert.False(string.IsNullOrWhiteSpace(description),
+                $"'{name}' carries no description");
+            Assert.DoesNotContain("(description not yet captured)", description);
+            // Evidence prose is HTML: entities must not leak into hover text.
+            Assert.DoesNotContain("&nbsp;", description);
+        }
     }
 
     public static TheoryData<string> CoreFunctionNames() => ToTheoryData(CoreFunctionsBothDialects);
