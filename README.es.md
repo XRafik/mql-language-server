@@ -79,6 +79,30 @@ Semántica:
 - Fail open: sin raíces configuradas, o cuando un header no se puede resolver ni parsear, el comportamiento es exactamente el anterior — sin errores ni diagnósticos extra.
 - Los includes con comillas (`#include "file.mqh"`) no se ven afectados: siguen resolviéndose relativo al archivo que los incluye.
 
+### Archivo de configuración del proyecto (`.mql-lsp.json`)
+
+Las raíces también se pueden declarar por proyecto, de modo que el repositorio lleva su propia configuración y cada sesión del editor la toma sin ajustes del cliente:
+
+```json
+{
+  "systemIncludeRoots": [
+    "../Include",
+    "C:/Program Files/MetaTrader 5/MQL5/Include"
+  ]
+}
+```
+
+- El archivo se lee desde la raíz de cada carpeta del workspace durante `initialize`; igual que `.mqlignore`, no hay watcher, así que editarlo requiere reiniciar el servidor.
+- Las entradas relativas se resuelven contra el directorio que contiene `.mql-lsp.json`, lo que mantiene el archivo portable entre máquinas; las entradas absolutas se usan tal cual.
+- Precedencia: una opción de inicialización `systemIncludeRoots` no vacía tiene prioridad y los archivos del proyecto no se consultan; en caso contrario se aplica la unión de las carpetas del workspace. Sin ninguna de las dos fuentes, el servidor permanece en modo fail-open.
+- Un archivo malformado o ilegible se ignora y se registra una advertencia: nunca interrumpe la sesión.
+
+### Includes del sistema sin resolver
+
+Cuando un include con corchetes angulares no se puede resolver, el servidor informa una `Warning` por directiva (`1004` para MQL4, `5004` para MQL5, origen `mql-lsp`) nombrando la entrada y las dos soluciones. No se suprime nada: los diagnósticos de `Undeclared symbol` (`1070`/`5070`) no cambian, así que la advertencia explica la causa sin ocultar el efecto.
+
+Los mantenedores pueden validar la resolución contra un terminal real con el script opt-in `./tools/verify-system-includes.sh /ruta/a/MQL5/Include`, que emite evidencia JSON y termina con código distinto de cero cuando los símbolos de la Biblioteca Estándar siguen sin resolverse. Nunca se ejecuta en CI.
+
 ## Decisiones Tecnológicas
 
 Esta sección documenta las decisiones técnicas clave tomadas durante el desarrollo para facilitar el onboarding de nuevos desarrolladores.

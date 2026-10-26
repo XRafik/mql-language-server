@@ -14,8 +14,9 @@ namespace MqlLanguageServer.Lsp.Server;
 ///
 /// <para>The exact rule set previously private to <c>DiagnosticHandler</c>
 /// (pull model): parser syntax errors, MQL-native semantic rules (#28) with
-/// workspace-correlated suppression (#44), plus the line-scan heuristics
-/// (typo / empty OnInit / underscore variable). Extracted so the push-model
+/// workspace-correlated suppression (#44), the line-scan heuristics
+/// (typo / empty OnInit / underscore variable), and the unresolved
+/// system-include warnings (#179). Extracted so the push-model
 /// publisher (<see cref="DiagnosticPublisher"/>, issue #91) emits the SAME
 /// diagnostics over <c>textDocument/publishDiagnostics</c> as the pull model
 /// returns over <c>textDocument/diagnostic</c> — one rule set, two
@@ -24,8 +25,9 @@ namespace MqlLanguageServer.Lsp.Server;
 /// <para>A-007: LSP 3.17 diagnostic codes are string|number. We emit numeric
 /// codes in dedicated ranges so clients can route/interpret them without
 /// parsing prefixes: MQL4 diagnostics 1000-1999, MQL5 5000-5999. Offsets are
-/// shared across both languages (001 typo, 002 empty OnInit, 003 underscore;
-/// +100 for syntax errors).</para>
+/// shared across both languages (001 typo, 002 empty OnInit, 003 underscore —
+/// rule retired, code reserved; 004 unresolved system include (#179); +100
+/// for syntax errors).</para>
 /// </summary>
 public static class DocumentDiagnostics
 {
@@ -110,6 +112,13 @@ public static class DocumentDiagnostics
         diagnostics.AddRange(ApplyCrossFileSuppression(
             logger, analyzer.Analyze(mqlFile, content, language, token),
             mqlFile, documentPath, language, token, symbolIndex));
+
+        // Issue #179 (S4): each unresolved angle-bracket system include gets
+        // exactly one actionable warning naming both remedies. Strictly
+        // additive — nothing here suppresses or alters the existing
+        // syntax/semantic diagnostics.
+        diagnostics.AddRange(UnresolvedIncludeDiagnostic.Generate(
+            content, language, documentPath, token));
 
         for (int i = 0; i < lines.Length; i++)
         {

@@ -79,6 +79,30 @@ Semantics:
 - Fail open: with no roots configured, or when a header cannot be resolved or parsed, behavior is exactly as before — no errors, no extra diagnostics.
 - Quoted includes (`#include "file.mqh"`) are unaffected: they still resolve relative to the including file.
 
+### Project configuration file (`.mql-lsp.json`)
+
+Roots can also be declared per project, so a repository carries its own configuration and every editor session picks it up without client settings:
+
+```json
+{
+  "systemIncludeRoots": [
+    "../Include",
+    "C:/Program Files/MetaTrader 5/MQL5/Include"
+  ]
+}
+```
+
+- The file is read from each workspace-folder root during `initialize`; like `.mqlignore` there is no watcher, so editing it requires a server restart.
+- Relative entries resolve against the directory containing `.mql-lsp.json`, which keeps the file portable across machines; absolute entries are used as-is.
+- Precedence: a non-empty `systemIncludeRoots` initialization option wins and the project files are not consulted; otherwise the union across workspace folders applies. With neither source the server stays in fail-open mode.
+- A malformed or unreadable file is ignored and a warning is logged — it never breaks the session.
+
+### Unresolved system includes
+
+When an angle-bracket include cannot be resolved, the server reports one `Warning` per include directive (`1004` for MQL4, `5004` for MQL5, source `mql-lsp`) naming the include entry and both remedies. Nothing is suppressed: `Undeclared symbol` diagnostics (`1070`/`5070`) are unchanged, so the warning explains the cause without hiding the effect.
+
+Maintainers can validate resolution against a real terminal with the opt-in script `./tools/verify-system-includes.sh /path/to/MQL5/Include`, which emits JSON evidence and exits non-zero when symbols behind the Standard Library stay unresolved. It never runs in CI.
+
 ## Technical Decisions
 
 This section documents the key technical decisions made during development to ease the onboarding of new developers.
