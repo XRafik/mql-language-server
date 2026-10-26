@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Xunit;
 using MqlLanguageServer.Models;
 using MqlLanguageServer.Parser;
@@ -589,6 +590,143 @@ public class Mql4ParserTests
         Assert.Equal("ask", symbol.Name);
         Assert.Equal(SymbolKind.Variable, symbol.Kind);
         Assert.Equal("double ask", symbol.Detail);
+    }
+
+    // --- FindSymbolDefinition scope-aware ordering (issue #184) ---
+
+    /// <summary>
+    /// Issue #184 (S1): a declaration whose scope encloses the lookup position
+    /// wins. 'value' exists at document scope and as a local of Compute; the
+    /// use inside Compute must resolve to the enclosing local, not to the
+    /// document-scope declaration the flat index lists first.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_EnclosingLocal_BeatsDocumentScopeDeclaration()
+    {
+        // Arrange
+        var code = @"
+            int value = 5;
+            void Compute()
+            {
+                double value = 7.0;
+                Print(value);
+            }
+        ";
+
+        // Act - cursor on 'value' inside the Print() call (line 6, column 23)
+        var file = _parser.ParseFile(code, "test.mq4");
+        var symbol = _parser.FindSymbolDefinition(file, code, 6, 23);
+
+        // Assert - the enclosing local wins over the document-scope declaration
+        Assert.NotNull(symbol);
+        Assert.Equal("value", symbol.Name);
+        Assert.Equal(SymbolKind.Variable, symbol.Kind);
+        Assert.Equal("double value", symbol.Detail);
+    }
+
+    /// <summary>
+    /// Issue #184 (S2): with no enclosing candidate, a document-scope
+    /// declaration beats one nested inside another function. The use of
+    /// 'helper' in Second must resolve to the document-scope function; the
+    /// local of First is not visible there.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_DocumentScopeDeclaration_BeatsForeignNestedLocal()
+    {
+        // Arrange
+        var code = @"
+            void First()
+            {
+                int helper = 1;
+                Print(helper);
+            }
+            int helper()
+            {
+                return 2;
+            }
+            void Second()
+            {
+                Print(helper());
+            }
+        ";
+
+        // Act - cursor on 'helper' inside Second's Print(...) (line 13, column 23)
+        var file = _parser.ParseFile(code, "test.mq4");
+        var symbol = _parser.FindSymbolDefinition(file, code, 13, 23);
+
+        // Assert - the document-scope function wins over First's local
+        Assert.NotNull(symbol);
+        Assert.Equal("helper", symbol.Name);
+        Assert.Equal(SymbolKind.Function, symbol.Kind);
+    }
+
+    /// <summary>
+    /// Issue #184 (S2+S3, the reported bug): 'ask' is a local of OnInit; a use
+    /// of the builtin Ask in OnTick must answer from the builtin registry, not
+    /// from OnInit's invisible local.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_ForeignLocalNamedLikeBuiltin_ReturnsBuiltin()
+    {
+        // Arrange
+        var code = @"
+            int OnInit()
+            {
+                double ask = 1.0;
+                Print(ask);
+                return 0;
+            }
+
+            void OnTick()
+            {
+                double price = Ask;
+            }
+        ";
+
+        // Act - cursor on 'Ask' inside OnTick (line 11, column 32)
+        var file = _parser.ParseFile(code, "test.mq4");
+        var symbol = _parser.FindSymbolDefinition(file, code, 11, 32);
+
+        // Assert - the registry answers; OnInit's local is not visible here
+        Assert.NotNull(symbol);
+        Assert.Equal("Ask", symbol.Name);
+        Assert.Equal("MQL4 Built-in", symbol.Detail);
+    }
+
+    /// <summary>
+    /// Issue #184 (S4): symbols merged from an included file compete at
+    /// document scope. 'spread' is a local of CheckSpread and also a
+    /// declaration of the included file; the use in UseSpread must resolve to
+    /// the included declaration, never to the local of another function.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_IncludedDeclaration_BeatsForeignNestedLocal()
+    {
+        // Arrange - main file with a local 'spread' plus an included declaration
+        var mainPath = Path.Combine(Path.GetTempPath(), "TestScopeAwareIncludesMql4.mq4");
+        var includePath = Path.Combine(Path.GetTempPath(), "spread_helper_mql4.mqh");
+        var mainContent = "#include \"spread_helper_mql4.mqh\"\nvoid CheckSpread()\n{\n    int spread = 1;\n    Print(spread);\n}\nvoid UseSpread()\n{\n    Print(spread);\n}\n";
+        File.WriteAllText(mainPath, mainContent);
+        File.WriteAllText(includePath, "int spread = 2;\n");
+
+        try
+        {
+            var file = _parser.ParseFileWithIncludes(mainPath);
+
+            // Act - cursor on 'spread' inside UseSpread's Print(...) (line 9, column 11)
+            var symbol = _parser.FindSymbolDefinition(file, mainContent, 9, 11);
+
+            // Assert - the included document-scope declaration wins
+            Assert.NotNull(symbol);
+            Assert.Equal("spread", symbol.Name);
+            Assert.Equal(SymbolKind.Variable, symbol.Kind);
+            Assert.Equal(Path.GetFullPath(includePath), symbol.FilePath);
+        }
+        finally
+        {
+            if (File.Exists(mainPath)) File.Delete(mainPath);
+            if (File.Exists(includePath)) File.Delete(includePath);
+        }
     }
 
     /// <summary>

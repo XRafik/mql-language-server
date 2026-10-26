@@ -207,6 +207,58 @@ public class HoverHandlerTests
     }
 
     /// <summary>
+    /// Issue #184 (S8): a builtin-named use in a function that does not declare
+    /// it must hover the builtin, even when another function in the same
+    /// document declares a case-insensitive local of that name. The enclosing
+    /// declaration still wins inside its own function.
+    /// </summary>
+    [Fact]
+    public async Task HoverHandler_Mql4_ForeignLocalNamedLikeBuiltin_HoversBuiltinAsync()
+    {
+        // Arrange - local 'ask' declared in OnInit; builtin 'Ask' read in OnTick
+        var content = "int OnInit()\n{\n    double ask = 1.0;\n    Print(ask);\n    return 0;\n}\n\nvoid OnTick()\n{\n    double price = Ask;\n}\n";
+        var testFilePath = Path.Combine(Path.GetTempPath(), "TestHoverForeignLocalBuiltinMql4.mq4");
+        File.WriteAllText(testFilePath, content);
+
+        try
+        {
+            var documentStore = new OpenDocumentStore();
+            var handler = new HoverHandler(MockLogger<HoverHandler>(), new Mql4AntlrParser(), documentStore);
+
+            // Act - hover the 'ask' use inside OnInit (its own function)
+            var ownFunctionResult = await handler.Handle(new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(3, 10)
+            }, CancellationToken.None);
+
+            // Act - hover the 'Ask' use inside OnTick, which declares nothing
+            var foreignFunctionResult = await handler.Handle(new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(9, 19)
+            }, CancellationToken.None);
+
+            // Assert - inside its own function the enclosing declaration still wins
+            Assert.NotNull(ownFunctionResult);
+            var ownFunctionContent = ownFunctionResult!.Contents.MarkupContent!.Value;
+            Assert.Contains("## ask", ownFunctionContent);
+            Assert.Contains("**Type:** User Defined", ownFunctionContent);
+
+            // Assert - in the foreign function the builtin registry answers
+            Assert.NotNull(foreignFunctionResult);
+            var foreignContent = foreignFunctionResult!.Contents.MarkupContent!.Value;
+            Assert.Contains("MQL4 Built-in", foreignContent);
+            Assert.Contains("Current Ask price", foreignContent);
+            Assert.DoesNotContain("## ask", foreignContent);
+        }
+        finally
+        {
+            if (File.Exists(testFilePath)) File.Delete(testFilePath);
+        }
+    }
+
+    /// <summary>
     /// Issue #182 (MQL5 symmetry): a user-declared local named like a builtin
     /// function must hover as the user symbol in an .mq5 document.
     /// </summary>
@@ -244,6 +296,62 @@ public class HoverHandlerTests
             Assert.Contains("**Type:** User Defined", hoverContent);
             Assert.DoesNotContain("MQL5 Built-in", hoverContent);
             Assert.DoesNotContain("int Bars(", hoverContent);
+        }
+        finally
+        {
+            if (File.Exists(testFilePath)) File.Delete(testFilePath);
+        }
+    }
+
+    /// <summary>
+    /// Issue #184 (S8, MQL5 symmetry): a Bars() call in a function that does
+    /// not declare a 'bars' local must hover the builtin, even when OnInit
+    /// declares a 'bars' local. The enclosing declaration still wins inside
+    /// its own function.
+    /// </summary>
+    [Fact]
+    public async Task HoverHandler_Mql5_ForeignLocalNamedLikeBuiltin_HoversBuiltinAsync()
+    {
+        // Arrange - local 'bars' declared in OnInit; builtin Bars() called in OnTick
+        var content = "int OnInit()\n{\n   int bars = 10;\n   Print(bars);\n   return 0;\n}\n\nvoid OnTick()\n{\n   int total = Bars(NULL, PERIOD_CURRENT);\n}\n";
+        var testFilePath = Path.Combine(Path.GetTempPath(), "TestHoverForeignLocalBuiltinMql5.mq5");
+        File.WriteAllText(testFilePath, content);
+
+        try
+        {
+            var documentStore = new OpenDocumentStore();
+            var handler = new HoverHandler(
+                MockLogger<HoverHandler>(),
+                new MqlLanguageService(new Mql4AntlrParser(), new Mql5AntlrParser()),
+                documentStore,
+                new IMqlBuiltins[] { new Mql4BuiltinsAdapter(), new Mql5Builtins() });
+
+            // Act - hover the 'bars' use inside OnInit (its own function)
+            var ownFunctionResult = await handler.Handle(new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(3, 9)
+            }, CancellationToken.None);
+
+            // Act - hover the 'Bars' call inside OnTick, which declares nothing
+            var foreignFunctionResult = await handler.Handle(new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(9, 15)
+            }, CancellationToken.None);
+
+            // Assert - inside its own function the enclosing declaration still wins
+            Assert.NotNull(ownFunctionResult);
+            var ownFunctionContent = ownFunctionResult!.Contents.MarkupContent!.Value;
+            Assert.Contains("## bars", ownFunctionContent);
+            Assert.Contains("**Type:** User Defined", ownFunctionContent);
+
+            // Assert - in the foreign function the builtin registry answers
+            Assert.NotNull(foreignFunctionResult);
+            var foreignContent = foreignFunctionResult!.Contents.MarkupContent!.Value;
+            Assert.Contains("MQL5 Built-in", foreignContent);
+            Assert.Contains("int Bars(", foreignContent);
+            Assert.DoesNotContain("## bars", foreignContent);
         }
         finally
         {
