@@ -96,12 +96,13 @@ L7 (parent, 2026-10-26): verification evidence.
   diagnostics; `DEAL_TYPE_BUY` control unchanged.
 - MQL4 symmetry: none of the 22 names exists in `mql4.json`, and the fragment rule applied to the
   official MQL4 CHM (690 HTML pages, 412/601 variables documented) finds zero fragments.
-- Suite on this branch: 1,750 passing (1,745 with the PR-template performance filter). `main`
-  measured 1,748 in a temporary worktree, so the delta is exactly the two new gates. Registry code
-  untouched (the #136 contract); parity tests included.
-- The earlier "1,760" figure was written from an adjacent branch's run and was not reproducible here:
-  the 1,758 run happened while #184's 10 tests were still in the working tree, before this branch was
-  rebased off them. Recorded so the number in the log is the one actually measured on this branch.
+- Suite: 1,750 passing (1,745 with the PR-template filter) while the branch sat on `main` before
+  #184 landed; after merging the main that contains #184 it is **1,760 (1,755 filtered)** against
+  `main`'s **1,758**, both measured in throw-away worktrees, so the delta is exactly the two new
+  gates. Registry code untouched (the #136 contract); parity tests included.
+- A suite count belongs to the tree being delivered, measured after every merge. The first "1,760"
+  was written from an adjacent branch's run; the figures above are this tree's, measured after the
+  merge that brought #184 in.
 
 L8 (independent verifier, 2026-10-26): **APPROVE**, all seven claims replicated independently
 (`mvpnxckd-6-to0k`). Confirmed: the 22 removed names are all absent from the HTML authority and each
@@ -112,7 +113,8 @@ pages, 412/601 documented, 0 fragments); audit deterministic (report sha256 unch
 apply a verified no-op by hash.
 
 Two corrections taken from its flags:
-1. The suite figure claimed 1,760; measured here it is 1,750 (L7 updated).
+1. The suite figure claimed 1,760; measured on the pre-merge branch it was 1,750, and 1,760 after
+   merging the main that carries #184 (main itself: 1,758). L7 records both.
 2. "22 clipped table cells promoted by the pdftotext extraction" is precise for 21 of them:
    `CHART_SCRIPT` carried `hand-curated-registry-v2.5.1-rc.1` provenance, not PDF provenance. Its
    removal evidence is the same shape — it only ever occurs inside the documented

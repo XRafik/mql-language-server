@@ -60,4 +60,13 @@ public class MqlFile
     /// Built lazily on first access and reused for subsequent lookups
     /// </summary>
     public Dictionary<string, List<Mql4Symbol>>? SymbolIndex { get; set; }
+
+    /// <summary>
+    /// Issue #184 (S6): cached function/method declarations of this document
+    /// (FilePath matching the document's), used by SymbolScopeResolver to
+    /// classify name-index candidates as document-scope vs nested in a
+    /// function. Built lazily next to <see cref="SymbolIndex"/> on the first
+    /// name lookup.
+    /// </summary>
+    public List<Mql4Symbol>? ScopeContainerSymbols { get; set; }
 }

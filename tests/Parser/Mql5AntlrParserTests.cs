@@ -315,6 +315,102 @@ public class Mql5AntlrParserTests
         Assert.Equal("int bars", def.Detail);
     }
 
+    // --- FindSymbolDefinition scope-aware ordering (issue #184) ---
+
+    /// <summary>
+    /// Issue #184 (S1): a declaration whose scope encloses the lookup position
+    /// wins. 'value' exists at document scope and as a local of Compute; the
+    /// use inside Compute must resolve to the enclosing local, not to the
+    /// document-scope declaration the flat index lists first.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_EnclosingLocal_BeatsDocumentScopeDeclaration()
+    {
+        var content = "int value = 5;\nvoid Compute()\n{\n    double value = 7.0;\n    Print(value);\n}\n";
+        var file = _parser.ParseFile(content, "t.mq5");
+
+        // Cursor on 'value' inside Print(...) (line 5, column 11, 1-based)
+        var def = _parser.FindSymbolDefinition(file, content, 5, 11);
+
+        Assert.NotNull(def);
+        Assert.Equal("double value", def!.Detail); // the enclosing local, not "int value"
+    }
+
+    /// <summary>
+    /// Issue #184 (S2): with no enclosing candidate, a document-scope
+    /// declaration beats one nested inside another function. The use of
+    /// 'helper' in Second must resolve to the document-scope function; the
+    /// local of First is not visible there.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_DocumentScopeDeclaration_BeatsForeignNestedLocal()
+    {
+        var content = "void First()\n{\n    int helper = 1;\n    Print(helper);\n}\nint helper()\n{\n    return 2;\n}\nvoid Second()\n{\n    Print(helper());\n}\n";
+        var file = _parser.ParseFile(content, "t.mq5");
+
+        // Cursor on 'helper' inside Second's Print(...) (line 12, column 11, 1-based)
+        var def = _parser.FindSymbolDefinition(file, content, 12, 11);
+
+        Assert.NotNull(def);
+        Assert.Equal("helper", def!.Name);
+        Assert.Equal(SymbolType.Function, def.SymbolType); // not First's local variable
+    }
+
+    /// <summary>
+    /// Issue #184 (S2+S3, the reported bug): 'bars' is a local of OnInit; a use
+    /// of the builtin Bars() in OnTick must answer from the builtin registry,
+    /// not from OnInit's invisible local.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_ForeignLocalNamedLikeBuiltin_ReturnsBuiltin()
+    {
+        var content = "int OnInit()\n{\n   int bars = 10;\n   Print(bars);\n   return 0;\n}\nvoid OnTick()\n{\n   int total = Bars(NULL, PERIOD_CURRENT);\n}\n";
+        var file = _parser.ParseFile(content, "t.mq5");
+
+        Assert.True(_parser.IsBuiltin("Bars"));
+
+        // Cursor on 'Bars' inside OnTick (line 9, column 16, 1-based)
+        var def = _parser.FindSymbolDefinition(file, content, 9, 16);
+
+        Assert.NotNull(def);
+        Assert.Equal("Bars", def!.Name);
+        Assert.Equal("MQL5 Built-in", def.Detail);
+    }
+
+    /// <summary>
+    /// Issue #184 (S4): symbols merged from an included file compete at
+    /// document scope. 'spread' is a local of CheckSpread and also a
+    /// declaration of the included file; the use in UseSpread must resolve to
+    /// the included declaration, never to the local of another function.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_IncludedDeclaration_BeatsForeignNestedLocal()
+    {
+        var mainPath = Path.Combine(Path.GetTempPath(), "TestScopeAwareIncludesMql5.mq5");
+        var includePath = Path.Combine(Path.GetTempPath(), "spread_helper_mql5.mqh");
+        var mainContent = "#include \"spread_helper_mql5.mqh\"\nvoid CheckSpread()\n{\n    int spread = 1;\n    Print(spread);\n}\nvoid UseSpread()\n{\n    Print(spread);\n}\n";
+        File.WriteAllText(mainPath, mainContent);
+        File.WriteAllText(includePath, "int spread = 2;\n");
+
+        try
+        {
+            var file = _parser.ParseFileWithIncludes(mainPath);
+
+            // Cursor on 'spread' inside UseSpread's Print(...) (line 9, column 11, 1-based)
+            var def = _parser.FindSymbolDefinition(file, mainContent, 9, 11);
+
+            Assert.NotNull(def);
+            Assert.Equal("spread", def!.Name);
+            Assert.Equal(SymbolType.Variable, def.SymbolType);
+            Assert.Equal(Path.GetFullPath(includePath), def.FilePath);
+        }
+        finally
+        {
+            if (File.Exists(mainPath)) File.Delete(mainPath);
+            if (File.Exists(includePath)) File.Delete(includePath);
+        }
+    }
+
     [Fact]
     public void FindSymbolDefinition_NoIdentifierAtPosition_ReturnsNull()
     {
@@ -339,18 +435,27 @@ public class Mql5AntlrParserTests
         Assert.Null(def);
     }
 
+    /// <summary>
+    /// Issue #183 (repaired pin): both dialect visitors index local variable
+    /// declarations, so positioning the cursor on the identifier 'x' of a local
+    /// inside a function body resolves that local from the symbol index (it is
+    /// not a builtin, and nothing else declares the name). The original pin
+    /// passed vacuously: its cursor landed on the whitespace after 'x', so
+    /// ExtractIdentifierAtPosition returned null before any lookup.
+    /// </summary>
     [Fact]
-    public void FindSymbolDefinition_LocalVariableInsideFunction_ReturnsNull()
+    public void FindSymbolDefinition_LocalVariableInsideFunction_ResolvesLocal()
     {
-        // 'x' is a local inside a function body; the visitor only extracts top-level
-        // variable declarations, so it is not in the symbol index and not a builtin.
         var content = "void f() { int x = 0; }\n";
         var file = _parser.ParseFile(content, "t.mq5");
 
-        var xCol = content.IndexOf("int x") + 5; // position of 'x'
+        var xCol = content.IndexOf("int x") + 4; // 0-based column of 'x'
         var def = _parser.FindSymbolDefinition(file, content, 1, xCol + 1);
 
-        Assert.Null(def);
+        Assert.NotNull(def);
+        Assert.Equal("x", def!.Name);
+        Assert.Equal(SymbolType.Variable, def.SymbolType);
+        Assert.Equal("int x", def.Detail);
     }
 
     // --- FindSymbolAtPosition ---

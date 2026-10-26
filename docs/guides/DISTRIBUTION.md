@@ -4,7 +4,25 @@ Esta guía documenta todos los métodos de distribución disponibles para el MQL
 
 ## 📦 Métodos de Distribución
 
-### 1. Standalone Binaries (Recomendado)
+### 1. Extensión VS Code (Prioridad 1 — Recomendado)
+
+**¿Qué es?**
+- Extensión `davalillo.mql-language-server` distribuida como VSIX en GitHub Releases
+- Resuelve, descarga y verifica el binario `mql-lsp-server` automáticamente (SHA256 contra `CHECKSUMS.txt`)
+- El usuario final no configura nada: instalar y abrir un `.mq4`/`.mq5`
+
+**Ventajas**:
+- ✅ Instalación en un paso (**Extensions: Install from VSIX…**)
+- ✅ Descarga automática y verificada del binario por plataforma
+- ✅ No requiere .NET runtime ni configuración manual del editor
+
+**Desventajas**:
+- ❌ Solo VS Code (otros editores usan los binarios standalone, ver [Editor Integration](EDITOR_INTEGRATION.md))
+- ❌ Publicación en el Marketplace aplazada (requiere cuenta de publisher y `VSCE_PAT`)
+
+**Detalles completos**: ver [VS Code Extension](VSCODE_EXTENSION.md).
+
+### 2. Standalone Binaries (Recomendado)
 
 **¿Qué son?**
 - Binarios ejecutables auto-contenidos
@@ -48,6 +66,7 @@ chmod +x mql-lsp-server-linux-x64
 ```
 
 **Artefactos publicados por el CI** (ver `.github/workflows/build.yml`):
+- `mql-language-server-<tag>.vsix` (extensión VS Code)
 - `mql-lsp-server-linux-x64`
 - `mql-lsp-server-osx-x64`
 - `mql-lsp-server-osx-arm64` (Apple Silicon)
@@ -55,7 +74,7 @@ chmod +x mql-lsp-server-linux-x64
 - `CHECKSUMS.txt`
 - `mql-language-server.<versión>.nupkg`
 
-### 2. .NET Global Tool (NuGet)
+### 3. .NET Global Tool (NuGet)
 
 **¿Qué es?**
 - Paquete NuGet distribuido via nuget.org o GitHub Packages
@@ -158,7 +177,7 @@ dotnet nuget add source "https://nuget.pkg.github.com/davalillo/index.json" \
 dotnet tool install -g mql-language-server
 ```
 
-### 3. Distribución Privada/Local
+### 4. Distribución Privada/Local
 
 Para empresas o distribución limitada sin repositorios públicos:
 
@@ -200,7 +219,8 @@ sha256sum -c CHECKSUMS.txt
 
 | Método | Tamaño | Dependencias | Instalación | Updates | Mejor para |
 |--------|--------|--------------|-------------|---------|------------|
-| Standalone Binaries | 71-72MB | Ninguna | Manual | Manual | Usuarios finales |
+| Extensión VS Code | ~120KB (VSIX) | Descarga el binario solo | Install from VSIX | Con cada release | Usuarios finales de VS Code |
+| Standalone Binaries | 71-72MB | Ninguna | Manual | Manual | Otros editores / scripts |
 | NuGet Tool | 2-5MB | .NET 10 SDK | `dotnet tool install` | `dotnet tool update` | Desarrolladores |
 | GitHub Packages | 2-5MB | .NET 10 SDK | `dotnet tool install` | `dotnet tool update` | Open source |
 | NuGet.org | 2-5MB | .NET 10 SDK | `dotnet tool install` | `dotnet tool update` | Público (Trusted Publishing) |
@@ -208,7 +228,7 @@ sha256sum -c CHECKSUMS.txt
 ## 🎯 Recomendación por Audiencia
 
 ### Para Usuarios Finales (Traders, Quants)
-→ **Standalone Binaries** (descargar desde GitHub Releases)
+→ **Extensión VS Code** (instalar el VSIX desde GitHub Releases); sin VS Code, usar **Standalone Binaries**
 
 ### Para Desarrolladores .NET
 → **GitHub Packages** (más rápido, sin revisión manual)
@@ -246,6 +266,7 @@ git push origin v2.0.0
 
 # 3. Resultado (~15-20 min):
 # https://github.com/davalillo/mql-language-server/releases/tag/v2.0.0
+# → mql-language-server-<tag>.vsix (extensión VS Code)
 # → mql-lsp-server-linux-x64 (~71MB)
 # → mql-lsp-server-osx-x64 (~71MB)
 # → mql-lsp-server-osx-arm64 (~71MB)
