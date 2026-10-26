@@ -562,6 +562,60 @@ public class Mql4ParserTests
         Assert.Equal(SymbolKind.Variable, symbol.Kind);
     }
 
+    /// <summary>
+    /// Issue #182: a user declaration must take precedence over the builtin
+    /// registry when the identifier matches both case-insensitively. Here the
+    /// local 'ask' shadows the builtin variable 'Ask'.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_UserLocalNamedLikeBuiltin_ResolvesUserSymbol()
+    {
+        // Arrange
+        var code = @"
+            int OnInit()
+            {
+                double ask = 1.0;
+                Print(ask);
+                return 0;
+            }
+        ";
+
+        // Act - cursor on 'ask' inside the Print() call
+        var file = _parser.ParseFile(code, "test.mq4");
+        var symbol = _parser.FindSymbolDefinition(file, code, 5, 23);
+
+        // Assert - the local declaration wins over the builtin registry
+        Assert.NotNull(symbol);
+        Assert.Equal("ask", symbol.Name);
+        Assert.Equal(SymbolKind.Variable, symbol.Kind);
+        Assert.Equal("double ask", symbol.Detail);
+    }
+
+    /// <summary>
+    /// Issue #182 companion: when nothing in the document declares the
+    /// identifier, the builtin registry remainder still answers.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_BuiltinWithoutUserDeclaration_ReturnsBuiltinSymbol()
+    {
+        // Arrange
+        var code = @"
+            void OnTick()
+            {
+                int total = HistoryTotal();
+            }
+        ";
+
+        // Act - cursor on 'HistoryTotal'
+        var file = _parser.ParseFile(code, "test.mq4");
+        var symbol = _parser.FindSymbolDefinition(file, code, 4, 30);
+
+        // Assert
+        Assert.NotNull(symbol);
+        Assert.Equal("HistoryTotal", symbol.Name);
+        Assert.Equal("MQL4 Built-in", symbol.Detail);
+    }
+
     [Fact]
     public void FindSymbolDefinition_ReturnsNullForNonExistentSymbol()
     {

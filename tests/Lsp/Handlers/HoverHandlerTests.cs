@@ -125,6 +125,133 @@ public class HoverHandlerTests
     }
 
     /// <summary>
+    /// Issue #182 regression: hovering a user-declared local whose name matches a
+    /// builtin case-insensitively must show the user declaration, not the builtin
+    /// pseudo-hover (registry type/signature/description).
+    /// </summary>
+    [Fact]
+    public async Task HoverHandler_Mql4_LocalNamedLikeBuiltin_HoversUserSymbolAsync()
+    {
+        // Arrange - local 'ask' shadows the builtin variable 'Ask'
+        var content = "int OnInit()\n{\n    double ask = 1.0;\n    Print(ask);\n    return 0;\n}\n";
+        var testFilePath = Path.Combine(Path.GetTempPath(), "TestHoverLocalShadowsBuiltinMql4.mq4");
+        File.WriteAllText(testFilePath, content);
+
+        try
+        {
+            var documentStore = new OpenDocumentStore();
+            var handler = new HoverHandler(MockLogger<HoverHandler>(), new Mql4AntlrParser(), documentStore);
+
+            // Cursor on the local 'ask' use inside Print(...)
+            var request = new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(3, 10)
+            };
+
+            // Act
+            var result = await handler.Handle(request, CancellationToken.None);
+
+            // Assert - the user declaration wins over the builtin registry
+            Assert.NotNull(result);
+            var hoverContent = result!.Contents.MarkupContent!.Value;
+            Assert.Contains("## ask", hoverContent);
+            Assert.Contains("**Type:** User Defined", hoverContent);
+            Assert.DoesNotContain("MQL4 Built-in", hoverContent);
+            Assert.DoesNotContain("Current Ask price", hoverContent);
+        }
+        finally
+        {
+            if (File.Exists(testFilePath)) File.Delete(testFilePath);
+        }
+    }
+
+    /// <summary>
+    /// Issue #182 (case-insensitivity): MQL resolves identifiers case-insensitively,
+    /// so a declaration named "Ask" must cover a use spelled "ask" — the registry
+    /// must not take over just because the spelling differs from the declaration.
+    /// </summary>
+    [Fact]
+    public async Task HoverHandler_Mql4_CaseVariantUseKeepsUserDeclarationAsync()
+    {
+        // Arrange - declaration 'Ask' (builtin spelling), use 'ask'
+        var content = "int OnInit()\n{\n    double Ask = 1.0;\n    Print(ask);\n    return 0;\n}\n";
+        var testFilePath = Path.Combine(Path.GetTempPath(), "TestHoverCaseVariantMql4.mq4");
+        File.WriteAllText(testFilePath, content);
+
+        try
+        {
+            var documentStore = new OpenDocumentStore();
+            var handler = new HoverHandler(MockLogger<HoverHandler>(), new Mql4AntlrParser(), documentStore);
+
+            var request = new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(3, 10)
+            };
+
+            // Act
+            var result = await handler.Handle(request, CancellationToken.None);
+
+            // Assert
+            Assert.NotNull(result);
+            var hoverContent = result!.Contents.MarkupContent!.Value;
+            Assert.Contains("## Ask", hoverContent);
+            Assert.Contains("**Type:** User Defined", hoverContent);
+            Assert.DoesNotContain("Current Ask price", hoverContent);
+        }
+        finally
+        {
+            if (File.Exists(testFilePath)) File.Delete(testFilePath);
+        }
+    }
+
+    /// <summary>
+    /// Issue #182 (MQL5 symmetry): a user-declared local named like a builtin
+    /// function must hover as the user symbol in an .mq5 document.
+    /// </summary>
+    [Fact]
+    public async Task HoverHandler_Mql5_LocalNamedLikeBuiltin_HoversUserSymbolAsync()
+    {
+        // Arrange - local 'bars' shadows the builtin function 'Bars()'
+        var content = "int OnInit()\n{\n   int bars = 10;\n   Print(bars);\n   return 0;\n}\n";
+        var testFilePath = Path.Combine(Path.GetTempPath(), "TestHoverLocalShadowsBuiltinMql5.mq5");
+        File.WriteAllText(testFilePath, content);
+
+        try
+        {
+            var documentStore = new OpenDocumentStore();
+            var handler = new HoverHandler(
+                MockLogger<HoverHandler>(),
+                new MqlLanguageService(new Mql4AntlrParser(), new Mql5AntlrParser()),
+                documentStore,
+                new IMqlBuiltins[] { new Mql4BuiltinsAdapter(), new Mql5Builtins() });
+
+            // Cursor on the local 'bars' use inside Print(...)
+            var request = new HoverParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(testFilePath)),
+                Position = new Position(3, 9)
+            };
+
+            // Act
+            var result = await handler.Handle(request, CancellationToken.None);
+
+            // Assert - the user declaration wins over the builtin registry
+            Assert.NotNull(result);
+            var hoverContent = result!.Contents.MarkupContent!.Value;
+            Assert.Contains("## bars", hoverContent);
+            Assert.Contains("**Type:** User Defined", hoverContent);
+            Assert.DoesNotContain("MQL5 Built-in", hoverContent);
+            Assert.DoesNotContain("int Bars(", hoverContent);
+        }
+        finally
+        {
+            if (File.Exists(testFilePath)) File.Delete(testFilePath);
+        }
+    }
+
+    /// <summary>
     /// Issue #180 regression: hovering a built-in FUNCTION must surface the
     /// registered signature from the dialect registry through the handler.
     /// </summary>

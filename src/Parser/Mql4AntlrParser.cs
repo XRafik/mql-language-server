@@ -358,7 +358,18 @@ namespace MqlLanguageServer.Parser
                 return null;
             }
 
-            // Check if it's a builtin
+            // Issue #182: declarations in this document (or its include graph) take
+            // precedence over the builtin registry. Lookup is case-insensitive in
+            // both directions, so a local "ask" shadows the builtin "Ask" instead
+            // of being answered from the registry.
+            var symbols = FindSymbolsByName(file, identifier);
+            if (symbols.Any())
+            {
+                // Return the first matching symbol (could be improved to handle overloads)
+                return symbols.First();
+            }
+
+            // Fall back to the builtin registry
             if (IsBuiltin(identifier))
             {
                 // For builtins, return a pseudo-symbol with the identifier name
@@ -372,14 +383,6 @@ namespace MqlLanguageServer.Parser
                         new LspPosition(searchLine, searchColumn + identifier.Length)
                     )
                 };
-            }
-
-            // Look up the identifier in defined symbols
-            var symbols = FindSymbolsByName(file, identifier);
-            if (symbols.Any())
-            {
-                // Return the first matching symbol (could be improved to handle overloads)
-                return symbols.First();
             }
 
             return null;
