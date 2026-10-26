@@ -154,10 +154,13 @@ public class HoverHandler : LanguageAwareHandlerBase<HoverParams, Hover?>, IHove
             // declaration of non-function kind) or nothing at all, answer from the
             // registry instead of returning the wrong symbol or null. User symbols
             // named exactly like the token keep the existing resolution path.
+            // Issue #182: the comparison is case-insensitive, matching the parsers'
+            // own lookup — a user declaration named "Ask" also covers a use spelled
+            // "ask" and must not be hijacked by the registry.
             var token = ExtractIdentifierAt(content, line - 1, character - 1);
             if (!string.IsNullOrEmpty(token)
                 && builtins.IsBuiltin(token)
-                && (symbol == null || !string.Equals(symbol.Name, token, StringComparison.Ordinal)))
+                && (symbol == null || !string.Equals(symbol.Name, token, StringComparison.OrdinalIgnoreCase)))
             {
                 return BuildBuiltinHover(token, builtins, language, line - 1, character - 1);
             }
@@ -170,16 +173,25 @@ public class HoverHandler : LanguageAwareHandlerBase<HoverParams, Hover?>, IHove
 
             try
             {
-                var isPredefined = builtins.IsBuiltin(symbol.Name);
+                // Issue #182: only pseudo-symbols synthesized from the registry are
+                // "predefined". A declaration that happens to share a builtin name
+                // keeps its non-empty FilePath and is rendered as user defined, so
+                // a shadowing local never inherits the builtin type/signature text.
+                var isPredefined = builtins.IsBuiltin(symbol.Name) && string.IsNullOrEmpty(symbol.FilePath);
                 var symbolType = isPredefined ? $"MQL{(language == MqlLanguage.Mql5 ? "5" : "4")} Built-in" : "User Defined";
 
-                var signature = builtins.GetBuiltinFunctionSignature(symbol.Name);
+                // Issue #182: registry-provided signature/description text belongs to
+                // builtin tokens only; a user declaration that shadows a builtin name
+                // keeps its own detail and never inherits the registry prose.
+                var signature = isPredefined ? builtins.GetBuiltinFunctionSignature(symbol.Name) : null;
 
                 // Issue #180: surface the registered variable description for
                 // builtin variables; the legacy pseudo-symbol path resolved them
                 // with Kind=Function and never read the variable descriptions.
+                // Issue #182: a user declaration that shadows a builtin name must
+                // not inherit the registry's variable description either.
                 var isBuiltinVariable = isPredefined && !builtins.IsBuiltinFunction(symbol.Name);
-                var builtinDescription = builtins.GetBuiltinVariableDescription(symbol.Name);
+                var builtinDescription = isPredefined ? builtins.GetBuiltinVariableDescription(symbol.Name) : null;
                 var markdownContent = BuildHoverContent(symbol, signature, isPredefined, symbolType, language, builtinDescription, isBuiltinVariable);
 
                 var hover = new Hover
