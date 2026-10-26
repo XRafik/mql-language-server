@@ -1,0 +1,1096 @@
+{
+  "schema": "mql5-constants-audit-v1",
+  "dataset": "data/builtins/mql5.json",
+  "totals": {
+    "variables": 2023,
+    "documented": 1802,
+    "documented_pct": 89.1,
+    "truncated_fragments": 22,
+    "undocumented_unknown": 199,
+    "removable_fragments": 18,
+    "additions_supported": 3,
+    "adjudication_needed": 4,
+    "ambiguous_adjudications": 0
+  },
+  "documented_in_authority": 1768,
+  "documented_pdf_only": 34,
+  "documented_sample": [
+    "ACCOUNT_ASSETS",
+    "ACCOUNT_BALANCE",
+    "ACCOUNT_COMMISSION_BLOCKED",
+    "ACCOUNT_COMPANY",
+    "ACCOUNT_CREDIT",
+    "ACCOUNT_CURRENCY",
+    "ACCOUNT_CURRENCY_DIGITS",
+    "ACCOUNT_EQUITY",
+    "ACCOUNT_FIFO_CLOSE",
+    "ACCOUNT_HEDGE_ALLOWED",
+    "ACCOUNT_LEVERAGE",
+    "ACCOUNT_LIABILITIES"
+  ],
+  "remove": [
+    {
+      "name": "ALANCE_DD",
+      "parents": [
+        "STAT_BALANCE_DD"
+      ],
+      "parent_in_dataset": [
+        "STAT_BALANCE_DD"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 895"
+    },
+    {
+      "name": "ARTEVENT_CLICK",
+      "parents": [
+        "CHARTEVENT_CLICK"
+      ],
+      "parent_in_dataset": [
+        "CHARTEVENT_CLICK"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 690"
+    },
+    {
+      "name": "BJ_BITMAP_LABEL",
+      "parents": [
+        "OBJ_BITMAP_LABEL"
+      ],
+      "parent_in_dataset": [
+        "OBJ_BITMAP_LABEL"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 705,706"
+    },
+    {
+      "name": "CHART_SCRIPT",
+      "parents": [
+        "CHART_SCRIPT_NAME"
+      ],
+      "parent_in_dataset": [
+        "CHART_SCRIPT_NAME"
+      ],
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "DER_FILLING_RETURN",
+      "parents": [
+        "ORDER_FILLING_RETURN"
+      ],
+      "parent_in_dataset": [
+        "ORDER_FILLING_RETURN"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 846"
+    },
+    {
+      "name": "ENUM_CHART_VOLUME_MOD",
+      "parents": [
+        "ENUM_CHART_VOLUME_MODE"
+      ],
+      "parent_in_dataset": [
+        "ENUM_CHART_VOLUME_MODE"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 (enum type name); descriptions-official-mql5-reference-pdf-2026-10-19"
+    },
+    {
+      "name": "GIN_MODE_RETAIL_HEDGING",
+      "parents": [
+        "ACCOUNT_MARGIN_MODE_RETAIL_HEDGING"
+      ],
+      "parent_in_dataset": [
+        "ACCOUNT_MARGIN_MODE_RETAIL_HEDGING"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 1005"
+    },
+    {
+      "name": "OBJ_BITMAP_LA",
+      "parents": [
+        "OBJ_BITMAP_LABEL"
+      ],
+      "parent_in_dataset": [
+        "OBJ_BITMAP_LABEL"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 702"
+    },
+    {
+      "name": "OBJ_BUTTO",
+      "parents": [
+        "OBJ_BUTTON"
+      ],
+      "parent_in_dataset": [
+        "OBJ_BUTTON"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 702,703,708"
+    },
+    {
+      "name": "OBJ_ELLIPS",
+      "parents": [
+        "OBJ_ELLIPSE"
+      ],
+      "parent_in_dataset": [
+        "OBJ_ELLIPSE"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 691"
+    },
+    {
+      "name": "OBJ_RECTANGL",
+      "parents": [
+        "OBJ_RECTANGLE",
+        "OBJ_RECTANGLE_LABEL"
+      ],
+      "parent_in_dataset": [
+        "OBJ_RECTANGLE",
+        "OBJ_RECTANGLE_LABEL"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 691"
+    },
+    {
+      "name": "OL_ORDER_MODE",
+      "parents": [
+        "SYMBOL_ORDER_MODE"
+      ],
+      "parent_in_dataset": [
+        "SYMBOL_ORDER_MODE"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 841"
+    },
+    {
+      "name": "ON_GTC",
+      "parents": [
+        "SYMBOL_EXPIRATION_GTC"
+      ],
+      "parent_in_dataset": [
+        "SYMBOL_EXPIRATION_GTC"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 782; descriptions-official-mql5-reference-pdf-2026-10-19"
+    },
+    {
+      "name": "ORDER_LIMIT",
+      "parents": [
+        "SYMBOL_ORDER_LIMIT"
+      ],
+      "parent_in_dataset": [
+        "SYMBOL_ORDER_LIMIT"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 842"
+    },
+    {
+      "name": "SYMBOL_CALC_MODE_EXCH_FUTURE",
+      "parents": [
+        "SYMBOL_CALC_MODE_EXCH_FUTURES",
+        "SYMBOL_CALC_MODE_EXCH_FUTURES_FORTS"
+      ],
+      "parent_in_dataset": [
+        "SYMBOL_CALC_MODE_EXCH_FUTURES"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 861"
+    },
+    {
+      "name": "TRADE_TRANSACTION_DEAL",
+      "parents": [
+        "TRADE_TRANSACTION_DEAL_",
+        "TRADE_TRANSACTION_DEAL_ADD",
+        "TRADE_TRANSACTION_DEAL_DELETE",
+        "TRADE_TRANSACTION_DEAL_UPDATE"
+      ],
+      "parent_in_dataset": [
+        "TRADE_TRANSACTION_DEAL_ADD",
+        "TRADE_TRANSACTION_DEAL_DELETE",
+        "TRADE_TRANSACTION_DEAL_UPDATE"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 985"
+    },
+    {
+      "name": "TRADE_TRANSACTION_ORDER",
+      "parents": [
+        "TRADE_TRANSACTION_ORDER_",
+        "TRADE_TRANSACTION_ORDER_ADD",
+        "TRADE_TRANSACTION_ORDER_DELETE",
+        "TRADE_TRANSACTION_ORDER_UPDATE"
+      ],
+      "parent_in_dataset": [
+        "TRADE_TRANSACTION_ORDER_ADD",
+        "TRADE_TRANSACTION_ORDER_DELETE",
+        "TRADE_TRANSACTION_ORDER_UPDATE"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 985"
+    },
+    {
+      "name": "T_DESCR",
+      "parents": [
+        "CHART_SHOW_OBJECT_DESCR"
+      ],
+      "parent_in_dataset": [
+        "CHART_SHOW_OBJECT_DESCR"
+      ],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 334"
+    }
+  ],
+  "add": [
+    {
+      "name": "DEAL_REASON_CORPORATE_ACTION",
+      "evidence": [
+        "page-cache/en__docs__constants__tradingconstants__dealproperties.html"
+      ],
+      "from_fragment": "ATE_ACTION"
+    },
+    {
+      "name": "SYMBOL_CALC_MODE_EXCH_FUTURES_FORTS",
+      "evidence": [
+        "page-cache/en__docs__constants__environment_state__marketinfoconstants.html",
+        "pdf/mql5-reference-layout.txt"
+      ],
+      "from_fragment": "SYMBOL_CALC_MODE_EXCH_FUTURE"
+    },
+    {
+      "name": "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE",
+      "evidence": [
+        "page-cache/en__docs__constants__environment_state__marketinfoconstants.html"
+      ],
+      "from_fragment": "SYMBOL_CALC_MODE_FOREX_NO_LEV"
+    }
+  ],
+  "adjudicate": [
+    {
+      "name": "ATE_ACTION",
+      "parents": [
+        "DEAL_REASON_CORPORATE_ACTION"
+      ],
+      "parent_in_dataset": [],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 924"
+    },
+    {
+      "name": "DEAL_REASON_CORPOR",
+      "parents": [
+        "DEAL_REASON_CORPORATE_ACTION"
+      ],
+      "parent_in_dataset": [],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 924"
+    },
+    {
+      "name": "SYMBOL_CALC_MODE_FOREX_NO_LEV",
+      "parents": [
+        "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE"
+      ],
+      "parent_in_dataset": [],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 858"
+    },
+    {
+      "name": "S_FORTS",
+      "parents": [
+        "SYMBOL_CALC_MODE_EXCH_FUTURES_FORTS"
+      ],
+      "parent_in_dataset": [],
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 861"
+    }
+  ],
+  "undocumented_unknown": [
+    {
+      "name": "CHART_MOUSE_DOUBLE_CLICK",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "CHART_SHOW_TIME_SCALE",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "CRYPT_AES192",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "CRYPT_ARCH_GZIP",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "CRYPT_ARCH_ZLIB",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "CRYPT_GOST28147_89",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "CRYPT_GOST28147_89_PRO",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "CRYPT_HASH_SHA512",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "DEAL_BALANCE",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "DEAL_BONUS",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "DEAL_BUY",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "DEAL_CHARGE",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "DEAL_CORRECTION",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "DEAL_CREDIT",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "DEAL_SELL",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "INDICATOR_LEVELS_COLOR",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "INDICATOR_TESTER",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "J_C",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 701"
+    },
+    {
+      "name": "J_E",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 697"
+    },
+    {
+      "name": "L_S",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 769"
+    },
+    {
+      "name": "MODE_MINUSDI",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "MODE_PLUSDI",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "M_E",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 949; descriptions-official-mql5-reference-pdf-2026-10-19"
+    },
+    {
+      "name": "MqlBookInfo",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlCalendarCountry",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlCalendarEvent",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlCalendarValue",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlDateTime",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlParam",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlRates",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlTick",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlTradeCheckResult",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlTradeRequest",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlTradeResult",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "MqlTradeTransaction",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "NT_MA",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 884,886,887"
+    },
+    {
+      "name": "OBJPROP_COMMENT",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "OBJPROP_CORNEROBJPROP_ANCHOROBJPROP_ANGLE",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 716,721"
+    },
+    {
+      "name": "OBJ_ARROWED_HLINE",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "OBJ_ARROWED_TREND",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "R_TYP",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 913"
+    },
+    {
+      "name": "T_MAR",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 885"
+    },
+    {
+      "name": "_AppliedTo",
+      "provenance": "official-mql5-reference-pdf (predefined variables section); descriptions-official-mql5-reference-pdf-2026-10-19"
+    },
+    {
+      "name": "_Digits",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "_IsX64",
+      "provenance": "official-mql5-reference-pdf (predefined variables section); descriptions-official-mql5-reference-pdf-2026-10-19"
+    },
+    {
+      "name": "_LastError",
+      "provenance": "issue-136-documented"
+    },
+    {
+      "name": "_Period",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "_Point",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "_RandomSeed",
+      "provenance": "official-mql5-reference-pdf (predefined variables section); descriptions-official-mql5-reference-pdf-2026-10-19"
+    },
+    {
+      "name": "_StopFlag",
+      "provenance": "issue-136-documented"
+    },
+    {
+      "name": "_Symbol",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "_UninitReason",
+      "provenance": "issue-136-documented"
+    },
+    {
+      "name": "__COUNTER__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__CPU_ARCHITECTURE__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__DATETIME__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__DATE__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__FILE__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__FUNCSIG__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__FUNCTION__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__LINE__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__MQL5BUILD__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__MQLBUILD__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__PATH__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "__RANDOM__",
+      "provenance": "mql5-reference-structs-macros-2026-10-21"
+    },
+    {
+      "name": "clrAliceBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrAntiqueWhite",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrAqua",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrAquamarine",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrBeige",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrBisque",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrBlack",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrBlanchedAlmond",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrBlueViolet",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrBrown",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrBurlyWood",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrCadetBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrChartreuse",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrChocolate",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrCoral",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrCornflowerBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrCornsilk",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrCrimson",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkGoldenrod",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkGray",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkKhaki",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkOliveGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkOrange",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkOrchid",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkSalmon",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkSeaGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkSlateBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkSlateGray",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkTurquoise",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDarkViolet",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDeepPink",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDeepSkyBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDimGray",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrDodgerBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrFireBrick",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrForestGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrGainsboro",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrGold",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrGoldenrod",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrGray",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrGreenYellow",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrHoneydew",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrHotPink",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrIndianRed",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrIndigo",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrIvory",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrKhaki",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLavender",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLavenderBlush",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLawnGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLemonChiffon",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightCoral",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightCyan",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightGoldenrod",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightGray",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightPink",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightSalmon",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightSeaGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightSkyBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightSlateGray",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightSteelBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLightYellow",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLime",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLimeGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrLinen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMagenta",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMaroon",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMediumAquamarine",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMediumBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMediumOrchid",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMediumPurple",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMediumSeaGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMediumSlateBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMediumSpringGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMediumTurquoise",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMediumVioletRed",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMidnightBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMintCream",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMistyRose",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrMoccasin",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrNONE",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 957; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrNavajoWhite",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrNavy",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrOldLace",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrOlive",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrOliveDrab",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrOrange",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrOrangeRed",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrOrchid",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPaleGoldenrod",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPaleGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPaleTurquoise",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPaleVioletRed",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPapayaWhip",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPeachPuff",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPeru",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPink",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPlum",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPowderBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrPurple",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrRed",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrRosyBrown",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrRoyalBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSaddleBrown",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSalmon",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSandyBrown",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSeaGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSeashell",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSienna",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSilver",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSkyBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSlateBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSlateGray",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSnow",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSpringGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrSteelBlue",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrTan",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrTeal",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrThistle",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrTomato",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrTurquoise",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrViolet",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrWheat",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrWhite",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrWhiteSmoke",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrYellow",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "clrYellowGreen",
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 730; descriptions-synthetic-web-colors"
+    },
+    {
+      "name": "false",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    },
+    {
+      "name": "true",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+    }
+  ],
+  "rules": {
+    "fragment_min_length": "enforced by IDENTIFIER_RE (4+ characters)",
+    "min_parent_length_for_addition": 10,
+    "removal_policy": "fragment whose documented parent is already a dataset entry (S3)",
+    "addition_policy": "documented parent of a dataset fragment, unambiguous and long enough (S4)",
+    "unknown_policy": "kept: undocumented is not proven fabricated (S2, conservative rule L2)"
+  },
+  "evidence": {
+    "distinct_identifiers": 4959,
+    "html_pages": 93,
+    "html_authority_identifiers": 1973,
+    "pdf_identifiers": 4048,
+    "pdf_only_identifiers": 2986
+  }
+}
