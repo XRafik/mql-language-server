@@ -7,6 +7,7 @@ Landing page for the `docs/` directory. For the project overview, installation, 
 | Document | What it covers |
 |----------|----------------|
 | [Editor Integration](guides/EDITOR_INTEGRATION.md) | Configure the LSP in VSCode, Neovim, Emacs, Vim, Sublime Text, and more |
+| [VS Code Extension](guides/VSCODE_EXTENSION.md) | Install the official VS Code extension: VSIX install, automatic server download, settings, troubleshooting |
 | [Local Installation](guides/LOCAL_INSTALLATION.md) | Install as a .NET tool without publishing to NuGet |
 | [Distribution](guides/DISTRIBUTION.md) | Distribution channels: GitHub Releases, NuGet, GitHub Packages, private feeds |
 | [Manual Testing](guides/MANUAL_TESTING.md) | Verify LSP features by hand, with or without an editor |

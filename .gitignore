@@ -71,6 +71,11 @@ benchmarks/
 # Test transient output
 tests/TestResults/
 
+# VS Code extension build artifacts (vscode/mql-language-server)
+# dist/ is already covered by the root dist/ rule above.
+vscode/mql-language-server/node_modules/
+vscode/mql-language-server/*.vsix
+
 # Golden-list extraction intermediates (large derived artifacts; evidence JSON
 # summaries are committed, raw page text/HTML caches are not)
 tools/generate-golden-lists/data/pdf/
