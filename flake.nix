@@ -29,7 +29,12 @@
 
           # Variables de entorno CRÍTICAS para .NET en NixOS
           env = {
-            DOTNET_ROOT = "${dotnetSdk}";
+            # Must point at the RUNTIME root (${sdk}/share/dotnet), not the
+            # package root: framework-dependent apphosts (e.g. `dotnet tool`
+            # binaries like csharp-ls) search $DOTNET_ROOT for host/fxr and
+            # fail with "You must install .NET" otherwise. The SDK CLI itself
+            # resolves its own location, so this does not affect `dotnet`.
+            DOTNET_ROOT = "${dotnetSdk}/share/dotnet";
             
             # .NET suele necesitar librerías de sistema (ICU para globalización, SSL, etc.)
             # que no están en rutas estándar en NixOS. Esto lo soluciona:

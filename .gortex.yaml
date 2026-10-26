@@ -1,0 +1,19 @@
+# Gortex per-repo configuration (mql-language-server).
+# Enables the semantic LSP layer so the facade's get_diagnostics /
+# code_actions / preview(diagnostics) work for the languages of this repo.
+semantic:
+  enabled: true
+  mode: typecheck
+  providers:
+    # C#: wire the already-installed csharp-ls (dotnet global tool) instead
+    # of the registry's default `omnisharp` spec, which is not installed.
+    # Requires DOTNET_ROOT to point at the runtime root (flake.nix fix).
+    - name: csharp-ls
+      command: csharp-ls
+      args: []
+      languages: [csharp]
+      enabled: true
+    # MQL: this repo's own language server (v2.6.0), self-contained binary.
+    - name: mql
+      command: mql-lsp-server
+      enabled: true

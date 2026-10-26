@@ -358,7 +358,18 @@ namespace MqlLanguageServer.Parser
                 return null;
             }
 
-            // Check if it's a builtin
+            // Issue #182: declarations in this document (or its include graph) take
+            // precedence over the builtin registry. Lookup is case-insensitive in
+            // both directions, so a local "ask" shadows the builtin "Ask" instead
+            // of being answered from the registry.
+            var symbols = FindSymbolsByName(file, identifier);
+            if (symbols.Any())
+            {
+                // Return the first matching symbol (could be improved to handle overloads)
+                return symbols.First();
+            }
+
+            // Fall back to the builtin registry
             if (IsBuiltin(identifier))
             {
                 // For builtins, return a pseudo-symbol with the identifier name
@@ -372,14 +383,6 @@ namespace MqlLanguageServer.Parser
                         new LspPosition(searchLine, searchColumn + identifier.Length)
                     )
                 };
-            }
-
-            // Look up the identifier in defined symbols
-            var symbols = FindSymbolsByName(file, identifier);
-            if (symbols.Any())
-            {
-                // Return the first matching symbol (could be improved to handle overloads)
-                return symbols.First();
             }
 
             return null;
@@ -870,13 +873,20 @@ namespace MqlLanguageServer.Parser
             if (nameToken == null)
                 return base.VisitClassDeclaration(context);
 
+            // Issue #123: capture the base class from the grammar's
+            // `COLON accessModifier qualifiedName` clause (single inheritance).
+            string? baseClass = context.qualifiedName()?.GetText();
+
             var symbol = new Mql4Symbol
             {
                 Name = nameToken.GetText(),
                 Kind = LspSymbolKind.Class,
                 Range = CreateRangeFromToken(nameToken.Symbol),
                 SelectionRange = CreateRangeFromToken(nameToken.Symbol),
-                Detail = $"class {nameToken.GetText()}",
+                Detail = baseClass != null
+                    ? $"class {nameToken.GetText()} : {baseClass}"
+                    : $"class {nameToken.GetText()}",
+                BaseClass = baseClass,
                 FilePath = _filePath
             };
 
@@ -922,6 +932,67 @@ namespace MqlLanguageServer.Parser
             }
         }
 
+        public override Mql4Symbol? VisitEnumDeclaration([NotNull] Mql4GrammarParser.EnumDeclarationContext context)
+        {
+            // Issue #126 follow-up: enums were not visited at all, so neither the
+            // enum type name nor its members reached the symbol tree — both surfaced
+            // as unresolved-symbol false positives in including documents. Members
+            // attach as Children (Kind EnumMember) so AddFile can flatten them into
+            // the workspace name index; an anonymous enum contributes top-level
+            // members (its constants are still file-scope). Tolerance per CCR-05:
+            // Kind is set, SymbolType stays null.
+            var nameToken = context.IDENTIFIER();
+            Mql4Symbol? enumSymbol = null;
+            if (nameToken != null)
+            {
+                enumSymbol = new Mql4Symbol
+                {
+                    Name = nameToken.GetText(),
+                    Kind = LspSymbolKind.Enum,
+                    Range = CreateRangeFromToken(nameToken.Symbol),
+                    SelectionRange = CreateRangeFromToken(nameToken.Symbol),
+                    Detail = $"enum {nameToken.GetText()}",
+                    FilePath = _filePath
+                };
+
+                Symbols.Add(enumSymbol);
+                AttachMember(enumSymbol);
+            }
+
+            foreach (var member in context.enumMember())
+            {
+                var memberToken = member.IDENTIFIER();
+                if (memberToken == null)
+                {
+                    continue;
+                }
+
+                var memberSymbol = new Mql4Symbol
+                {
+                    Name = memberToken.GetText(),
+                    Kind = LspSymbolKind.EnumMember,
+                    Range = CreateRangeFromToken(memberToken.Symbol),
+                    SelectionRange = CreateRangeFromToken(memberToken.Symbol),
+                    Detail = enumSymbol != null ? $"enum member of {enumSymbol.Name}" : "enum member (anonymous enum)",
+                    FilePath = _filePath
+                };
+
+                if (enumSymbol != null)
+                {
+                    if (!enumSymbol.Children.Contains(memberSymbol))
+                    {
+                        enumSymbol.Children.Add(memberSymbol);
+                    }
+                }
+                else
+                {
+                    Symbols.Add(memberSymbol);
+                }
+            }
+
+            return base.VisitEnumDeclaration(context);
+        }
+
         public override Mql4Symbol? VisitFunctionDeclaration([NotNull] Mql4GrammarParser.FunctionDeclarationContext context)
         {
             // Get function name (now uses qualifiedName to support Class::Method syntax)
@@ -957,13 +1028,16 @@ namespace MqlLanguageServer.Parser
 
         public override Mql4Symbol? VisitVariableDeclaration([NotNull] Mql4GrammarParser.VariableDeclarationContext context)
         {
-            // Get variable name from variableDeclarator (new grammar structure)
-            // Note: variableDeclarator() returns an array because there can be multiple declarators
+            // Get variable names from variableDeclarator (new grammar structure)
+            // Note: variableDeclarator() returns an array — every declarator
+            // declares a name ("uchar src[], dst[], key[32];"): issue #109's
+            // unresolved-symbol false positives came from emitting only the first.
             var declarators = context.variableDeclarator();
             if (declarators != null && declarators.Length > 0)
             {
-                var firstDeclarator = declarators[0];
-                var nameToken = firstDeclarator.IDENTIFIER();
+              foreach (var declarator in declarators)
+              {
+                var nameToken = declarator.IDENTIFIER();
                 if (nameToken != null)
                 {
                     var name = nameToken.GetText();
@@ -1023,6 +1097,7 @@ namespace MqlLanguageServer.Parser
                     Symbols.Add(symbol);
                     AttachMember(symbol);
                 }
+              }
             }
 
             return base.VisitVariableDeclaration(context);

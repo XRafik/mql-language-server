@@ -1,0 +1,37 @@
+{
+  "mcpServers": {
+    "agent-lsp": {
+      "type": "stdio",
+      "command": "agent-lsp",
+      "args": [
+        "python:pyright-langserver,--stdio",
+        "csharp:csharp-ls",
+        "mql:mql-lsp-server"
+      ],
+      "exposure": "direct",
+      "includeTools": [
+        "start_lsp",
+
+        "get_diagnostics",
+        "inspect_symbol",
+        "get_editing_context",
+        "explore_symbol",
+
+        "find_references",
+        "go_to_definition",
+        "go_to_type_definition",
+        "go_to_implementation",
+        "find_callers",
+        "type_hierarchy",
+
+        "prepare_rename",
+        "rename_symbol",
+
+        "safe_apply_edit",
+        "replace_symbol_body",
+        "insert_after_symbol",
+        "insert_before_symbol"
+      ]
+    }
+  }
+}

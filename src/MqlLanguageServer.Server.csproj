@@ -24,7 +24,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>mql-lsp-server</ToolCommandName>
     <PackageId>mql-language-server</PackageId>
-    <Version>2.4.1</Version>
+    <Version>2.6.2</Version>
     <Authors>Guillermo Davalillo</Authors>
     <Description>Language Server Protocol implementation for MQL4 and MQL5 (MetaTrader 4/5)</Description>
     <!-- NuGet package authoring best practices:
@@ -83,7 +83,7 @@
          a version below 13.0.1, which is affected by CVE-2024-21907 / GHSA-5crp-9r3c-p9vr
          (DoS via deep JSON nesting). The exact resolved version (13.0.3) is pinned rather
          than a floor (>= 13.0.1) so restore stays deterministic; bump it deliberately. -->
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <!-- MediatR arrives transitively via OmniSharp.Extensions 0.19.9. It is pinned to the
          [8.1.0, 9.0.0) range (NuGet interval notation: floor 8.1.0 inclusive, ceiling
          9.0.0 exclusive) for two reasons: (1) it keeps the 8.x API surface OmniSharp 0.19.9
@@ -99,6 +99,14 @@
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
     <PackageReference Include="Antlr4BuildTasks" Version="12.14.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Issue #136: documentation-driven golden lists, embedded as the
+         single source of truth for Mql4Builtins / Mql5Builtins and the
+         Mql4OnlyApiRegistry (5060) projection. -->
+    <EmbeddedResource Include="..\data\builtins\mql4.json" LogicalName="MqlLanguageServer.Builtins.builtins.mql4.json" />
+    <EmbeddedResource Include="..\data\builtins\mql5.json" LogicalName="MqlLanguageServer.Builtins.builtins.mql5.json" />
   </ItemGroup>
 
   <ItemGroup>

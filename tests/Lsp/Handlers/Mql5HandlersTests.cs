@@ -106,7 +106,7 @@ public class Mql5HandlersTests
         var codes = report.Items.Select(d => d.Code?.String).Where(c => c != null).ToList();
         Assert.Contains("5001", codes);
         Assert.Contains("5002", codes);
-        Assert.Contains("5003", codes);
+        Assert.DoesNotContain("5003", codes); // underscore hint removed (issue #109 fourth sweep)
         Assert.All(report.Items, d =>
         {
             var code = d.Code?.String ?? "0";

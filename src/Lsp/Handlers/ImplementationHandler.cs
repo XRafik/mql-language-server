@@ -68,15 +68,13 @@ public class ImplementationHandler : LanguageAwareHandlerBase<ImplementationPara
             }
 
             var parser = ResolveParser(language);
-            var content = SourceFileReader.ReadAllText(filePath);
             var uri = documentUri.ToUri();
-
-            MqlFile? mqlFile = null;
-            if (!_documentStore.TryGetValue(uri, out mqlFile) || mqlFile == null)
-            {
-                mqlFile = parser.ParseFile(content, filePath);
-                _documentStore.AddOrUpdate(uri, mqlFile, content, language);
-            }
+            // Issue #88 (the #86 pattern): store-first — the stored content is
+            // the exact text the stored model was parsed from (the editor
+            // buffer), while the disk file can be stale for unsaved edits.
+            // Reading disk text against the fresh model desynchronized
+            // position-based resolution until a restart (#86).
+            TryGetDocumentContent(uri, filePath, parser, language, out var mqlFile, out var content);
 
             var line = request.Position.Line + 1;
             var character = request.Position.Character + 1;

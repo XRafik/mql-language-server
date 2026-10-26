@@ -68,15 +68,13 @@ public class DocumentHighlightHandler : LanguageAwareHandlerBase<DocumentHighlig
             }
 
             var parser = ResolveParser(language);
-            var content = SourceFileReader.ReadAllText(filePath);
             var uri = documentUri.ToUri();
-
-            MqlFile? mqlFile = null;
-            if (!_documentStore.TryGetValue(uri, out mqlFile) || mqlFile == null)
-            {
-                mqlFile = parser.ParseFile(content, filePath);
-                _documentStore.AddOrUpdate(uri, mqlFile, content, language);
-            }
+            // Issue #88 (the #86 pattern): store-first — the stored content is
+            // the exact text the stored model was parsed from (the editor
+            // buffer), while the disk file can be stale for unsaved edits.
+            // Reading disk text against the fresh model desynchronized
+            // position-based resolution until a restart (#86).
+            TryGetDocumentContent(uri, filePath, parser, language, out var mqlFile, out var content);
 
             var line = request.Position.Line + 1;
             var character = request.Position.Character + 1;
@@ -88,7 +86,16 @@ public class DocumentHighlightHandler : LanguageAwareHandlerBase<DocumentHighlig
             var symbol = parser.FindSymbolDefinition(mqlFile, content, line, character);
             if (symbol == null)
             {
-                return new DocumentHighlightContainer();
+                // Issue #92: the cursor may sit on a call site of a function declared
+                // in an included file (e.g. StopLong from "stop_utils.mqh") — in-file
+                // lookup finds nothing. Resolve the identifier against the global
+                // index so the same-file textual-occurrence fallback below highlights
+                // the call sites (kind Text) instead of returning an empty result.
+                symbol = IncludeSymbolResolver.TryResolve(mqlFile, line - 1, character - 1, SymbolIndex.Index);
+                if (symbol == null)
+                {
+                    return new DocumentHighlightContainer();
+                }
             }
 
             var highlights = new List<DocumentHighlight>();

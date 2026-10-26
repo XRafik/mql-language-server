@@ -55,9 +55,27 @@ public class DidCloseTextDocumentHandler : LanguageAwareHandlerBase<DidCloseText
 
     public Task<Unit> Handle(DidCloseTextDocumentParams request, CancellationToken cancellationToken)
     {
+        return Task.FromResult(HandleCore(request, cancellationToken));
+    }
+
+    /// <summary>
+    /// Issue #116: synchronous forwarding entry point used by the built-in
+    /// TextDocumentSync handler registered in Program.cs. OmniSharp 0.19.9
+    /// routes each textDocument/didClose notification to EXACTLY ONE of the two
+    /// handlers registered for the method, and which one wins is decided per
+    /// process; this exposes the same synchronous core so the real logic runs
+    /// regardless of routing (see DidOpenTextDocumentHandler.HandleSync).
+    /// </summary>
+    public void HandleSync(DidCloseTextDocumentParams request, CancellationToken cancellationToken)
+    {
+        HandleCore(request, cancellationToken);
+    }
+
+    private Unit HandleCore(DidCloseTextDocumentParams request, CancellationToken cancellationToken)
+    {
         var uri = request.TextDocument.Uri.ToUri();
         var language = ResolveLanguage(uri);
-        return Task.FromResult(HandleForLanguage(request, language, cancellationToken));
+        return HandleForLanguage(request, language, cancellationToken);
     }
 
     protected override Unit HandleForLanguage(DidCloseTextDocumentParams request, MqlLanguage language, CancellationToken cancellationToken)

@@ -5,6 +5,7 @@ using System.Threading;
 using MqlLanguageServer.Analysis;
 using MqlLanguageServer.Analysis.Rules;
 using MqlLanguageServer.Models;
+using MqlLanguageServer.Mql5.Parser;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using Range = OmniSharp.Extensions.LanguageServer.Protocol.Models.Range;
 using Xunit;
@@ -15,11 +16,25 @@ namespace MqlLanguageServer.Tests.Analysis;
 /// Unit tests for <see cref="Mql4OnlyApiRegistry"/> and
 /// <see cref="Mql4OnlyApiRule"/> (issue #34, base+60 range): MQL4-only API
 /// usage flagged inside MQL5-routed documents as migration warnings.
+/// Since issue #176 detection is occurrence-driven: tests hand-craft
+/// <see cref="MqlFile.Occurrences"/> the way TokenOccurrenceCapture fills
+/// them in production (default-channel IDENTIFIER tokens only).
 /// </summary>
 public class Mql4OnlyApiRuleTests
 {
     private static SemanticRuleContext Context(MqlFile? file, string content, MqlLanguage language = MqlLanguage.Mql5) =>
         new(file, content, language, language == MqlLanguage.Mql5 ? 5000 : 1000, CancellationToken.None);
+
+    /// <summary>
+    /// Builds a parsed-file stand-in carrying hand-crafted token occurrences
+    /// (issue #176): the rule consumes <see cref="MqlFile.Occurrences"/> as
+    /// captured by <c>TokenOccurrenceCapture</c> in production (default-channel
+    /// IDENTIFIER tokens only).
+    /// </summary>
+    private static MqlFile FileWithOccurrences(params TokenOccurrence[] occurrences) => new()
+    {
+        Occurrences = occurrences.ToList()
+    };
 
     private readonly Mql4OnlyApiRule _rule = new();
     private readonly SemanticAnalyzer _analyzer = new();
@@ -36,7 +51,9 @@ public class Mql4OnlyApiRuleTests
         // Dedup: FrozenDictionary keys are unique by construction, but the
         // check documents the curated-table invariant explicitly.
         Assert.Equal(names.Count, names.Distinct().Count());
-        Assert.Equal(47, names.Count);
+        // 47 pre-#152 admissions + CharToStr and StrToInteger (issue #152
+        // corpus enrichment: deprecated MQL4 aliases with mql5Mapping).
+        Assert.Equal(49, names.Count);
 
         foreach (var (key, entry) in Mql4OnlyApiRegistry.Entries)
         {
@@ -88,7 +105,9 @@ public class Mql4OnlyApiRuleTests
     {
         const string content = "int h = TimeHour(t);\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(new TokenOccurrence("TimeHour", 0, 8, 8));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         var diagnostic = Assert.Single(diagnostics);
         Assert.Equal("5060", diagnostic.Code);
@@ -105,7 +124,12 @@ public class Mql4OnlyApiRuleTests
             "double price = Ask;\n" +
             "double stop = Ask - 10 * Point;\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(
+            new TokenOccurrence("Ask", 0, 15, 3),
+            new TokenOccurrence("Ask", 1, 14, 3),
+            new TokenOccurrence("Point", 1, 25, 5));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         // Point is also MQL4-only; this test pins the Ask occurrences only.
         var askDiagnostics = diagnostics.Where(d => d.Message.Contains("'Ask'")).ToList();
@@ -121,7 +145,9 @@ public class Mql4OnlyApiRuleTests
     {
         const string content = "double spread = MarketInfo(_Symbol, MODE_SPREAD);\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(new TokenOccurrence("MarketInfo", 0, 16, 10));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         var diagnostic = Assert.Single(diagnostics);
         Assert.Contains("MarketInfo", diagnostic.Message);
@@ -145,7 +171,17 @@ public class Mql4OnlyApiRuleTests
             "int TimeHours = 0;\n" +
             "double MarketInfoDouble = 0.0;\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        // Occurrences are whole IDENTIFIER tokens, so embedded matches cannot
+        // arise; the boundary check stays as a defensive guard (REQ-MA-03).
+        var file = FileWithOccurrences(
+            new TokenOccurrence("Asked", 0, 4, 5),
+            new TokenOccurrence("Bidder", 1, 4, 6),
+            new TokenOccurrence("BarCount", 2, 4, 8),
+            new TokenOccurrence("MyBars", 3, 4, 6),
+            new TokenOccurrence("TimeHours", 4, 4, 9),
+            new TokenOccurrence("MarketInfoDouble", 5, 7, 16));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         Assert.Empty(diagnostics);
     }
@@ -159,7 +195,11 @@ public class Mql4OnlyApiRuleTests
             "int Asked = 0;\n" +
             "double Ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(
+            new TokenOccurrence("Asked", 0, 4, 5),
+            new TokenOccurrence("Ask", 1, 7, 3));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         var diagnostic = Assert.Single(diagnostics);
         Assert.Contains("'Ask'", diagnostic.Message);
@@ -171,13 +211,19 @@ public class Mql4OnlyApiRuleTests
         // MQL is case-sensitive like C++: `timehour`, `ask` and `bid` are
         // user identifiers, not the canonical registry spellings
         // (`TimeHour`, `Ask`, `Bid`) — flagging them would be a false
-        // positive (REQ-MA-02/03). Ordinal keying + Ordinal IndexOf.
+        // positive (REQ-MA-02/03). Ordinal registry lookup on captured
+        // occurrences pins the spelling.
         const string content =
             "int hour = timehour(t);\n" +
             "double price = ask;\n" +
             "double stop = bid;\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(
+            new TokenOccurrence("timehour", 0, 11, 8),
+            new TokenOccurrence("ask", 1, 15, 3),
+            new TokenOccurrence("bid", 2, 14, 3));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         Assert.Empty(diagnostics);
     }
@@ -203,7 +249,15 @@ public class Mql4OnlyApiRuleTests
             "    int handle = FileOpen(\"x.txt\", FILE_READ);\n" +
             "}\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(
+            new TokenOccurrence("OrderSend", 3, 15, 9),
+            new TokenOccurrence("Ask0", 3, 47, 4),
+            new TokenOccurrence("ArrayResize", 4, 15, 11),
+            new TokenOccurrence("Print", 5, 4, 5),
+            new TokenOccurrence("CopyBuffer", 7, 17, 10),
+            new TokenOccurrence("FileOpen", 8, 17, 8));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         Assert.Empty(diagnostics);
     }
@@ -227,39 +281,69 @@ public class Mql4OnlyApiRuleTests
     [Fact]
     public void WholeLineComment_Skipped()
     {
-        // Whole-line comments are skipped by the rule's phase-1 heuristic
-        // (inherited from #28).
+        // Occurrences exclude comments by construction (issue #176): the
+        // capture emits only default-channel IDENTIFIER tokens and comment
+        // text lives on a hidden lexer channel, so a comment mention never
+        // reaches the rule.
         const string content = "// Ask is a MQL4 variable\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var diagnostics = _rule.Check(Context(FileWithOccurrences(), content)).ToList();
 
         Assert.Empty(diagnostics);
     }
 
     [Fact]
-    public void StringLiteralFalsePositive_DocumentedNotFixed()
+    public void StringLiteral_Mention_IsNotFlagged()
     {
-        // Phase-1 tradeoff inherited from #28 (issue #28): string literals
-        // are NOT stripped, so a registry name inside a string produces a
-        // diagnostic. Documented, not fixed (REQ-MA-05).
-        const string content = "string label = \"Ask\";\n";
+        // Issue #176 repro (the documented PrintFormat example): `Close`
+        // inside the format-string literal must not warn. Occurrence-driven
+        // detection excludes string-literal contents by construction — the
+        // behavior change is the point of #176, closing the phase-1
+        // limitation inherited from #28.
+        const string content = "PrintFormat(\"%s. Close %.2f\", symbol, price);\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(
+            new TokenOccurrence("PrintFormat", 0, 0, 11),
+            new TokenOccurrence("symbol", 0, 30, 6),
+            new TokenOccurrence("price", 0, 38, 5));
 
-        Assert.Single(diagnostics);
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
+
+        Assert.Empty(diagnostics);
     }
 
     [Fact]
-    public void TrailingCommentFalsePositive_DocumentedNotFixed()
+    public void TrailingComment_Mention_IsNotFlagged()
     {
-        // Phase-1 tradeoff inherited from #28: trailing comments are NOT
-        // stripped, so a registry name after code produces a diagnostic.
-        // Documented, not fixed (REQ-MA-05).
-        const string content = "int x = 0; // Ask\n";
+        // Issue #176: a registry name in a trailing comment must not warn.
+        // The capture contract excludes comments by construction — the
+        // behavior change is the point of #176 (phase-1 limitation from #28
+        // closed).
+        const string content = "int x = 1; // Close\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(new TokenOccurrence("x", 0, 4, 1));
 
-        Assert.Single(diagnostics);
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
+
+        Assert.Empty(diagnostics);
+    }
+
+    [Fact]
+    public void BareRead_StillFlagged()
+    {
+        // Occurrence-driven detection must not lose true positives: a bare
+        // MQL4-only variable read keeps its 5060 warning, now ranged at the
+        // lexer position.
+        const string content = "double price = Ask;\n";
+
+        var file = FileWithOccurrences(new TokenOccurrence("Ask", 0, 15, 3));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
+
+        var diagnostic = Assert.Single(diagnostics);
+        Assert.Equal("5060", diagnostic.Code);
+        Assert.Equal(DiagnosticSeverity.Warning, diagnostic.Severity);
+        Assert.Contains("Ask", diagnostic.Message);
     }
 
     [Fact]
@@ -276,7 +360,15 @@ public class Mql4OnlyApiRuleTests
             "    return 0;\n" +
             "}\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(
+            new TokenOccurrence("MqlDateTime", 2, 4, 11),
+            new TokenOccurrence("TimeToStruct", 3, 4, 12),
+            new TokenOccurrence("TimeCurrent", 3, 17, 11),
+            new TokenOccurrence("hour", 4, 8, 4),
+            new TokenOccurrence("hour", 4, 18, 4),
+            new TokenOccurrence("SymbolInfoDouble", 5, 19, 16));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         Assert.Empty(diagnostics);
     }
@@ -301,7 +393,13 @@ public class Mql4OnlyApiRuleTests
             "int digits = Digits();\n" +
             "double point = Point();\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(
+            new TokenOccurrence("Bars", 0, 12, 4),
+            new TokenOccurrence("Bars", 1, 12, 4),
+            new TokenOccurrence("Digits", 2, 13, 6),
+            new TokenOccurrence("Point", 3, 15, 5));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         Assert.Empty(diagnostics);
     }
@@ -316,7 +414,11 @@ public class Mql4OnlyApiRuleTests
             "int total = Bars;\n" +
             "int digits = Digits;\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(
+            new TokenOccurrence("Bars", 0, 12, 4),
+            new TokenOccurrence("Digits", 1, 13, 6));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         Assert.Equal(2, diagnostics.Count);
 
@@ -339,7 +441,9 @@ public class Mql4OnlyApiRuleTests
         // (TimeHour() does not exist in MQL5 at all).
         const string content = "int h = TimeHour(t);\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(new TokenOccurrence("TimeHour", 0, 8, 8));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         var diagnostic = Assert.Single(diagnostics);
         Assert.Contains("not available in MQL5", diagnostic.Message);
@@ -351,11 +455,15 @@ public class Mql4OnlyApiRuleTests
         // Same line, both forms: only the bare variable read warns.
         const string content = "int delta = Bars - Bars(_Symbol, _Period);\n";
 
-        var diagnostics = _rule.Check(Context(null, content)).ToList();
+        var file = FileWithOccurrences(
+            new TokenOccurrence("Bars", 0, 12, 4),
+            new TokenOccurrence("Bars", 0, 19, 4));
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
 
         var diagnostic = Assert.Single(diagnostics);
         Assert.Contains("'Bars'", diagnostic.Message);
-        // Range covers the bare occurrence (index 12..16), not the call.
+        // Range covers the bare occurrence (lexer position 12..16), not the call.
         Assert.Equal(new Range(0, 12, 0, 16), diagnostic.Range);
     }
 
@@ -391,16 +499,41 @@ public class Mql4OnlyApiRuleTests
     public void MixedMql5Document_AnalyzerAggregates5060s()
     {
         // Observable emission: an MQL5 doc with both a property violation
-        // (5030) and MQL4-only API usage (5060) aggregates both codes.
+        // (5030) and MQL4-only API usage (5060) aggregates both codes. The
+        // parsed file carries captured occurrences (issue #176), as in
+        // production; UnresolvedSymbolRule defers registry names to 5060
+        // (issue #46), so only the 5060/5030 pair is emitted.
         const string content =
             "#property bogus_thing\n" +
             "double price = Ask;\n";
 
-        var diagnostics = _analyzer.Analyze(null, content, MqlLanguage.Mql5, CancellationToken.None);
+        var file = FileWithOccurrences(new TokenOccurrence("Ask", 1, 15, 3));
+
+        var diagnostics = _analyzer.Analyze(file, content, MqlLanguage.Mql5, CancellationToken.None);
 
         Assert.Equal(2, diagnostics.Count);
         Assert.Contains(diagnostics, d => d.Code == "5030");
         Assert.Contains(diagnostics, d => d.Code == "5060");
+    }
+
+    [Fact]
+    public void MacroBody_CaptureContract_IsPinned()
+    {
+        // Capture-contract pin (documented in TokenOccurrenceCapture: only
+        // default-channel IDENTIFIER tokens are captured). A macro body
+        // mention of a registry name is NOT captured — `#define X Close`
+        // lives on the hidden preprocessor channel — so no 5060 can fire for
+        // it. This asserts the OBSERVED capture behavior; fixing capture
+        // semantics is out of scope for #176.
+        const string content = "#define X Close\ndouble y = 1.0;\n";
+
+        var file = new Mql5AntlrParser().ParseFile(content, "t.mq5");
+
+        Assert.DoesNotContain(file.Occurrences, o => o.Text == "Close");
+
+        var diagnostics = _rule.Check(Context(file, content)).ToList();
+
+        Assert.DoesNotContain(diagnostics, d => d.Code == "5060");
     }
 
     [Fact]

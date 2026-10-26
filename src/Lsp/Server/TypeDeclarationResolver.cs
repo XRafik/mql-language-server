@@ -101,9 +101,28 @@ public static class TypeDeclarationResolver
         // Cross-file: the global index keys are the captured symbol names
         // (case-sensitive), so an exact query avoids the same-file
         // variable/class case shadowing on purpose.
+        //
+        // Issue #89 reachability guard: a type-name identifier with no in-file
+        // declaration must not resolve to a same-named type in an UNRELATED
+        // file (the reporter's case: free function Format(string) in an included
+        // helper + a foreign class Format in a never-included Utils.mqh — the
+        // pre-guard fallback answered the foreign class instead of null).
+        // Candidates are restricted to files linked to the queried document
+        // through the include graph (either direction). When the queried
+        // document has no include edges at all (degraded graph — no scan, never
+        // opened), the guard is skipped: name-keyed resolution is the documented
+        // tier-2 behavior, and never resolving would regress #64.
+        var hasEdges = index.GetDependencies(currentFile.FilePath).Count > 0
+                    || index.GetDependentFiles(currentFile.FilePath).Count > 0;
+
         foreach (var candidate in index.FindSymbol(typeName))
         {
             if (!IsTypeCandidate(candidate.Symbol) || string.IsNullOrEmpty(candidate.FilePath))
+            {
+                continue;
+            }
+
+            if (hasEdges && !IsReachableThroughIncludes(currentFile.FilePath, candidate.FilePath, index))
             {
                 continue;
             }
@@ -122,5 +141,22 @@ public static class TypeDeclarationResolver
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Issue #89: true when the two files are linked through the include graph
+    /// (A includes B, or B includes A). The graph is populated by didOpen's
+    /// include loop and by the workspace scan (issue #90). Direct edges only —
+    /// the MQL include chains this guard needs are one hop (consumer → header).
+    /// </summary>
+    public static bool IsReachableThroughIncludes(string filePathA, string filePathB, GlobalSymbolIndex index)
+    {
+        if (string.IsNullOrEmpty(filePathA) || string.IsNullOrEmpty(filePathB) || index == null)
+        {
+            return false;
+        }
+
+        return index.GetDependencies(filePathA).Contains(filePathB, StringComparer.OrdinalIgnoreCase)
+            || index.GetDependentFiles(filePathA).Contains(filePathB, StringComparer.OrdinalIgnoreCase);
     }
 }

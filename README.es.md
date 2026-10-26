@@ -23,6 +23,8 @@ Implementación del Language Server Protocol (LSP) para MQL4 y MQL5 (MetaTrader 
 - Formateo de Documento y Formateo de Rango
 - Análisis consciente del preprocesador: expansión de macros function-like y object-like, cadenas de includes anidados, fusión condicional según el orden de includes y macros de mapa de eventos de la librería MQL Controls (`ON_EVENT`, `EVENT_MAP_BEGIN`/`END`)
 - Caché LRU de reutilización de parseo en ciclos didOpen/didClose para archivos grandes
+- `.mqlignore` por proyecto para excluir rutas (copias de backup, terminales instalados) del escaneo del workspace
+- Señales de disponibilidad al arranque: el escaneo del workspace emite tokens `$/progress` (`workDoneProgress`) a los clientes que declaran la capability, y las peticiones batcheadas con el handshake `initialize` se responden en vez de descartarse (#160)
 - Binarios multiplataforma: Linux x64/ARM64, macOS Intel/Apple Silicon, Windows x64/ARM64
 
 ## Soporte de MQL5
@@ -33,6 +35,73 @@ Esta versión añade soporte de primera clase para MQL5 manteniendo intacto el c
 - Se analiza la sintaxis específica de MQL5: clases, structs, interfaces, herencia, plantillas, `enum class`, `nullptr`, `union`, `final`, `pack(n)`, parámetros por referencia, `using`, `#resource`, listas de inicialización y `new`/`delete` en el heap.
 - Las funciones integradas y variables predefinidas de MQL5 se incluyen en el autocompletado y hover.
 - Los diagnósticos de archivos MQL5 usan un rango de códigos distinto `MQL5xxx` para que los filtros de CI puedan separar los problemas de MQL4 y MQL5.
+
+## Exclusiones del Escaneo del Workspace (`.mqlignore`)
+
+El escaneo del workspace al arranque indexa cada archivo `.mq4`/`.mq5`/`.mqh` bajo cada carpeta del workspace, podando directorios integrados (`.git`, `bin`, `obj`, …) y directorios ocultos. Un proyecto puede excluir sus propias rutas colocando un archivo **`.mqlignore`** en la raíz de la carpeta del workspace (issue #157).
+
+Sintaxis (subconjunto de gitignore, gana la última coincidencia):
+
+- `#` comentarios y líneas en blanco se ignoran.
+- `backup-utf8/` — la `/` final hace el patrón solo-de-directorios (nunca coincide con un archivo del mismo nombre).
+- `/src/gen.mq4` — la `/` inicial ancla el patrón a la raíz de la carpeta; sin ella, el patrón coincide a cualquier profundidad.
+- `*.mq4`, `?`, `**` — comodines; `**` como segmento completo coincide con cero o más segmentos.
+- `!keep.mq4` — la negación re-incluye una ruta que coincidió con un patrón anterior (gana la última coincidencia).
+- Se manejan CRLF y BOM UTF-8; las líneas malformadas se omiten; la coincidencia es insensible a mayúsculas.
+
+Semántica:
+
+- Un directorio que coincide se poda por completo — el escaneo no paga coste por los subárboles ignorados, y el recuento de la notificación de inicio refleja los candidatos podados.
+- `.mqlignore` solo puede AÑADIR exclusiones: la negación no puede resucitar las exclusiones integradas (`.git`, directorios ocultos) ni las reglas de enumeración (atributos ocultos/sistema, reparse points).
+- El ignore gobierna solo el **índice del workspace**: abrir un archivo ignorado (`didOpen`) sigue dándole análisis completo a nivel de documento.
+- Un `.mqh` ignorado no se indexa; los fuentes que lo incluyan pueden reportar símbolos no resueltos para sus declaraciones ("ignorado" significa "fuera del índice").
+- El archivo se lee una vez por escaneo al arranque — no hay watcher, así que editarlo requiere reiniciar el servidor.
+
+## Raíces de Includes del Sistema (`systemIncludeRoots`)
+
+Los includes con corchetes angulares (`#include <Trade\Trade.mqh>`) son includes de la biblioteca del sistema: resuelven contra los directorios de la biblioteca estándar del terminal MetaTrader, que están fuera de todas las carpetas del workspace. El servidor acepta una opción de inicialización **`systemIncludeRoots`** — un array de rutas absolutas de directorios, típicamente los directorios `MQL5/Include` / `MQL4/Include` del terminal:
+
+```json
+{
+  "initializationOptions": {
+    "systemIncludeRoots": [
+      "/ruta/a/MetaTrader/MQL5/Include"
+    ]
+  }
+}
+```
+
+Semántica:
+
+- Las entradas con corchetes angulares resuelven contra cada raíz configurada (en orden), con normalización de separadores (`\` y `/` ambos aceptados) y comprobación de existencia insensible a mayúsculas estilo Windows; la traversía `..` que escape de la raíz se rechaza.
+- Un header resuelto se parsea con el parser del dialecto y se indexa perezosamente en el índice global de símbolos en `didOpen` (deduplicado — un header ya indexado nunca se re-parsea).
+- Una vez indexadas, las clases y tipos de la Biblioteca Estándar (`CTrade`, `CArrayObj`, `MqlTradeRequest`, …) funcionan con definition, hover, references, completion y la supresión de diagnósticos cross-file — sin falsos positivos de `Undeclared symbol` para ellos.
+- Fail open: sin raíces configuradas, o cuando un header no se puede resolver ni parsear, el comportamiento es exactamente el anterior — sin errores ni diagnósticos extra.
+- Los includes con comillas (`#include "file.mqh"`) no se ven afectados: siguen resolviéndose relativo al archivo que los incluye.
+
+### Archivo de configuración del proyecto (`.mql-lsp.json`)
+
+Las raíces también se pueden declarar por proyecto, de modo que el repositorio lleva su propia configuración y cada sesión del editor la toma sin ajustes del cliente:
+
+```json
+{
+  "systemIncludeRoots": [
+    "../Include",
+    "C:/Program Files/MetaTrader 5/MQL5/Include"
+  ]
+}
+```
+
+- El archivo se lee desde la raíz de cada carpeta del workspace durante `initialize`; igual que `.mqlignore`, no hay watcher, así que editarlo requiere reiniciar el servidor.
+- Las entradas relativas se resuelven contra el directorio que contiene `.mql-lsp.json`, lo que mantiene el archivo portable entre máquinas; las entradas absolutas se usan tal cual.
+- Precedencia: una opción de inicialización `systemIncludeRoots` no vacía tiene prioridad y los archivos del proyecto no se consultan; en caso contrario se aplica la unión de las carpetas del workspace. Sin ninguna de las dos fuentes, el servidor permanece en modo fail-open.
+- Un archivo malformado o ilegible se ignora y se registra una advertencia: nunca interrumpe la sesión.
+
+### Includes del sistema sin resolver
+
+Cuando un include con corchetes angulares no se puede resolver, el servidor informa una `Warning` por directiva (`1004` para MQL4, `5004` para MQL5, origen `mql-lsp`) nombrando la entrada y las dos soluciones. No se suprime nada: los diagnósticos de `Undeclared symbol` (`1070`/`5070`) no cambian, así que la advertencia explica la causa sin ocultar el efecto.
+
+Los mantenedores pueden validar la resolución contra un terminal real con el script opt-in `./tools/verify-system-includes.sh /ruta/a/MQL5/Include`, que emite evidencia JSON y termina con código distinto de cero cuando los símbolos de la Biblioteca Estándar siguen sin resolverse. Nunca se ejecuta en CI.
 
 ## Decisiones Tecnológicas
 

@@ -5,6 +5,15 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 10
+    ignore:
+      # MediatR is a transitive dependency (via OmniSharp.Extensions 0.19.9) pinned
+      # to [8.1.0, 9.0.0) in src/MqlLanguageServer.Server.csproj as a deliberate
+      # license guard: the 13.0.0+ line (July 2025) is distributed under a
+      # commercial / RPL-1.5 dual license, incompatible with this MIT-licensed
+      # server. Dependabot must not propose bumps past the ceiling — any move
+      # past it is an explicit, reviewed change (see PR #132 for the verdict).
+      - dependency-name: "mediatr"
+        versions: [">= 9.0.0"]
 
   - package-ecosystem: "github-actions"
     directory: "/"

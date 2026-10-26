@@ -77,6 +77,55 @@ public class LanguageDetectionTests
     }
 
     [Fact]
+    public void Detect_Mqh_Mql5Token_In_Line_Comment_Returns_Mql4()
+    {
+        // Issue #124: a lone MQL5-exclusive token inside a line comment must not
+        // flip the header to the MQL5 pipeline.
+        var uri = new Uri("file:///x.mqh");
+        var result = LanguageDetection.Detect(uri, null, "// void f(union U u) { pack(1); }\nint start() { return(0); }");
+        Assert.Equal(MqlLanguage.Mql4, result);
+    }
+
+    [Fact]
+    public void Detect_Mqh_Mql5Token_In_Block_Comment_Returns_Mql4()
+    {
+        // Issue #124: same rule for block comments, including doc-comment style.
+        var uri = new Uri("file:///x.mqh");
+        var result = LanguageDetection.Detect(uri, null, "/*\n * Legacy signature: void f(union U u)\n *\n/\nint start() { return(0); }");
+        Assert.Equal(MqlLanguage.Mql4, result);
+    }
+
+    [Fact]
+    public void Detect_Mqh_Mql5Token_After_Comment_Still_Returns_Mql5()
+    {
+        // Stripping comments must not hide real code: a token in code after a
+        // comment still flips the dialect.
+        var uri = new Uri("file:///x.mqh");
+        var result = LanguageDetection.Detect(uri, null, "// unused: union U { int a; };\nvoid f() { int* p = nullptr; }");
+        Assert.Equal(MqlLanguage.Mql5, result);
+    }
+
+    [Fact]
+    public void Detect_Mqh_CommentMarker_In_String_Is_Not_A_Comment()
+    {
+        // A "//" or "/*" inside a string literal is not a comment; code after it
+        // on the same line must still be seen by the sniffer.
+        var uri = new Uri("file:///x.mqh");
+        var result = LanguageDetection.Detect(uri, null, "string url = \"http://example.com/*x\"; union U { int a; };");
+        Assert.Equal(MqlLanguage.Mql5, result);
+    }
+
+    [Fact]
+    public void Detect_Mqh_Unterminated_Block_Comment_Degrades_To_Mql4()
+    {
+        // Unterminated block comment: the remainder is comment (compiler-like),
+        // so a token after it cannot be real code and must not flip the dialect.
+        var uri = new Uri("file:///x.mqh");
+        var result = LanguageDetection.Detect(uri, null, "int start() { return(0); }\n/* void f(union U u)");
+        Assert.Equal(MqlLanguage.Mql4, result);
+    }
+
+    [Fact]
     public void Detect_Mqh_With_Using_System_Returns_Mql4()
     {
         var uri = new Uri("file:///x.mqh");

@@ -192,6 +192,6 @@ public class Mql5IntegrationTests
         }
 
         Assert.Contains(report.Items, d => d.Code?.String == "5001"); // typo diagnostic
-        Assert.Contains(report.Items, d => d.Code?.String == "5003"); // underscore variable hint
+        Assert.DoesNotContain(report.Items, d => d.Code?.String == "5003"); // underscore hint removed (issue #109 fourth sweep)
     }
 }

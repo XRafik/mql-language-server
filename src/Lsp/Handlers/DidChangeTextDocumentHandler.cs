@@ -27,16 +27,19 @@ namespace MqlLanguageServer.Lsp.Handlers;
 public class DidChangeTextDocumentHandler : LanguageAwareHandlerBase<DidChangeTextDocumentParams, Unit>, IDidChangeTextDocumentHandler
 {
     private readonly ILogger<DidChangeTextDocumentHandler> _logger;
+    private readonly DiagnosticPublisher? _diagnosticPublisher;
 
     public DidChangeTextDocumentHandler(
         ILogger<DidChangeTextDocumentHandler> logger,
         MqlLanguageService languageService,
         OpenDocumentStore openFiles,
         IMqlBuiltins[] builtins,
-        GlobalSymbolIndexAccessor? symbolIndex = null)
+        GlobalSymbolIndexAccessor? symbolIndex = null,
+        DiagnosticPublisher? diagnosticPublisher = null)
         : base(languageService, openFiles, builtins, symbolIndex ?? new GlobalSymbolIndexAccessor())
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _diagnosticPublisher = diagnosticPublisher;
         _logger.LogInformation("DidChangeTextDocumentHandler initialized");
     }
 
@@ -65,9 +68,27 @@ public class DidChangeTextDocumentHandler : LanguageAwareHandlerBase<DidChangeTe
 
     public Task<Unit> Handle(DidChangeTextDocumentParams request, CancellationToken cancellationToken)
     {
+        return Task.FromResult(HandleCore(request, cancellationToken));
+    }
+
+    /// <summary>
+    /// Issue #116: synchronous forwarding entry point used by the built-in
+    /// TextDocumentSync handler registered in Program.cs. OmniSharp 0.19.9
+    /// routes each textDocument/didChange notification to EXACTLY ONE of the two
+    /// handlers registered for the method, and which one wins is decided per
+    /// process; this exposes the same synchronous core so the real logic runs
+    /// regardless of routing (see DidOpenTextDocumentHandler.HandleSync).
+    /// </summary>
+    public void HandleSync(DidChangeTextDocumentParams request, CancellationToken cancellationToken)
+    {
+        HandleCore(request, cancellationToken);
+    }
+
+    private Unit HandleCore(DidChangeTextDocumentParams request, CancellationToken cancellationToken)
+    {
         var uri = request.TextDocument.Uri.ToUri();
         var language = ResolveLanguage(uri);
-        return Task.FromResult(HandleForLanguage(request, language, cancellationToken));
+        return HandleForLanguage(request, language, cancellationToken);
     }
 
     protected override Unit HandleForLanguage(DidChangeTextDocumentParams request, MqlLanguage language, CancellationToken cancellationToken)
@@ -116,6 +137,12 @@ public class DidChangeTextDocumentHandler : LanguageAwareHandlerBase<DidChangeTe
                 UpdateIncludes(newMqlFile, filePath);
 
                 _logger.LogDebug("Re-parsed {SymbolCount} symbols after document change", newMqlFile.Symbols.Count);
+
+                // Issue #91: push-model diagnostics mirror of the didOpen path —
+                // publish the fresh state (including an empty set, so clients clear
+                // stale squiggles after a fix). Null in legacy/test constructors.
+                _diagnosticPublisher?.Publish(
+                    documentUri, filePath, newMqlFile, newContent, language, cancellationToken);
             }
         }
         catch (Exception ex)

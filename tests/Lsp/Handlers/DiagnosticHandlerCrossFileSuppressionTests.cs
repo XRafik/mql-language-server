@@ -36,11 +36,9 @@ public class DiagnosticHandlerCrossFileSuppressionTests
 
     #region Tier 1 — include closure
 
-    [SkippableFact]
+    [Fact]
     public async Task Handle_SymbolDeclaredInIncludedHeader_IsSuppressed()
     {
-        Skip.If(Environment.GetEnvironmentVariable("CI") == "true",
-            "Skipping test in CI due to potential timeout with real file processing");
         GlobalSymbolIndex.Instance.Clear();
 
         var libPath = GetFixtureFilePath("cross-file/trade_lib.mqh");
@@ -55,11 +53,9 @@ public class DiagnosticHandlerCrossFileSuppressionTests
         Assert.DoesNotContain(items, d => IsUnresolvedFor(d, "NormalizeVolume"));
     }
 
-    [SkippableFact]
+    [Fact]
     public async Task Handle_GenuinelyUndeclaredSymbol_StillYieldsDiagnostic()
     {
-        Skip.If(Environment.GetEnvironmentVariable("CI") == "true",
-            "Skipping test in CI due to potential timeout with real file processing");
         GlobalSymbolIndex.Instance.Clear();
 
         var libPath = GetFixtureFilePath("cross-file/trade_lib.mqh");
@@ -78,11 +74,9 @@ public class DiagnosticHandlerCrossFileSuppressionTests
 
     #region Fallback — empty index
 
-    [SkippableFact]
+    [Fact]
     public async Task Handle_EmptyIndex_ColdOpen_KeepsDiagnosticsUnchanged()
     {
-        Skip.If(Environment.GetEnvironmentVariable("CI") == "true",
-            "Skipping test in CI due to potential timeout with real file processing");
         GlobalSymbolIndex.Instance.Clear();
 
         var items = await GetDiagnosticsAsync(GetFixtureFilePath("cross-file/ea_main.mq4"));
@@ -97,11 +91,9 @@ public class DiagnosticHandlerCrossFileSuppressionTests
 
     #region Tier 2 — workspace correlation
 
-    [SkippableFact]
+    [Fact]
     public async Task Handle_SymbolDeclaredOnlyInNonIncludedWorkspaceFile_IsSuppressed()
     {
-        Skip.If(Environment.GetEnvironmentVariable("CI") == "true",
-            "Skipping test in CI due to potential timeout with real file processing");
         GlobalSymbolIndex.Instance.Clear();
 
         // Indexed under a path that is NOT part of ea_main.mq4's include

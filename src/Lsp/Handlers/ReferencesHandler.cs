@@ -77,21 +77,28 @@ public class ReferencesHandler : LanguageAwareHandlerBase<ReferenceParams, Locat
             }
 
             var parser = ResolveParser(language);
-            var content = SourceFileReader.ReadAllText(filePath);
             var uri = documentUri.ToUri();
-
-            MqlFile? mqlFile = null;
-            if (!_documentStore.TryGetValue(uri, out mqlFile) || mqlFile == null)
-            {
-                _logger.LogDebug("Document not in cache, parsing: {DocumentUri}", documentUri);
-                mqlFile = parser.ParseFile(content, filePath);
-                _documentStore.AddOrUpdate(uri, mqlFile, content, language);
-            }
+            // Issue #88 (the #86 pattern): store-first — the stored content is
+            // the exact text the stored model was parsed from (the editor
+            // buffer), while the disk file can be stale for unsaved edits.
+            // Reading disk text against the fresh model desynchronized
+            // position-based resolution until a restart (#86).
+            TryGetDocumentContent(uri, filePath, parser, language, out var mqlFile, out var content);
 
             var line = request.Position.Line + 1;
             var character = request.Position.Character + 1;
 
             var symbol = parser.FindSymbolDefinition(mqlFile, content, line, character);
+
+            if (symbol == null)
+            {
+                // Issue #92: references requested at a call site of a function declared
+                // in an included file. FindSymbolDefinition searches the requesting
+                // document's own symbols only; resolve the cursor identifier against
+                // the global index (occurrences are name-keyed by design, OCC-05, so
+                // the cross-file call sites and definition resolve below).
+                symbol = IncludeSymbolResolver.TryResolve(mqlFile, line - 1, character - 1, SymbolIndex.Index);
+            }
 
             if (symbol == null)
             {

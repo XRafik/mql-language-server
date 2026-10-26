@@ -71,7 +71,6 @@ public class Mql5BuiltinsTests
     [InlineData("INDICATOR_DATA")]
     [InlineData("DRAW_LINE")]
     [InlineData("DRAW_COLOR_CANDLES")]
-    [InlineData("MODE_MAIN")]
     [InlineData("MODE_PLUSDI")]
     [InlineData("ORDER_TYPE_BUY_STOP_LIMIT")]
     [InlineData("ORDER_TYPE_SELL_STOP_LIMIT")]
@@ -88,6 +87,22 @@ public class Mql5BuiltinsTests
         Assert.True(builtins.IsBuiltinVariable(constant),
             $"{constant} should be registered as an MQL5 stdlib enum constant (issue #46)");
         Assert.False(string.IsNullOrWhiteSpace(builtins.GetBuiltinVariableDescription(constant)));
+    }
+
+    [Fact]
+    public void Mql4OnlyIndicatorConstants_AreNotRegistered()
+    {
+        // MODE_MAIN/MODE_SIGNAL/MODE_UPPER/MODE_LOWER are MQL4 indicator
+        // line constants (MQL5 documents MAIN_LINE/SIGNAL_LINE/UPPER_BAND/
+        // LOWER_BAND instead); they were removed from the MQL5 golden list
+        // by the MQL5-dataset-hygiene change (see
+        // tools/generate-golden-lists/data/mql5-dataset-audit.json).
+        var builtins = new Mql5Builtins();
+        foreach (var name in new[] { "MODE_MAIN", "MODE_SIGNAL", "MODE_UPPER", "MODE_LOWER" })
+        {
+            Assert.False(builtins.IsBuiltinVariable(name),
+                $"{name} should not be registered as MQL5 built-in (MQL4-only; see mql5-dataset-audit.json)");
+        }
     }
 
     [Fact]

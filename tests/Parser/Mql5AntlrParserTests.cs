@@ -293,6 +293,28 @@ public class Mql5AntlrParserTests
         Assert.Equal("MQL5 Built-in", def.Detail);
     }
 
+    /// <summary>
+    /// Issue #182: a user declaration must take precedence over the builtin
+    /// registry when the identifier matches both case-insensitively. Here the
+    /// local 'bars' shadows the builtin function 'Bars()'.
+    /// </summary>
+    [Fact]
+    public void FindSymbolDefinition_UserLocalNamedLikeBuiltin_ResolvesUserSymbol()
+    {
+        var content = "int OnInit()\n{\n   int bars = 10;\n   Print(bars);\n   return 0;\n}\n";
+        var file = _parser.ParseFile(content, "t.mq5");
+
+        Assert.True(_parser.IsBuiltin("Bars"));
+
+        // Position on 'bars' inside the Print() call (line 4, column 10, 1-based)
+        var def = _parser.FindSymbolDefinition(file, content, 4, 10);
+
+        Assert.NotNull(def);
+        Assert.Equal("bars", def!.Name);
+        Assert.Equal(SymbolType.Variable, def.SymbolType);
+        Assert.Equal("int bars", def.Detail);
+    }
+
     [Fact]
     public void FindSymbolDefinition_NoIdentifierAtPosition_ReturnsNull()
     {

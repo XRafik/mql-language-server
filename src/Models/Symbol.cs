@@ -30,6 +30,15 @@ public class MqlSymbol
     public string? DeclaredType { get; set; }
 
     /// <summary>
+    /// Base class/interface name for class, struct (MQL5) and interface
+    /// declarations, as written in the source (issue #123: captured from the
+    /// grammar's `COLON accessModifier qualifiedName` clause). Single
+    /// inheritance only — MQL has no multiple inheritance. Null when the
+    /// declaration has no base or the dialect's grammar does not parse one.
+    /// </summary>
+    public string? BaseClass { get; set; }
+
+    /// <summary>
     /// Range within the document (full symbol including body for functions)
     /// </summary>
     public Range Range { get; set; } = new();

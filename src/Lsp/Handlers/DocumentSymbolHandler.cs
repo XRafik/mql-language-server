@@ -69,15 +69,13 @@ public class DocumentSymbolHandler : LanguageAwareHandlerBase<DocumentSymbolPara
             }
 
             var parser = ResolveParser(language);
-            var content = SourceFileReader.ReadAllText(filePath);
             var uri = documentUri.ToUri();
-
-            if (!_documentStore.TryGetValue(uri, out var mqlFile) || mqlFile == null)
-            {
-                _logger.LogDebug("Document not in cache, parsing: {DocumentUri}", documentUri);
-                mqlFile = parser.ParseFile(content, filePath);
-                _documentStore.AddOrUpdate(uri, mqlFile, content, language);
-            }
+            // Issue #88 (the #86 pattern): store-first — the stored content is
+            // the exact text the stored model was parsed from (the editor
+            // buffer), while the disk file can be stale for unsaved edits.
+            // Reading disk text against the fresh model desynchronized
+            // position-based resolution until a restart (#86).
+            TryGetDocumentContent(uri, filePath, parser, language, out var mqlFile, out var content);
 
             var symbols = mqlFile.Symbols
                 .Select(ConvertToSymbolInformationOrDocumentSymbol);

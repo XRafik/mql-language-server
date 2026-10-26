@@ -73,6 +73,7 @@ public class Mql4AdvancedFixtureTests
     [InlineData("advanced_modifiers.mq4")]
     [InlineData("advanced_control_flow.mq4")]
     [InlineData("advanced_array_initializer.mq4")]
+    [InlineData("advanced_pure_virtual.mq4")]
     public void Fixture_Parses_WithoutErrors(string fileName)
     {
         ParseFixture(fileName);
@@ -95,6 +96,20 @@ public class Mql4AdvancedFixtureTests
 
         // The visitor does NOT extract class symbols, so we only assert functions.
         AssertHasSymbol(file, "OnTick", SymbolKind.Function);
+    }
+
+    /// <summary>
+    /// Issue #143: pure virtual specifiers (`= 0` and the documented `= NULL`
+    /// spelling) must parse without spurious syntax errors in MQL4 too
+    /// (docs.mql4.com compile error 381 confirms the construct exists there).
+    /// The visitor does not extract class symbols, so only OnStart is asserted.
+    /// </summary>
+    [Fact]
+    public void PureVirtual_Extracts_OnStart()
+    {
+        var file = ParseFixture("advanced_pure_virtual.mq4");
+
+        AssertHasSymbol(file, "OnStart", SymbolKind.Function);
     }
 
     [Fact]

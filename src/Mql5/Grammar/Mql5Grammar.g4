@@ -38,9 +38,13 @@ LITERAL_COLOR : 'C\'' ~[']* '\'';
 
 // --- Numbers ---
 HEX           : '0' [xX] [0-9a-fA-F]+;
-DOUBLE        : [0-9]+ '.' [0-9]* EXP?
-              | '.' [0-9]+ EXP?
-              | [0-9]+ EXP
+// Issue #176: optional f/F suffix on real literals (C-style; MetaEditor
+// accepts `0.0f`/`1e3f` — official MQL5 Reference samples use f-suffixed
+// float literals, e.g. the matrixf examples). Integer `123f` still lexes as
+// INTEGER + IDENTIFIER.
+DOUBLE        : [0-9]+ '.' [0-9]* EXP? [fF]?
+              | '.' [0-9]+ EXP? [fF]?
+              | [0-9]+ EXP [fF]?
               ;
 INTEGER       : [0-9]+;
 
@@ -72,10 +76,18 @@ K_STATIC    : 'static';
 K_EXTERN    : 'extern';
 K_INPUT     : 'input';
 K_SINPUT    : 'sinput';
+// Issue #176: `group` keyword for the documented input-parameter grouping
+// (`input group "text"`, MQL5 Reference, inputs).
+K_GROUP     : 'group';
 K_CONST     : 'const';
 K_VIRTUAL   : 'virtual';
 K_OVERRIDE  : 'override';
 K_FINAL     : 'final';
+// Issue #141: `abstract` class modifier. NOTE: unlike `final`, `abstract` is
+// not in the official MQL5 reserved-words list; classes become abstract via
+// pure virtual functions. We still accept `abstract class ...` so documented
+// style examples (and legacy authoring habits) parse without spurious errors.
+K_ABSTRACT  : 'abstract';
 // Issue #26: `inline` storage-class keyword on out-of-class member definitions
 // (e.g. `inline bool CClass::Method(...)`). Valid MQL4/MQL5.
 K_INLINE    : 'inline';
@@ -184,6 +196,7 @@ compilationUnit
 translationUnit
     : templateDefinition
     | directive
+    | inputGroupDirective
     | classDeclaration
     | structDeclaration
     | unionDeclaration
@@ -210,6 +223,13 @@ directive
     | PRE_PACK
     ;
 
+// Issue #176: documented input-parameter grouping (`input group "text"`,
+// MQL5 Reference, inputs). Exact documented form: no trailing semicolon;
+// `sinput group` is not documented and stays rejected (#141 honesty rule).
+inputGroupDirective
+    : K_INPUT K_GROUP STRING
+    ;
+
 // --- Types ---
 // Supports "int", "const int", "int&", "List<T>", and object pointers "T *p"
 // (MUL declarator, issue #26).
@@ -224,8 +244,12 @@ baseType
     | qualifiedName
     ;
 
+// Issue #143: `override` is a documented MQL5 access specifier
+// (docs/basis/syntax/reserved) and a valid member modifier
+// (`void F() override { }`). The lexer already had K_OVERRIDE; the parser
+// just never matched it.
 modifiers
-    : (K_CONST | K_STATIC | K_INPUT | K_SINPUT | K_EXTERN | K_VIRTUAL | K_FINAL | K_INLINE)+
+    : (K_CONST | K_STATIC | K_INPUT | K_SINPUT | K_EXTERN | K_VIRTUAL | K_FINAL | K_OVERRIDE | K_INLINE)+
     ;
 
 qualifiedName
@@ -263,7 +287,27 @@ arrayInitializer
 
 // --- Functions ---
 functionDeclaration
-    : templateDefinition? modifiers? type modifiers? qualifiedName LPAREN parameterList? RPAREN modifiers? (block | SEMICOLON)
+    : templateDefinition? modifiers? type modifiers? qualifiedName LPAREN parameterList? RPAREN modifiers? (block | (pureSpecifier? | deleteSpecifier) SEMICOLON)
+    ;
+
+// Issue #143: pure virtual specifier. The MQL5 compiler accepts exactly two
+// spellings (compile error 381: "Illegal syntax when declaring pure virtual
+// function, only \"=NULL\" or \"=0\" are allowed") — nothing else.
+pureSpecifier
+    : ASSIGN (INTEGER | K_NULL)
+    ;
+
+// Issue #145: `= delete` method specifier. Documented in the official
+// MQL5Book (oop/classes_and_interfaces/classes_final_delete: "The delete
+// keyword can be specified in the header of a method to make it
+// inaccessible in the current class and its descendants") with the exact
+// shape `void method() = delete;`. Kept separate from pureSpecifier:
+// compile error 381 closes that rule to "=NULL"/"=0" only, and deletion
+// is a different construct than purity. Not documented for MQL4
+// (docs.mql4.com only carries `delete` as the memory operator), so this
+// alternative is MQL5-only.
+deleteSpecifier
+    : ASSIGN K_DELETE
     ;
 
 // Constructor outside of class: Crypter::Crypter() { }
@@ -290,12 +334,20 @@ parameter
     ;
 
 // --- Classes & Structs & Unions & Interfaces ---
+// Issue #141: documented class modifiers. Per the MQL5 reference
+// (docs/basis/types/classes#final_class) and the official MQL5Book examples
+// (`class Derived final : public Base`), `final` goes AFTER the class name,
+// BEFORE the optional base clause. `abstract` is accepted as a leading
+// modifier (`abstract class CAnimal { ... };`) so such declarations parse as
+// a single declaration instead of relying on ANTLR error recovery.
 classDeclaration
-    : K_CLASS IDENTIFIER (COLON accessModifier qualifiedName)? LBRACE classBody RBRACE SEMICOLON
+    : K_ABSTRACT? K_CLASS IDENTIFIER K_FINAL? (COLON accessModifier qualifiedName)? LBRACE classBody RBRACE SEMICOLON
     ;
 
+// Issue #141: the reference documents the same `final` suffix for structures
+// (docs/basis/types/classes#final_struct: `struct settings final { ... };`).
 structDeclaration
-    : K_STRUCT IDENTIFIER (COLON accessModifier qualifiedName)? LBRACE classBody RBRACE SEMICOLON
+    : K_STRUCT IDENTIFIER K_FINAL? (COLON accessModifier qualifiedName)? LBRACE classBody RBRACE SEMICOLON
     ;
 
 unionDeclaration

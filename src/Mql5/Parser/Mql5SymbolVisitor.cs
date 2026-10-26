@@ -47,6 +47,8 @@ public class Mql5SymbolVisitor : Mql5GrammarBaseVisitor<MqlSymbol?>
         {
             var parentName = context.qualifiedName().GetText();
             symbol.Detail = $"class {name} : {parentName}";
+            // Issue #123: structured capture for typeHierarchy supertypes.
+            symbol.BaseClass = parentName;
         }
 
         Symbols.Add(symbol);
@@ -78,6 +80,8 @@ public class Mql5SymbolVisitor : Mql5GrammarBaseVisitor<MqlSymbol?>
         {
             var parentName = context.qualifiedName().GetText();
             symbol.Detail = $"struct {name} : {parentName}";
+            // Issue #123: structured capture for typeHierarchy supertypes.
+            symbol.BaseClass = parentName;
         }
 
         Symbols.Add(symbol);
@@ -109,6 +113,8 @@ public class Mql5SymbolVisitor : Mql5GrammarBaseVisitor<MqlSymbol?>
         {
             var parentName = context.qualifiedName().GetText();
             symbol.Detail = $"interface {name} : {parentName}";
+            // Issue #123: structured capture for typeHierarchy supertypes.
+            symbol.BaseClass = parentName;
         }
 
         Symbols.Add(symbol);
@@ -153,25 +159,64 @@ public class Mql5SymbolVisitor : Mql5GrammarBaseVisitor<MqlSymbol?>
 
     public override MqlSymbol? VisitEnumDeclaration([NotNull] Mql5GrammarParser.EnumDeclarationContext context)
     {
+        // Issue #126 follow-up: the enum node was captured but its members never
+        // were, and an anonymous enum contributed nothing — enum constants then
+        // surfaced as unresolved-symbol false positives in including documents.
+        // Members attach as Children (Kind EnumMember) so AddFile can flatten
+        // them into the workspace name index; an anonymous enum contributes
+        // top-level members (its constants are still file-scope).
         var nameToken = context.IDENTIFIER()?.Symbol;
-        if (nameToken == null)
-            return base.VisitEnumDeclaration(context);
-
-        var name = nameToken.Text;
-        var range = CreateRangeFromToken(nameToken);
-        var symbol = new MqlSymbol
+        MqlSymbol? enumSymbol = null;
+        if (nameToken != null)
         {
-            Name = name,
-            Kind = SymbolType.Enum.ToLspSymbolKind(),
-            SymbolType = SymbolType.Enum,
-            Range = range,
-            SelectionRange = range,
-            Detail = context.K_CLASS() != null ? $"enum class {name}" : $"enum {name}",
-            FilePath = _filePath
-        };
+            var name = nameToken.Text;
+            var range = CreateRangeFromToken(nameToken);
+            var symbol = new MqlSymbol
+            {
+                Name = name,
+                Kind = SymbolType.Enum.ToLspSymbolKind(),
+                SymbolType = SymbolType.Enum,
+                Range = range,
+                SelectionRange = range,
+                Detail = context.K_CLASS() != null ? $"enum class {name}" : $"enum {name}",
+                FilePath = _filePath
+            };
 
-        Symbols.Add(symbol);
-        _symbolsByName[name] = symbol;
+            Symbols.Add(symbol);
+            _symbolsByName[name] = symbol;
+            enumSymbol = symbol;
+        }
+
+        foreach (var member in context.enumMember())
+        {
+            var memberToken = member.IDENTIFIER()?.Symbol;
+            if (memberToken == null)
+            {
+                continue;
+            }
+
+            var memberSymbol = new MqlSymbol
+            {
+                Name = memberToken.Text,
+                Kind = OmniSharp.Extensions.LanguageServer.Protocol.Models.SymbolKind.EnumMember,
+                Range = CreateRangeFromToken(memberToken),
+                SelectionRange = CreateRangeFromToken(memberToken),
+                Detail = enumSymbol != null ? $"enum member of {enumSymbol.Name}" : "enum member (anonymous enum)",
+                FilePath = _filePath
+            };
+
+            if (enumSymbol != null)
+            {
+                if (!enumSymbol.Children.Contains(memberSymbol))
+                {
+                    enumSymbol.Children.Add(memberSymbol);
+                }
+            }
+            else
+            {
+                Symbols.Add(memberSymbol);
+            }
+        }
 
         return base.VisitEnumDeclaration(context);
     }
@@ -209,31 +254,39 @@ public class Mql5SymbolVisitor : Mql5GrammarBaseVisitor<MqlSymbol?>
 
     public override MqlSymbol? VisitVariableDeclaration([NotNull] Mql5GrammarParser.VariableDeclarationContext context)
     {
+        // Issue #109 (follow-up): a declaration can carry multiple declarators
+        // ("uchar src[], dst[], key[32];") — every declarator declares a
+        // name. Only the first was emitted, so the rest became unresolved-
+        // symbol false positives whenever they were referenced later.
         var declarators = context.variableDeclarator();
         if (declarators != null && declarators.Length > 0)
         {
-            var firstDeclarator = declarators[0];
-            var nameToken = firstDeclarator.IDENTIFIER();
-            if (nameToken != null)
+            var modifierTokens = new List<string>();
+            for (int i = 0; i < context.modifiers().Length; i++)
             {
-                var name = nameToken.GetText();
-                var range = CreateRangeFromToken(nameToken.Symbol);
+                var modifiersContext = context.modifiers(i);
+                if (modifiersContext.K_INPUT() != null) modifierTokens.Add("input");
+                if (modifiersContext.K_EXTERN() != null) modifierTokens.Add("extern");
+                if (modifiersContext.K_STATIC() != null) modifierTokens.Add("static");
+                if (modifiersContext.K_CONST() != null) modifierTokens.Add("const");
+                if (modifiersContext.K_SINPUT() != null) modifierTokens.Add("sinput");
+                if (modifiersContext.K_VIRTUAL() != null) modifierTokens.Add("virtual");
+                if (modifiersContext.K_FINAL() != null) modifierTokens.Add("final");
+            }
 
-                var modifierTokens = new List<string>();
-                for (int i = 0; i < context.modifiers().Length; i++)
+            string modifier = string.Join(" ", modifierTokens);
+            var typeText = context.type().GetText();
+
+            foreach (var declarator in declarators)
+            {
+                var nameToken = declarator.IDENTIFIER();
+                if (nameToken == null)
                 {
-                    var modifiersContext = context.modifiers(i);
-                    if (modifiersContext.K_INPUT() != null) modifierTokens.Add("input");
-                    if (modifiersContext.K_EXTERN() != null) modifierTokens.Add("extern");
-                    if (modifiersContext.K_STATIC() != null) modifierTokens.Add("static");
-                    if (modifiersContext.K_CONST() != null) modifierTokens.Add("const");
-                    if (modifiersContext.K_SINPUT() != null) modifierTokens.Add("sinput");
-                    if (modifiersContext.K_VIRTUAL() != null) modifierTokens.Add("virtual");
-                    if (modifiersContext.K_FINAL() != null) modifierTokens.Add("final");
+                    continue;
                 }
 
-                string modifier = string.Join(" ", modifierTokens);
-                var typeText = context.type().GetText();
+                var name = nameToken.GetText();
+                var range = CreateRangeFromToken(nameToken.Symbol);
                 string detail = string.IsNullOrEmpty(modifier)
                     ? $"{typeText} {name}"
                     : $"{modifier} {typeText} {name}";

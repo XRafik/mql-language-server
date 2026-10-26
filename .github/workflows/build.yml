@@ -153,14 +153,18 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      # Fail the release if the pushed tag does not match the package version in the csproj,
+      # Fail the release if the effective tag does not match the package version in the csproj,
       # preventing a mismatched tag/package pair from being published.
+      # Issue #79: on workflow_dispatch, GITHUB_REF_NAME is the branch (e.g. main),
+      # not the tag — derive the version from the job's effective tag instead.
       - name: Verify tag matches package version
+        env:
+          EFFECTIVE_TAG: ${{ needs.get-effective-tag.outputs.effective_tag }}
         run: |
           CS_VERSION=$(grep -oP '(?<=<Version>)[^<]+' src/MqlLanguageServer.Server.csproj | head -1)
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          TAG_VERSION="${EFFECTIVE_TAG#v}"
           if [[ "$TAG_VERSION" != "$CS_VERSION" ]]; then
-            echo "::error::Tag '$GITHUB_REF_NAME' does not match csproj version '$CS_VERSION'."
+            echo "::error::Tag '$EFFECTIVE_TAG' does not match csproj version '$CS_VERSION'."
             echo "::error::Update <Version> in src/MqlLanguageServer.Server.csproj to '$TAG_VERSION' and tag again."
             exit 1
           fi

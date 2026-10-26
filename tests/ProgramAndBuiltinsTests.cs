@@ -101,7 +101,6 @@ public class ProgramAndBuiltinsTests
     [InlineData("OnDeinit")]
     [InlineData("OnStart")]
     [InlineData("OnTimer")]
-    [InlineData("OnTrade")]
     [InlineData("OnCalculate")]
     public void IsBuiltin_WithEventHandlers_ShouldReturnTrue(string eventHandler)
     {
@@ -148,7 +147,6 @@ public class ProgramAndBuiltinsTests
     [InlineData("iRSI")]
     [InlineData("iMACD")]
     [InlineData("iBands")]
-    [InlineData("CopyBuffer")]
     public void IsBuiltin_WithIndicatorFunctions_ShouldReturnTrue(string functionName)
     {
         // Act
@@ -156,6 +154,18 @@ public class ProgramAndBuiltinsTests
 
         // Assert
         Assert.True(result, $"{functionName} should be recognized as builtin");
+    }
+
+    [Fact]
+    public void IsBuiltin_WithMql5OnlyIndicatorFunction_ShouldReturnFalse()
+    {
+        // CopyBuffer is MQL5-only: the MQL4 Reference CHM has no dedicated
+        // page or identifier evidence for it, so it was removed from the
+        // MQL4 golden list (see mql4-dataset-audit.json and
+        // odd/tasks/mql4-dataset-hygiene.md).
+        var result = Mql4Builtins.IsBuiltin("CopyBuffer");
+
+        Assert.False(result, "CopyBuffer should not be recognized as MQL4 builtin (MQL5-only; see mql4-dataset-audit.json)");
     }
 
     [Theory]
@@ -192,7 +202,6 @@ public class ProgramAndBuiltinsTests
     [InlineData("ArrayResize")]
     [InlineData("ArraySort")]
     [InlineData("ArraySize")]
-    [InlineData("ArraySearch")]
     public void IsBuiltin_WithArrayFunctions_ShouldReturnTrue(string functionName)
     {
         // Act

@@ -21,6 +21,11 @@ public static class LanguageDetection
     /// mitigates it by routing .mqh files by their includer. The predefined variables
     /// `_Digits`, `_Point`, `_Symbol`, and `_Period` are excluded here on purpose: they are
     /// valid in both MQL4 (build 600+) and MQL5, so they must not be treated as MQL5 markers.
+    /// Issue #124: when sniffing .mqh content, tokens inside comments no longer flip the
+    /// dialect — the token scan runs over a comment-stripped copy of the content (see
+    /// <see cref="StripCommentsForSniffing"/>). This list itself is unchanged and remains
+    /// the single source of truth for the LanguageMisuseRule (issue #28), which still scans
+    /// raw document text.
     /// </remarks>
     private static readonly string[] Mql5Tokens =
     {
@@ -62,16 +67,102 @@ public static class LanguageDetection
             return MqlLanguage.Mql4;
 
         // Only sniff content for include files (.mqh) regardless of languageId.
+        // Issue #124: sniff the comment-stripped copy so a lone MQL5-exclusive token
+        // in a comment (a signature note, a disabled helper, prose) does not flip the
+        // whole header to the MQL5 pipeline. Tokens in code and string literals still do.
         if (extension.Equals(".mqh", StringComparison.OrdinalIgnoreCase))
         {
+            var sniffable = StripCommentsForSniffing(content);
             foreach (var token in Mql5Tokens)
             {
-                if (content.Contains(token, StringComparison.Ordinal))
+                if (sniffable.Contains(token, StringComparison.Ordinal))
                     return MqlLanguage.Mql5;
             }
         }
 
         return MqlLanguage.Mql4; // default per REQ-LD-03
+    }
+
+    /// <summary>
+    /// Issue #124: produce a copy of <paramref name="content"/> with line (//) and
+    /// block (/* */) comments replaced by a single space, so content sniffing never
+    /// reacts to MQL5-exclusive tokens that only appear inside comments. String and
+    /// character literals are tracked so comment markers inside them (e.g. a URL in
+    /// a string) are not mistaken for comments, and comment markers can never hide
+    /// real code on the same line. Unterminated comments degrade gracefully: the
+    /// remainder of the file is treated as comment (matching compiler behavior).
+    /// The input is returned unmodified when it contains no comment start marker.
+    /// </summary>
+    private static string StripCommentsForSniffing(string content)
+    {
+        if (string.IsNullOrEmpty(content))
+            return content;
+
+        if (!content.Contains("//", StringComparison.Ordinal) &&
+            !content.Contains("/*", StringComparison.Ordinal))
+            return content;
+
+        var buffer = new char[content.Length];
+        var write = 0;
+        var i = 0;
+
+        while (i < content.Length)
+        {
+            var c = content[i];
+
+            if (c == '"' || c == '\'')
+            {
+                // Copy the literal verbatim, honoring backslash escapes, so a
+                // "//" or "/*" inside it is never treated as a comment.
+                var quote = c;
+                buffer[write++] = c;
+                i++;
+                while (i < content.Length)
+                {
+                    buffer[write++] = content[i];
+                    if (content[i] == '\\' && i + 1 < content.Length)
+                    {
+                        buffer[write++] = content[i + 1];
+                        i += 2;
+                        continue;
+                    }
+
+                    var closed = content[i] == quote;
+                    i++;
+                    if (closed)
+                        break;
+                }
+
+                continue;
+            }
+
+            if (c == '/' && i + 1 < content.Length && content[i + 1] == '/')
+            {
+                // Line comment: collapse to one space, keep the newline so line
+                // structure (and the test above for tokens after comments) holds.
+                buffer[write++] = ' ';
+                while (i < content.Length && content[i] != '\n')
+                    i++;
+                continue;
+            }
+
+            if (c == '/' && i + 1 < content.Length && content[i + 1] == '*')
+            {
+                // Block comment: collapse to one space; unterminated runs to EOF.
+                buffer[write++] = ' ';
+                i += 2;
+                while (i < content.Length &&
+                       !(content[i] == '*' && i + 1 < content.Length && content[i + 1] == '/'))
+                    i++;
+                i = Math.Min(i + 2, content.Length);
+                continue;
+            }
+
+            buffer[write++] = c;
+            i++;
+        }
+
+        return new string(buffer, 0, write);
     }
 
     /// <summary>

@@ -109,6 +109,69 @@ public abstract class LanguageAwareHandlerBase<TParams, TResult>
     }
 
     /// <summary>
+    /// Issue #86: resolve the document text and parsed model for a request,
+    /// preferring the open-document store over the disk file. didOpen/didChange
+    /// feed the editor buffer into the store, so for an open document the
+    /// stored content is the exact text the stored model was parsed from;
+    /// reading the disk file instead desynchronizes the cursor-identifier
+    /// extraction (stale text) from the fresh model and permanently degrades
+    /// cross-file resolution until restart. When the document is not open,
+    /// read from disk and register the parse result in the store so later
+    /// requests behave identically.
+    /// </summary>
+    protected bool TryGetDocumentContent(
+        Uri uri,
+        string filePath,
+        IMqlParser parser,
+        MqlLanguage language,
+        out MqlFile mqlFile,
+        out string content)
+    {
+        if (_documentStore.TryGetValue(uri, out var storedFile, out var storedContent) &&
+            storedFile != null && storedContent != null)
+        {
+            mqlFile = storedFile;
+            content = storedContent;
+            return true;
+        }
+
+        content = SourceFileReader.ReadAllText(filePath);
+        mqlFile = parser.ParseFile(content, filePath);
+        _documentStore.AddOrUpdate(uri, mqlFile, content, language);
+
+        // Issue #116 (defense layer): a request-path parse must be indexed, not
+        // merely stored. The workspace scan skips any document the store holds,
+        // so before this fix a request that parsed a never-opened file (or one
+        // whose didOpen was swallowed) left the OpenDocumentStore as the only
+        // record; the scan then skipped it and the file stayed permanently
+        // absent from GlobalSymbolIndex. Mirror didOpen/the scan exactly:
+        // symbols plus the occurrence-aware SymbolOccurrenceMapper.Map overload
+        // (passing null would purge scan-indexed occurrences with an empty list
+        // — the CRITICAL-2 hazard documented in DidOpenTextDocumentHandler).
+        //
+        // Language choice: use the caller-resolved `language`, not
+        // _documentStore.TryGetLanguage. This branch runs only on a store miss,
+        // so TryGetLanguage would always report false and fall back to the MQL4
+        // default, mis-keying MQL5 documents. Handlers resolve the language via
+        // ResolveLanguage before calling here, which for an unopened file sniffs
+        // the on-disk content (and routes indexed .mqh headers by includer).
+        //
+        // Defensive copy of Symbols: AddOrUpdate just stored mqlFile, and
+        // GlobalSymbolIndex.AddFile stores the list it is given BY REFERENCE.
+        // If a later AddFile receives that same instance (RenameHandler
+        // re-indexes a never-opened document after this method returns), the
+        // updater runs existing.Clear(); existing.AddRange(symbols) against the
+        // identical list and wipes the file's symbols from the index (#36). The
+        // copy keeps the index's list distinct from the store's model, so the
+        // redundant second AddFile replaces content instead of self-clearing.
+        SymbolIndex.Index.AddFile(
+            filePath, language, mqlFile.Symbols.ToList(),
+            SymbolOccurrenceMapper.Map(mqlFile, filePath, language));
+
+        return true;
+    }
+
+    /// <summary>
     /// Language-specific handling to be implemented by each concrete handler.
     /// </summary>
     protected abstract TResult HandleForLanguage(TParams request, MqlLanguage language, CancellationToken cancellationToken);

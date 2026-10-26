@@ -36,9 +36,11 @@ LITERAL_COLOR : 'C\'' ~[']* '\'';
 
 // --- Numbers ---
 HEX           : '0' [xX] [0-9a-fA-F]+;
-DOUBLE        : [0-9]+ '.' [0-9]* EXP?
-              | '.' [0-9]+ EXP?
-              | [0-9]+ EXP
+// Issue #176 mirror: optional f/F suffix on real literals (same C-style
+// lexing as the MQL5 grammar; MQL4 documents the same real-constant forms).
+DOUBLE        : [0-9]+ '.' [0-9]* EXP? [fF]?
+              | '.' [0-9]+ EXP? [fF]?
+              | [0-9]+ EXP [fF]?
               ;
 INTEGER       : [0-9]+;
 
@@ -250,7 +252,15 @@ arrayInitializer
 
 // --- Functions ---
 functionDeclaration
-    : templateDefinition? modifiers? type modifiers? qualifiedName LPAREN parameterList? RPAREN modifiers? (block | SEMICOLON)
+    : templateDefinition? modifiers? type modifiers? qualifiedName LPAREN parameterList? RPAREN modifiers? (block | pureSpecifier? SEMICOLON)
+    ;
+
+// Issue #143: pure virtual specifier. The MQL4 compiler (build 600+) accepts
+// exactly the same two spellings as MQL5 (docs.mql4.com compile error 381:
+// "Illegal syntax when declaring pure virtual function, only \"=NULL\" or
+// \"=0\" are allowed") — nothing else.
+pureSpecifier
+    : ASSIGN (INTEGER | K_NULL)
     ;
 
 // Constructor outside of class: Crypter::Crypter() { }

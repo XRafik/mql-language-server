@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Linq;
+using MqlLanguageServer.Builtins;
 
 namespace MqlLanguageServer.Analysis;
 
@@ -37,206 +39,54 @@ public readonly record struct Mql4OnlyApiEntry(
     bool SemanticsChanged = false);
 
 /// <summary>
-/// Curated registry of MQL4-only standard-library API names (issue #34).
+/// Registry of MQL4-only standard-library API names (issues #34 + #136).
 ///
-/// Admission per REQ-MA-02: an entry is admissible only if the name is
-/// demonstrably rejected by the MQL5 compiler, or present in MQL5 with
-/// changed semantics such that unchanged MQL4 usage is a defect. Names
-/// shared by both languages with UNCHANGED semantics (OrderSend,
-/// OrderSelect, OrderClose, ArrayResize, Print, CopyBuffer, FileOpen,
-/// OrdersTotal, HistoryTotal, the i* series, IsStopped, …) are deliberately
-/// excluded: call-site signature discrimination is out of scope and flagging
-/// them would be a false positive. Semantics-changed names (Bars, Digits,
-/// Point) are admitted with <c>SemanticsChanged = true</c>: the rule skips
-/// their valid MQL5 call forms and flags only MQL4-style bare reads, so no
-/// valid MQL5 usage is flagged. This table is explicitly NOT a diff of
-/// Mql4Builtins / Mql5Builtins (asymmetric, shared names).
+/// Since #136 this table is NOT hand-curated here: it is projected from the
+/// documentation-driven golden list (<c>data/builtins/mql4.json</c>), where
+/// every admitted entry carries explicit <c>mql4OnlyApi: true</c> metadata
+/// plus an <c>mql5Mapping</c> object. Admission policy (REQ-MA-02) is
+/// unchanged and enforced at data-maintenance time:
+///
+/// An entry is admissible only if the name is demonstrably rejected by the
+/// MQL5 compiler, or present in MQL5 with changed semantics such that
+/// unchanged MQL4 usage is a defect. Names shared by both languages with
+/// UNCHANGED semantics (OrderSend, OrderSelect, OrderClose, ArrayResize,
+/// Print, CopyBuffer, FileOpen, OrdersTotal, HistoryTotal, the i* series,
+/// IsStopped, …) are deliberately excluded: call-site signature
+/// discrimination is out of scope and flagging them would be a false
+/// positive. Semantics-changed names (Bars, Digits, Point) are admitted with
+/// <c>SemanticsChanged = true</c>: the rule skips their valid MQL5 call
+/// forms and flags only MQL4-style bare reads, so no valid MQL5 usage is
+/// flagged. This table is explicitly NOT a diff of Mql4Builtins /
+/// Mql5Builtins (asymmetric, shared names).
 ///
 /// Keyed Ordinal (case-sensitive): MQL identifiers are case-sensitive
 /// like C++, so `TimeHour` and `timehour` are distinct identifiers.
 /// </summary>
 internal static class Mql4OnlyApiRegistry
 {
-    private static readonly FrozenDictionary<string, Mql4OnlyApiEntry> _entries = new Dictionary<string, Mql4OnlyApiEntry>
-    {
-        // --- Predefined variables (5) -----------------------------------
-        // Ask/Bid: bare forms rejected by the MQL5 compiler (always flagged).
-        // Bars/Digits/Point: still exist in MQL5 with changed semantics —
-        // SemanticsChanged=true, so only bare variable reads are flagged;
-        // valid MQL5 call forms (Bars(...), Digits(), Point()) are skipped.
-        { "Ask", new("Ask", Mql4OnlyApiKind.Variable,
-            "MQL4 predefined variable; MQL5 compiler rejects bare Ask",
-            "SymbolInfoDouble(_Symbol, SYMBOL_ASK)") },
-        { "Bid", new("Bid", Mql4OnlyApiKind.Variable,
-            "MQL4 predefined variable; MQL5 compiler rejects bare Bid",
-            "SymbolInfoDouble(_Symbol, SYMBOL_BID)") },
-        { "Bars", new("Bars", Mql4OnlyApiKind.Variable,
-            "Semantics changed: MQL4 predefined var; MQL5 Bars is a function Bars(symbol, timeframe)",
-            "iBars(_Symbol, _Period)",
-            SemanticsChanged: true) },
-        { "Digits", new("Digits", Mql4OnlyApiKind.Variable,
-            "Semantics changed: MQL4 predefined var; MQL5 Digits is a function call",
-            "_Digits",
-            SemanticsChanged: true) },
-        { "Point", new("Point", Mql4OnlyApiKind.Variable,
-            "Semantics changed: MQL4 predefined var; MQL5 Point is a function call",
-            "_Point",
-            SemanticsChanged: true) },
-
-        // --- Predefined series arrays (6) --------------------------------
-        // MQL4-only; MQL5 requires explicit Copy*/i* calls.
-        { "Close", new("Close", Mql4OnlyApiKind.Variable,
-            "MQL4 predefined series array; rejected by MQL5",
-            "iClose(_Symbol, _Period, shift)") },
-        { "High", new("High", Mql4OnlyApiKind.Variable,
-            "MQL4 predefined series array; rejected by MQL5",
-            "iHigh(_Symbol, _Period, shift)") },
-        { "Low", new("Low", Mql4OnlyApiKind.Variable,
-            "MQL4 predefined series array; rejected by MQL5",
-            "iLow(_Symbol, _Period, shift)") },
-        { "Open", new("Open", Mql4OnlyApiKind.Variable,
-            "MQL4 predefined series array; rejected by MQL5",
-            "iOpen(_Symbol, _Period, shift)") },
-        { "Time", new("Time", Mql4OnlyApiKind.Variable,
-            "MQL4 predefined series array; rejected by MQL5",
-            "iTime(_Symbol, _Period, shift)") },
-        { "Volume", new("Volume", Mql4OnlyApiKind.Variable,
-            "MQL4 predefined series array; rejected by MQL5",
-            "CopyTickVolume(_Symbol, _Period, start, count)") },
-
-        // --- Time helper family (8) ---------------------------------------
-        // No MQL5 equivalent (MQL5 compiler: identifier not found); all
-        // replaced via MqlDateTime + TimeToStruct.
-        { "TimeHour", new("TimeHour", Mql4OnlyApiKind.Function,
-            "No MQL5 equivalent",
-            "TimeToStruct(time, dt); ... dt.hour") },
-        { "TimeMinute", new("TimeMinute", Mql4OnlyApiKind.Function,
-            "No MQL5 equivalent",
-            "TimeToStruct(time, dt); ... dt.min") },
-        { "TimeDay", new("TimeDay", Mql4OnlyApiKind.Function,
-            "No MQL5 equivalent",
-            "TimeToStruct(time, dt); ... dt.day") },
-        { "TimeDayOfWeek", new("TimeDayOfWeek", Mql4OnlyApiKind.Function,
-            "No MQL5 equivalent",
-            "TimeToStruct(time, dt); ... dt.day_of_week") },
-        { "TimeDayOfYear", new("TimeDayOfYear", Mql4OnlyApiKind.Function,
-            "No MQL5 equivalent",
-            "TimeToStruct(time, dt); ... dt.day_of_year") },
-        { "TimeYear", new("TimeYear", Mql4OnlyApiKind.Function,
-            "No MQL5 equivalent",
-            "TimeToStruct(time, dt); ... dt.year") },
-        { "TimeMonth", new("TimeMonth", Mql4OnlyApiKind.Function,
-            "No MQL5 equivalent",
-            "TimeToStruct(time, dt); ... dt.mon") },
-        { "TimeSeconds", new("TimeSeconds", Mql4OnlyApiKind.Function,
-            "No MQL5 equivalent",
-            "TimeToStruct(time, dt); ... dt.sec") },
-
-        // --- Environment/state helpers (12) -------------------------------
-        // Rejected by the MQL5 compiler (identifier not found).
-        { "MarketInfo", new("MarketInfo", Mql4OnlyApiKind.Function,
-            "No MQL5 equivalent; replaced by typed SymbolInfo functions",
-            "SymbolInfoDouble / SymbolInfoInteger (MarketInfo(s, MODE_BID) -> SymbolInfoDouble(s, SYMBOL_BID))") },
-        { "RefreshRates", new("RefreshRates", Mql4OnlyApiKind.Function,
-            "MQL4-only; MQL5 refreshes quotes automatically",
-            "remove call; use SymbolInfoTick") },
-        { "IndicatorCounted", new("IndicatorCounted", Mql4OnlyApiKind.Function,
-            "MQL4-only custom-indicator helper",
-            "prev_calculated parameter of OnCalculate") },
-        { "WindowRedraw", new("WindowRedraw", Mql4OnlyApiKind.Function,
-            "MQL4-only",
-            "ChartRedraw()") },
-        { "WindowFind", new("WindowFind", Mql4OnlyApiKind.Function,
-            "MQL4-only window index API",
-            "ChartWindowFind()") },
-        { "WindowOnDropped", new("WindowOnDropped", Mql4OnlyApiKind.Function,
-            "MQL4-only",
-            "ChartGetInteger(0, CHART_WINDOWS_TOTAL) family / CHART_WINDOW_XY events") },
-        { "IsConnected", new("IsConnected", Mql4OnlyApiKind.Function,
-            "MQL4-only",
-            "TerminalInfoInteger(TERMINAL_CONNECTED)") },
-        { "IsDemo", new("IsDemo", Mql4OnlyApiKind.Function,
-            "MQL4-only",
-            "AccountInfoInteger(ACCOUNT_TRADE_MODE) == ACCOUNT_TRADE_MODE_DEMO") },
-        { "IsTradeAllowed", new("IsTradeAllowed", Mql4OnlyApiKind.Function,
-            "MQL4-only",
-            "TerminalInfoInteger(TERMINAL_TRADE_ALLOWED) && MQLInfoInteger(MQL_TRADE_ALLOWED)") },
-        { "IsTesting", new("IsTesting", Mql4OnlyApiKind.Function,
-            "MQL4-only",
-            "MQLInfoInteger(MQL_TESTER)") },
-        { "IsOptimization", new("IsOptimization", Mql4OnlyApiKind.Function,
-            "MQL4-only",
-            "MQLInfoInteger(MQL_OPTIMIZATION)") },
-        { "IsVisualMode", new("IsVisualMode", Mql4OnlyApiKind.Function,
-            "MQL4-only",
-            "MQLInfoInteger(MQL_VISUAL_MODE)") },
-
-        // --- Order-property getters (16) ----------------------------------
-        // MQL4-only; read the order selected via OrderSelect. MQL5 has
-        // OrderGetDouble/OrderGetInteger/OrderGetString (ticket + property)
-        // but NOT these standalone zero-arg getters (verified during apply:
-        // OrderType, OrderLots, OrderTicket, OrderExpiration etc. as
-        // zero-arg getters do not exist in MQL5 — compile error).
-        { "OrderType", new("OrderType", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetInteger(POSITION_TYPE) / HistoryOrderGetInteger(ticket, ORDER_TYPE)") },
-        { "OrderLots", new("OrderLots", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetDouble(POSITION_VOLUME)") },
-        { "OrderMagicNumber", new("OrderMagicNumber", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetInteger(POSITION_MAGIC)") },
-        { "OrderSymbol", new("OrderSymbol", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetString(POSITION_SYMBOL)") },
-        { "OrderComment", new("OrderComment", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetString(POSITION_COMMENT)") },
-        { "OrderOpenPrice", new("OrderOpenPrice", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetDouble(POSITION_PRICE_OPEN)") },
-        { "OrderClosePrice", new("OrderClosePrice", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "HistoryDealGetDouble(deal, DEAL_PRICE)") },
-        { "OrderCloseTime", new("OrderCloseTime", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "HistoryDealGetInteger(deal, DEAL_TIME)") },
-        { "OrderOpenTime", new("OrderOpenTime", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetInteger(POSITION_TIME)") },
-        { "OrderStopLoss", new("OrderStopLoss", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetDouble(POSITION_SL)") },
-        { "OrderTakeProfit", new("OrderTakeProfit", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetDouble(POSITION_TP)") },
-        { "OrderProfit", new("OrderProfit", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetDouble(POSITION_PROFIT) / HistoryDealGetDouble(deal, DEAL_PROFIT)") },
-        { "OrderSwap", new("OrderSwap", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "HistoryDealGetDouble(deal, DEAL_SWAP)") },
-        { "OrderCommission", new("OrderCommission", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "HistoryDealGetDouble(deal, DEAL_COMMISSION)") },
-        { "OrderTicket", new("OrderTicket", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "PositionGetInteger(POSITION_TICKET)") },
-        { "OrderExpiration", new("OrderExpiration", Mql4OnlyApiKind.Function,
-            "MQL4 order-property getter; not in MQL5",
-            "OrderGetInteger(ticket, ORDER_TIME_EXPIRATION)") }
-    }
-    .ToFrozenDictionary(StringComparer.Ordinal);
+    private static readonly Lazy<FrozenDictionary<string, Mql4OnlyApiEntry>> LazyEntries =
+        new(() => BuiltinGoldenData.Load("mql4").Admissions
+            .ToDictionary(
+                admission => admission.Name,
+                admission => new Mql4OnlyApiEntry(
+                    admission.Name,
+                    admission.IsFunction ? Mql4OnlyApiKind.Function : Mql4OnlyApiKind.Variable,
+                    admission.Reason,
+                    admission.Replacement,
+                    admission.SemanticsChanged),
+                StringComparer.Ordinal)
+            .ToFrozenDictionary(StringComparer.Ordinal));
 
     /// <summary>
-    /// Curated MQL4-only API table, keyed by canonical name with
+    /// MQL4-only API table, keyed by canonical name with
     /// case-sensitive (Ordinal) semantics.
     /// </summary>
-    public static FrozenDictionary<string, Mql4OnlyApiEntry> Entries => _entries;
+    public static FrozenDictionary<string, Mql4OnlyApiEntry> Entries => LazyEntries.Value;
 
     /// <summary>
     /// Case-sensitive lookup of a MQL4-only API entry.
     /// </summary>
     public static bool TryGetEntry(string name, out Mql4OnlyApiEntry entry) =>
-        _entries.TryGetValue(name, out entry);
+        Entries.TryGetValue(name, out entry);
 }

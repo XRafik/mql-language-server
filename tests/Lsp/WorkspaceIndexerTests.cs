@@ -182,6 +182,87 @@ public class WorkspaceIndexerTests : IDisposable
     }
 
     // ------------------------------------------------------------------
+    // Issue #95: the recursion must survive symlink cycles (a Wine prefix's
+    // dosdevices/z: symlink re-enters the workspace and previously aborted
+    // the ENTIRE scan on UnauthorizedAccessException, leaving an empty index
+    // — workspace/symbol answered [] for everything not opened) and must
+    // prune inaccessible subtrees instead of dying on them.
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Scan_SkipsReparsePointDirectories_SymlinkCycleDoesNotAbortScan()
+    {
+        var source = Path.Combine(_workspace, "src");
+        Directory.CreateDirectory(source);
+        var header = Path.Combine(source, "riesgo_utils_mqh.mqh");
+        File.WriteAllText(header, "double CalculaRiesgoTicks(int id){ return id; }\n");
+
+        // The Wine-prefix shape: dosdevices/z: is a symlink re-entering the
+        // workspace root itself. Following it used to loop forever (and die
+        // on /proc or other unreadable paths reached through it).
+        var dosdevices = Path.Combine(_workspace, "wine-mt4", "dosdevices");
+        Directory.CreateDirectory(dosdevices);
+        Directory.CreateSymbolicLink(Path.Combine(dosdevices, "z:"), _workspace);
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        Assert.Contains(header, _index.GetIndexedFiles());
+        Assert.Contains(_index.GetAllSymbols(),
+            s => s.Symbols.Any(sym => sym.Name == "CalculaRiesgoTicks"));
+    }
+
+    [Fact]
+    public void Scan_ContinuesPastInaccessibleSubdirectory()
+    {
+        var before = Path.Combine(_workspace, "before");
+        var locked = Path.Combine(_workspace, "locked");
+        var after = Path.Combine(_workspace, "after");
+        Directory.CreateDirectory(before);
+        Directory.CreateDirectory(locked);
+        Directory.CreateDirectory(after);
+
+        File.WriteAllText(Path.Combine(before, "before.mq4"), "int BeforeSymbol = 1;\n");
+        File.WriteAllText(Path.Combine(locked, "locked.mq4"), "int LockedSymbol = 2;\n");
+        File.WriteAllText(Path.Combine(after, "after.mq4"), "int AfterSymbol = 3;\n");
+
+        // Prune the locked subtree from enumeration (non-root on Linux).
+        if (!OperatingSystem.IsLinux())
+        {
+            return; // UnixFileMode-based lock simulation is Linux-only
+        }
+        var originalMode = File.GetUnixFileMode(locked);
+        File.SetUnixFileMode(locked, UnixFileMode.None);
+        try
+        {
+            CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+        }
+        finally
+        {
+            File.SetUnixFileMode(locked, originalMode);
+        }
+
+        var indexed = _index.GetIndexedFiles().ToList();
+        Assert.Contains(Path.Combine(before, "before.mq4"), indexed);
+        Assert.Contains(Path.Combine(after, "after.mq4"), indexed);
+        Assert.DoesNotContain(Path.Combine(locked, "locked.mq4"), indexed);
+    }
+
+    [Fact]
+    public void Scan_NotifiesLifecycleStartedAndFinished()
+    {
+        var header = Path.Combine(_workspace, "riesgo_utils_mqh.mqh");
+        File.WriteAllText(header, "double CalculaRiesgoTicks(int id){ return id; }\n");
+
+        var notifications = new List<(LogLevel Level, string Message)>();
+        var indexer = CreateIndexer();
+        indexer.ScanNotifier = (level, message) => notifications.Add((level, message));
+        indexer.StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        Assert.Contains(notifications, n => n.Level == LogLevel.Information && n.Message.Contains("scan started"));
+        Assert.Contains(notifications, n => n.Level == LogLevel.Information && n.Message.Contains("scan finished") && n.Message.Contains("1/1 files indexed"));
+    }
+
+    // ------------------------------------------------------------------
     // WI-05: open documents skipped (client buffer is authoritative)
     // ------------------------------------------------------------------
 
@@ -304,6 +385,276 @@ public class WorkspaceIndexerTests : IDisposable
         // Monotonic growth: final results never shrink below the mid-scan count.
         var finalCount = _index.FindOccurrences("Alpha").Count;
         Assert.True(finalCount >= midScanCount, "Occurrence results shrank after scan completion.");
+    }
+
+    // ------------------------------------------------------------------
+    // Issue #157: project-local .mqlignore — exclude paths from the scan.
+    // The ignore is a third prune source: a matched directory is pruned
+    // entirely (zero enumeration cost), dir-only patterns never match
+    // files and vice versa, and the last matching pattern wins. The file
+    // is read once per scan (no watcher). The ignore governs the workspace
+    // index ONLY — didOpen on an ignored file still gets full document-level
+    // analysis (pinned by MqlIgnore_IgnoredFileDidOpen_StillAnalyzed).
+    // ------------------------------------------------------------------
+
+    private void WriteIgnoreFile(string content, bool withBom = false)
+    {
+        var path = Path.Combine(_workspace, ".mqlignore");
+        File.WriteAllText(path, content, withBom
+            ? new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true)
+            : new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+    }
+
+    [Fact]
+    public void MqlIgnore_BareName_ExcludesWholeSubtree()
+    {
+        WriteIgnoreFile("backup-utf8\n");
+        var ignored = Path.Combine(_workspace, "backup-utf8");
+        Directory.CreateDirectory(ignored);
+        File.WriteAllText(Path.Combine(ignored, "old.mq4"), "int OldSymbol = 1;\n");
+        var live = Path.Combine(_workspace, "live.mq4");
+        File.WriteAllText(live, "int LiveSymbol = 2;\n");
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        var indexed = _index.GetIndexedFiles();
+        Assert.Contains(live, indexed);
+        Assert.DoesNotContain(Path.Combine(ignored, "old.mq4"), indexed);
+        Assert.DoesNotContain(_index.GetAllSymbols(), s => s.Symbols.Any(sym => sym.Name == "OldSymbol"));
+    }
+
+    [Fact]
+    public void MqlIgnore_TrailingSlash_IsDirectoryOnly()
+    {
+        // "backup-utf8/" excludes the directory but must not exclude a
+        // same-named FILE.
+        WriteIgnoreFile("backup-utf8/\n");
+        var dir = Path.Combine(_workspace, "backup-utf8");
+        Directory.CreateDirectory(dir);
+        File.WriteAllText(Path.Combine(dir, "old.mq5"), "int OldSymbol = 1;\n");
+        var file = Path.Combine(_workspace, "backup-utf8.mq5");
+        File.WriteAllText(file, "int SameNamedFile = 2;\n");
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        var indexed = _index.GetIndexedFiles();
+        Assert.Contains(file, indexed);
+        Assert.DoesNotContain(Path.Combine(dir, "old.mq5"), indexed);
+    }
+
+    [Fact]
+    public void MqlIgnore_LeadingSlash_AnchorsAtRoot_UnanchoredMatchesAnyDepth()
+    {
+        WriteIgnoreFile("/src/gen.mq4\nnotes.mq4\n");
+
+        var anchored = Path.Combine(_workspace, "src", "gen.mq4");
+        Directory.CreateDirectory(Path.Combine(_workspace, "src"));
+        File.WriteAllText(anchored, "int AnchoredGen = 1;\n");
+
+        // Same leaf name deeper down: the anchored pattern must NOT match it.
+        var deeper = Path.Combine(_workspace, "other", "src", "gen.mq4");
+        Directory.CreateDirectory(Path.Combine(_workspace, "other", "src"));
+        File.WriteAllText(deeper, "int DeeperGen = 2;\n");
+
+        // Unanchored: matches at any depth.
+        var notesRoot = Path.Combine(_workspace, "notes.mq4");
+        var notesNested = Path.Combine(_workspace, "deep", "notes.mq4");
+        Directory.CreateDirectory(Path.Combine(_workspace, "deep"));
+        File.WriteAllText(notesRoot, "int NotesRoot = 3;\n");
+        File.WriteAllText(notesNested, "int NotesNested = 4;\n");
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        var indexed = _index.GetIndexedFiles();
+        Assert.Contains(deeper, indexed);
+        Assert.DoesNotContain(anchored, indexed);
+        Assert.DoesNotContain(notesRoot, indexed);
+        Assert.DoesNotContain(notesNested, indexed);
+    }
+
+    [Fact]
+    public void MqlIgnore_DoubleStar_Patterns()
+    {
+        // Trailing '/**' matches everything INSIDE logs (the directory
+        // itself is not the match — every file below is).
+        // '**/generated/**' excludes a 'generated' directory at ANY depth.
+        WriteIgnoreFile("logs/**\n**/generated/**\n");
+
+        var logsA = Path.Combine(_workspace, "logs", "a");
+        Directory.CreateDirectory(logsA);
+        var inLogs = Path.Combine(logsA, "x.mq4");
+        File.WriteAllText(inLogs, "int InLogs = 1;\n");
+
+        var inGenerated = Path.Combine(_workspace, "src", "generated", "g.mq4");
+        Directory.CreateDirectory(Path.Combine(_workspace, "src", "generated"));
+        File.WriteAllText(inGenerated, "int InGenerated = 2;\n");
+
+        var live = Path.Combine(_workspace, "live.mq5");
+        File.WriteAllText(live, "int LiveSymbol = 3;\n");
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        var indexed = _index.GetIndexedFiles();
+        Assert.Contains(live, indexed);
+        Assert.DoesNotContain(inLogs, indexed);
+        Assert.DoesNotContain(inGenerated, indexed);
+    }
+
+    [Fact]
+    public void MqlIgnore_Negation_Reincludes_LastMatchWins()
+    {
+        // The directory is NOT excluded (the pattern targets its files), so
+        // each file is checked individually and the negation can re-include.
+        WriteIgnoreFile("backups/*.mq4\n!backups/keep.mq4\n");
+        var dir = Path.Combine(_workspace, "backups");
+        Directory.CreateDirectory(dir);
+        var dropped = Path.Combine(dir, "old.mq4");
+        var kept = Path.Combine(dir, "keep.mq4");
+        File.WriteAllText(dropped, "int OldSymbol = 1;\n");
+        File.WriteAllText(kept, "int KeepSymbol = 2;\n");
+
+        // Last-match-wins across the whole file: keep.mq4 excluded by the
+        // first pattern, re-included by the last.
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        var indexed = _index.GetIndexedFiles();
+        Assert.Contains(kept, indexed);
+        Assert.DoesNotContain(dropped, indexed);
+    }
+
+    [Fact]
+    public void MqlIgnore_Negation_CannotResurrectBuiltinExclusions()
+    {
+        // Pin the v1 decision: '!' re-includes only paths matched by earlier
+        // .mqlignore patterns — never ExcludedDirectoryNames or dot-dirs.
+        WriteIgnoreFile("!.git/\n!.hidden/\n!bin/\n");
+        foreach (var dir in new[] { ".git", ".hidden", "bin" })
+        {
+            Directory.CreateDirectory(Path.Combine(_workspace, dir));
+            File.WriteAllText(Path.Combine(_workspace, dir, "x.mq5"), $"int Sym_{dir.Replace(".", "_")} = 1;\n");
+        }
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        Assert.Empty(_index.GetIndexedFiles());
+    }
+
+    [Fact]
+    public void MqlIgnore_FilePattern_ExcludesSingleFile()
+    {
+        WriteIgnoreFile("secret.mq4\n");
+        var secret = Path.Combine(_workspace, "secret.mq4");
+        File.WriteAllText(secret, "int SecretSymbol = 1;\n");
+        var live = Path.Combine(_workspace, "live.mq4");
+        File.WriteAllText(live, "int LiveSymbol = 2;\n");
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        var indexed = _index.GetIndexedFiles();
+        Assert.Contains(live, indexed);
+        Assert.DoesNotContain(secret, indexed);
+    }
+
+    [Fact]
+    public void MqlIgnore_Comments_BlankLines_Crlf_Bom()
+    {
+        // Windows-authored file: BOM + CRLF + comments + blank lines.
+        WriteIgnoreFile("\uFEFF# legacy copies (git-tracked, must not be indexed)\r\n\r\nbackup-utf16/\r\n   \r\n# trailing comment block\r\nold-stuff\r\n", withBom: true);
+
+        var backup = Path.Combine(_workspace, "backup-utf16");
+        Directory.CreateDirectory(backup);
+        var legacy = Path.Combine(backup, "legacy.mq4");
+        File.WriteAllText(legacy, "int LegacySymbol = 1;\n");
+        var oldStuff = Path.Combine(_workspace, "old-stuff");
+        Directory.CreateDirectory(oldStuff);
+        var old = Path.Combine(oldStuff, "old.mq4");
+        File.WriteAllText(old, "int OldSymbol = 2;\n");
+        var live = Path.Combine(_workspace, "live.mq5");
+        File.WriteAllText(live, "int LiveSymbol = 3;\n");
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        var indexed = _index.GetIndexedFiles();
+        Assert.Contains(live, indexed);
+        Assert.DoesNotContain(legacy, indexed);
+        Assert.DoesNotContain(old, indexed);
+    }
+
+    [Fact]
+    public void MqlIgnore_MissingFile_BehaviorUnchanged()
+    {
+        // Control: no .mqlignore — byte-for-byte today's behavior.
+        var a = Path.Combine(_workspace, "a.mq4");
+        var b = Path.Combine(_workspace, "sub", "b.mq5");
+        Directory.CreateDirectory(Path.Combine(_workspace, "sub"));
+        File.WriteAllText(a, "int ASymbol = 1;\n");
+        File.WriteAllText(b, "int BSymbol = 2;\n");
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        var indexed = _index.GetIndexedFiles();
+        Assert.Contains(a, indexed);
+        Assert.Contains(b, indexed);
+    }
+
+    [Fact]
+    public void MqlIgnore_NotifyCounts_ReflectPrunedCandidates()
+    {
+        WriteIgnoreFile("wine-mt4/\n");
+        var wine = Path.Combine(_workspace, "wine-mt4");
+        Directory.CreateDirectory(wine);
+        File.WriteAllText(Path.Combine(wine, "terminal.mq4"), "int Terminal = 1;\n");
+        var live = Path.Combine(_workspace, "live.mq4");
+        File.WriteAllText(live, "int LiveSymbol = 2;\n");
+
+        var notifications = new List<(LogLevel Level, string Message)>();
+        var indexer = CreateIndexer();
+        indexer.ScanNotifier = (level, message) => notifications.Add((level, message));
+        indexer.StartIndexingAndWaitForIdle(new[] { _workspace });
+
+        // Only the live file is a scan candidate: the ignored subtree's cost
+        // is zero, not deferred.
+        Assert.Contains(notifications,
+            n => n.Level == LogLevel.Information && n.Message.Contains("scan started") && n.Message.Contains("(1 candidate files)"));
+        Assert.Contains(notifications,
+            n => n.Level == LogLevel.Information && n.Message.Contains("scan finished") && n.Message.Contains("1/1 files indexed"));
+    }
+
+    [Fact]
+    public async Task MqlIgnore_IgnoredFileDidOpen_StillAnalyzed()
+    {
+        // Contract (issue #157, point 4): the ignore governs the workspace
+        // INDEX, never the document pipeline. didOpen on an ignored file
+        // still yields full document-level diagnostics.
+        WriteIgnoreFile("legacy/\n");
+        var ignored = Path.Combine(_workspace, "legacy");
+        Directory.CreateDirectory(ignored);
+        var path = Path.Combine(ignored, "header.mq5");
+        var content = "int Declared = UndefinedSymbol;\n";
+        File.WriteAllText(path, content);
+
+        CreateIndexer().StartIndexingAndWaitForIdle(new[] { _workspace });
+        Assert.DoesNotContain(path, _index.GetIndexedFiles());
+
+        // didOpen-equivalent state: the open buffer is authoritative.
+        var documentStore = new OpenDocumentStore();
+        var parsed = new Mql5AntlrParser().ParseFile(content, path);
+        documentStore.AddOrUpdate(new Uri(path), parsed, content, MqlLanguage.Mql5);
+
+        var handler = new DiagnosticHandler(
+            Substitute.For<ILogger<DiagnosticHandler>>(),
+            Substitute.For<IServiceProvider>(),
+            documentStore);
+        var report = await handler.Handle(
+            new DocumentDiagnosticParams { TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(path)) },
+            CancellationToken.None);
+
+        Assert.NotNull(report);
+        var full = Assert.IsType<RelatedFullDocumentDiagnosticReport>(report);
+        Assert.Equal(DocumentDiagnosticReportKind.Full, full.Kind);
+        // Full analysis ran: the reference to UndefinedSymbol is reported
+        // even though the file is excluded from the workspace index.
+        Assert.Contains(full.Items, d => d.Message.Contains("UndefinedSymbol"));
     }
 }
 

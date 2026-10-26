@@ -6,6 +6,7 @@ using MqlLanguageServer.Lsp.Handlers;
 using MqlLanguageServer.Lsp.Server;
 using MqlLanguageServer.Models;
 using MqlLanguageServer.Parser;
+using MqlLanguageServer.Mql5.Parser;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using MqlLanguageServer.Tests.Lsp;
@@ -949,6 +950,190 @@ namespace MqlLanguageServer.Tests.Lsp.Handlers
             finally
             {
                 if (File.Exists(path)) File.Delete(path);
+            }
+        }
+
+        #endregion
+
+        #region DocumentHighlightMql5FixtureTests (issue #78)
+
+        // Exact #62/#78 fixture shape: an included header with out-of-class
+        // definitions plus a constructor-style declaration in main.mq5.
+        private const string Issue78HeaderContent =
+            "// person.mqh\n" +
+            "class Person\n" +
+            "  {\n" +
+            "private:\n" +
+            "   string   m_name;\n" +
+            "   int      m_age;\n" +
+            "public:\n" +
+            "                     Person(void);\n" +
+            "                     Person(string name, int age);\n" +
+            "   string            Greet(void) const;\n" +
+            "   int               GetAge(void) const;\n" +
+            "  };\n" +
+            "\n" +
+            "string Person::Greet(void) const\n" +
+            "  {\n" +
+            "   return(\"Hello, \" + m_name + \"!\");\n" +
+            "  }\n" +
+            "\n" +
+            "int Person::GetAge(void) const\n" +
+            "  {\n" +
+            "   return(m_age);\n" +
+            "  }\n";
+
+        private const string Issue78MainContent =
+            "// main.mq5\n" +
+            "#include \"person.mqh\"\n" +
+            "\n" +
+            "int OnInit(void)\n" +
+            "  {\n" +
+            "   Person person(\"Alice\", 30);\n" +
+            "   string message   = person.Greet();\n" +
+            "   int    age       = person.GetAge();\n" +
+            "   Print(message, \" age=\", age);\n" +
+            "   return(INIT_SUCCEEDED);\n" +
+            "  }\n";
+
+        /// <summary>
+        /// Seed both fixture files through the real didOpen handler (same
+        /// parse + store + index path as production) with the MQL5 parser
+        /// wired for .mq5 documents (issue #78).
+        /// </summary>
+        private static async Task<(OpenDocumentStore store, string headerPath, string mainPath)> OpenIssue78FixtureAsync()
+        {
+            GlobalSymbolIndex.Instance.Clear();
+            var dir = Path.Combine(Path.GetTempPath(), "Issue78Fixture_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(dir);
+            var headerPath = Path.Combine(dir, "person.mqh");
+            var mainPath = Path.Combine(dir, "main.mq5");
+            File.WriteAllText(headerPath, Issue78HeaderContent);
+            File.WriteAllText(mainPath, Issue78MainContent);
+
+            var mql5Parser = new Mql5AntlrParser();
+            var store = new OpenDocumentStore();
+            var openHandler = new DidOpenTextDocumentHandler(
+                Substitute.For<ILogger<DidOpenTextDocumentHandler>>(),
+                new MqlLanguageService(new Mql4AntlrParser(), mql5Parser),
+                store,
+                new MqlLanguageServer.Mql4.Builtins.IMqlBuiltins[] { new MqlLanguageServer.Mql4.Builtins.Mql4BuiltinsAdapter() });
+
+            foreach (var (path, text) in new[] { (headerPath, Issue78HeaderContent), (mainPath, Issue78MainContent) })
+            {
+                await openHandler.Handle(new DidOpenTextDocumentParams
+                {
+                    TextDocument = new TextDocumentItem
+                    {
+                        Uri = DocumentUri.FromFileSystemPath(path),
+                        Text = text,
+                        LanguageId = "mql5"
+                    }
+                }, CancellationToken.None);
+            }
+
+            return (store, headerPath, mainPath);
+        }
+
+        private static async Task<List<DocumentHighlight>> HighlightAtAsync(
+            DocumentHighlightHandler handler, string mainPath, int line, int character)
+        {
+            var result = await handler.Handle(new DocumentHighlightParams
+            {
+                TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath(mainPath)),
+                Position = new Position(line, character)
+            }, CancellationToken.None);
+            return result?.ToList() ?? new List<DocumentHighlight>();
+        }
+
+        /// <summary>
+        /// Issue #78: with the exact #62 fixture on the MQL5 path, a cursor ON
+        /// the OnInit event-handler identifier must not return an empty result.
+        /// The user-declared OnInit function symbol resolves in the first loop
+        /// (Write kind); the #63 occurrence fallback covers the no-symbol case.
+        /// </summary>
+        [Fact]
+        public async Task DocumentHighlightHandler_Mql5Fixture_OnInitIdentifier_ReturnsHighlightAsync()
+        {
+            var (store, headerPath, mainPath) = await OpenIssue78FixtureAsync();
+            try
+            {
+                var handler = new DocumentHighlightHandler(
+                    Substitute.For<ILogger<DocumentHighlightHandler>>(),
+                    new Mql4AntlrParser(), // .mq5 documents route to Mql5AntlrParser
+                    store);
+
+                // Cursor on 'O' of "int OnInit(void)" (line 3, col 4).
+                var highlights = await HighlightAtAsync(handler, mainPath, 3, 4);
+
+                Assert.NotEmpty(highlights);
+                Assert.Contains(highlights, h => h.Range.Start.Line == 3);
+                Assert.Contains(highlights, h => h.Kind == DocumentHighlightKind.Write);
+            }
+            finally
+            {
+                GlobalSymbolIndex.Instance.Clear();
+                Directory.Delete(Path.GetDirectoryName(mainPath)!, recursive: true);
+            }
+        }
+
+        /// <summary>
+        /// Issue #78: a cursor on the Print builtin call highlights its
+        /// same-file textual occurrences (kind Text) via the #63 fallback —
+        /// on the MQL5 path, not only the MQL4 path covered by the #63 tests.
+        /// </summary>
+        [Fact]
+        public async Task DocumentHighlightHandler_Mql5Fixture_PrintBuiltin_ReturnsTextOccurrencesAsync()
+        {
+            var (store, headerPath, mainPath) = await OpenIssue78FixtureAsync();
+            try
+            {
+                var handler = new DocumentHighlightHandler(
+                    Substitute.For<ILogger<DocumentHighlightHandler>>(),
+                    new Mql4AntlrParser(),
+                    store);
+
+                // Cursor inside "Print" (line 8, col 4; the identifier spans
+                // cols 3-7 after the three-space indent).
+                var highlights = await HighlightAtAsync(handler, mainPath, 8, 4);
+
+                Assert.NotEmpty(highlights);
+                Assert.All(highlights, h => Assert.Equal(DocumentHighlightKind.Text, h.Kind));
+                Assert.Contains(highlights, h => h.Range.Start.Line == 8 && h.Range.Start.Character == 3);
+            }
+            finally
+            {
+                GlobalSymbolIndex.Instance.Clear();
+                Directory.Delete(Path.GetDirectoryName(mainPath)!, recursive: true);
+            }
+        }
+
+        /// <summary>
+        /// Issue #78 contrast case (as reported): the Person type usage keeps
+        /// returning a resolved highlight while the builtin/event-handler
+        /// cursors above also return results.
+        /// </summary>
+        [Fact]
+        public async Task DocumentHighlightHandler_Mql5Fixture_PersonUsage_ReturnsHighlightAsync()
+        {
+            var (store, headerPath, mainPath) = await OpenIssue78FixtureAsync();
+            try
+            {
+                var handler = new DocumentHighlightHandler(
+                    Substitute.For<ILogger<DocumentHighlightHandler>>(),
+                    new Mql4AntlrParser(),
+                    store);
+
+                // Cursor on 'P' of "   Person person(...);" (line 5, col 3).
+                var highlights = await HighlightAtAsync(handler, mainPath, 5, 3);
+
+                Assert.NotEmpty(highlights);
+                Assert.Contains(highlights, h => h.Range.Start.Line == 5);
+            }
+            finally
+            {
+                GlobalSymbolIndex.Instance.Clear();
+                Directory.Delete(Path.GetDirectoryName(mainPath)!, recursive: true);
             }
         }
 

@@ -33,14 +33,6 @@ public class DiagnosticHandler : LanguageAwareHandlerBase<DocumentDiagnosticPara
     /// </summary>
     private readonly SemanticAnalyzer? _semanticAnalyzer;
 
-    // A-007: LSP 3.17 diagnostic codes are string|number. We emit numeric codes in
-    // dedicated ranges so clients can route/interpret them without parsing prefixes.
-    //   MQL4 diagnostics: 1000-1999
-    //   MQL5 diagnostics: 5000-5999
-    // Offsets are shared across both languages (001 typo, 002 empty OnInit, 003 underscore).
-    private const int Mql4DiagnosticBase = 1000;
-    private const int Mql5DiagnosticBase = 5000;
-
     public DiagnosticHandler(
         ILogger<DiagnosticHandler> logger,
         MqlLanguageService languageService,
@@ -78,7 +70,10 @@ public class DiagnosticHandler : LanguageAwareHandlerBase<DocumentDiagnosticPara
 
     private RelatedFullDocumentDiagnosticReport GenerateReport(MqlFile? file, string content, MqlLanguage language, CancellationToken token, string? documentPath)
     {
-        var diagnostics = GenerateDiagnostics(file, content, language, token, documentPath);
+        // Issue #91: the rule set lives in the shared DocumentDiagnostics service
+        // (identical output to the push channel — one rule set, two channels).
+        var diagnostics = DocumentDiagnostics.Generate(
+            _logger, file, content, language, token, documentPath, _semanticAnalyzer, SymbolIndex.Index);
 
         return new RelatedFullDocumentDiagnosticReport
         {
@@ -87,14 +82,31 @@ public class DiagnosticHandler : LanguageAwareHandlerBase<DocumentDiagnosticPara
         };
     }
 
+    /// <summary>
+    /// Budget for the fallback parse of a document that is not in the store
+    /// (issue #20: the pre-parse guard plus this timeout bound the worst
+    /// case; oversized input is rejected by the parser as a regular
+    /// SyntaxError, which the generation publishes).
+    /// </summary>
+    internal const int ParseTimeoutMilliseconds = 2000;
+
+    /// <summary>
+    /// Budget for the FULL rule-set generation over an already-parsed model
+    /// (issue #150). Deliberately much larger than the parse budget: the
+    /// generation includes cross-file suppression against the workspace
+    /// index, which on real-world projects (documents with thousands of
+    /// symbols indexed from sibling sources) can legitimately take longer
+    /// than a bare parse. Before #150 this shared the 2s parse budget and
+    /// the overrun was answered with an EMPTY report — indistinguishable
+    /// from a clean document, which silently killed the pull channel for
+    /// exactly the projects where diagnostics matter most.
+    /// </summary>
+    internal const int GenerationTimeoutMilliseconds = 10000;
+
     protected override RelatedDocumentDiagnosticReport HandleForLanguage(DocumentDiagnosticParams request, MqlLanguage language, CancellationToken cancellationToken)
     {
         try
         {
-            using var timeoutCts = new CancellationTokenSource(2000);
-            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCts.Token);
-            var token = linkedCts.Token;
-
             var uri = request.TextDocument.Uri.ToUri();
 
             string? content = null;
@@ -129,19 +141,40 @@ public class DiagnosticHandler : LanguageAwareHandlerBase<DocumentDiagnosticPara
                 var parser = ResolveParser(language);
                 var filePath = request.TextDocument.Uri.GetFileSystemPath() ?? (language == MqlLanguage.Mql5 ? "unknown.mq5" : "unknown.mq4");
                 // Issue #20: thread the (linked) cancellation token into the
-                // parse so the 2s timeout can abort between pre-scan, lexing,
+                // parse so the parse budget can abort between pre-scan, lexing,
                 // and the recursive-descent pass. Oversized/deeply nested
                 // input is rejected by the parser's pre-parse guard as a
                 // regular SyntaxError, which GenerateDiagnostics publishes.
-                mqlFile = parser.ParseFile(content, filePath, token);
+                using var parseCts = new CancellationTokenSource(ParseTimeoutMilliseconds);
+                using var linkedParseCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, parseCts.Token);
+                mqlFile = parser.ParseFile(content, filePath, linkedParseCts.Token);
                 _documentStore.AddOrUpdate(uri, mqlFile, content, language);
             }
 
-            return GenerateReport(mqlFile, content, language, token, request.TextDocument.Uri.GetFileSystemPath());
+            // Issue #150: the generation budget is separate from (and much
+            // larger than) the parse budget, and its overrun degrades to
+            // parse-only diagnostics instead of an empty report.
+            try
+            {
+                using var generationCts = new CancellationTokenSource(GenerationTimeoutMilliseconds);
+                using var linkedGenerationCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, generationCts.Token);
+                return GenerateReport(mqlFile, content, language, linkedGenerationCts.Token, request.TextDocument.Uri.GetFileSystemPath());
+            }
+            catch (OperationCanceledException)
+            {
+                // Issue #150: a budget overrun must NEVER look like "no
+                // problems". Parse-level syntax errors are still real signal
+                // (and are what the 2s-era path silently dropped), so answer
+                // with them rather than an empty report.
+                _logger.LogWarning(
+                    "Diagnostic generation exceeded {BudgetMs}ms for {Uri}; answering with parse-only diagnostics.",
+                    GenerationTimeoutMilliseconds, request.TextDocument.Uri);
+                return CreateParseOnlyReport(mqlFile, language);
+            }
         }
         catch (OperationCanceledException)
         {
-            _logger.LogWarning("Diagnostic request timed out.");
+            _logger.LogWarning("Diagnostic parse timed out.");
             return CreateEmptyReport();
         }
         catch (Exception ex)
@@ -151,43 +184,38 @@ public class DiagnosticHandler : LanguageAwareHandlerBase<DocumentDiagnosticPara
         }
     }
 
-    /// <summary>
-    /// Issue #44: workspace-correlated suppression of cross-file unresolved-symbol
-    /// false positives. The rule itself stays document-local (REQ-IA-02); this
-    /// downstream filter suppresses base+70 diagnostics whose symbol is declared
-    /// in an included header (tier 1) or anywhere in the indexed workspace (tier 2).
-    /// Best-effort (fail open): any correlator failure keeps the document-local
-    /// diagnostics, and cancellation aborts the request as before.
-    /// </summary>
-    private IReadOnlyList<Diagnostic> ApplyCrossFileSuppression(
-        IReadOnlyList<Diagnostic> semanticDiagnostics,
-        MqlFile? mqlFile,
-        string? documentPath,
-        MqlLanguage language,
-        CancellationToken token)
-    {
-        try
-        {
-            return CrossFileSymbolCorrelator.SuppressWorkspaceResolvable(
-                semanticDiagnostics, mqlFile, documentPath, language, SymbolIndex.Index, token);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Cross-file symbol suppression failed; keeping document-local diagnostics.");
-            return semanticDiagnostics;
-        }
-    }
-
     private RelatedFullDocumentDiagnosticReport CreateEmptyReport()
     {
         return new RelatedFullDocumentDiagnosticReport
         {
             ResultId = null,
             Items = Array.Empty<Diagnostic>()
+        };
+    }
+
+    /// <summary>
+    /// Issue #150 degraded answer: parse-level diagnostics only. Non-empty
+    /// whenever the parse found real syntax errors, so a budget overrun can
+    /// never masquerade as a clean document.
+    /// </summary>
+    private RelatedFullDocumentDiagnosticReport CreateParseOnlyReport(MqlFile? mqlFile, MqlLanguage language)
+    {
+        List<Diagnostic> parseDiagnostics;
+        try
+        {
+            parseDiagnostics = DocumentDiagnostics.GenerateSyntaxErrors(
+                mqlFile, language, CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Parse-only diagnostic fallback failed.");
+            parseDiagnostics = new List<Diagnostic>();
+        }
+
+        return new RelatedFullDocumentDiagnosticReport
+        {
+            ResultId = Guid.NewGuid().ToString(),
+            Items = parseDiagnostics
         };
     }
 
@@ -203,98 +231,4 @@ public class DiagnosticHandler : LanguageAwareHandlerBase<DocumentDiagnosticPara
         };
     }
 
-    private List<Diagnostic> GenerateDiagnostics(MqlFile? mqlFile, string content, MqlLanguage language, CancellationToken token, string? documentPath)
-    {
-        var diagnostics = new List<Diagnostic>();
-        var lines = content.Split('\n');
-        var baseCode = language == MqlLanguage.Mql5 ? Mql5DiagnosticBase : Mql4DiagnosticBase;
-
-        // Publish real syntax errors from the parser.
-        // ANTLR uses 1-based lines and 0-based columns; LSP uses 0-based for both.
-        if (mqlFile?.SyntaxErrors != null)
-        {
-            foreach (var syntaxError in mqlFile.SyntaxErrors)
-            {
-                token.ThrowIfCancellationRequested();
-
-                var length = syntaxError.OffendingSymbol?.Length ?? 1;
-                diagnostics.Add(new Diagnostic
-                {
-                    Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(
-                        syntaxError.Line - 1, syntaxError.Column,
-                        syntaxError.Line - 1, syntaxError.Column + length),
-                    Severity = DiagnosticSeverity.Error,
-                    Message = syntaxError.Message,
-                    Code = (baseCode + 100).ToString(),  // 1100 for MQL4, 5100 for MQL5
-                    Source = "mql-lsp"
-                });
-            }
-        }
-
-        // Issue #28: MQL-native semantic rules run after syntax errors and
-        // before the line-scan heuristics. Failures inside the analyzer are
-        // swallowed per-rule (best-effort) and must not disturb the existing
-        // syntax/typo/underscore diagnostics.
-        var semanticAnalyzer = _semanticAnalyzer ?? new SemanticAnalyzer();
-        diagnostics.AddRange(ApplyCrossFileSuppression(
-            semanticAnalyzer.Analyze(mqlFile, content, language, token),
-            mqlFile, documentPath, language, token));
-
-        for (int i = 0; i < lines.Length; i++)
-        {
-            if (i % 100 == 0) token.ThrowIfCancellationRequested();
-
-            var line = lines[i];
-
-            if (line.Contains("UnkownFunction") || line.Contains("UnkownVariable"))
-            {
-                diagnostics.Add(new Diagnostic
-                {
-                    Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(i, 0, i, line.Length),
-                    Severity = DiagnosticSeverity.Error,
-                    Message = "Potential typo: 'Unkown' should be 'Unknown'",
-                    Code = (baseCode + 1).ToString(),
-                    Source = "mql-lsp"
-                });
-            }
-
-            if (line.Contains("int OnInit()") && i + 1 < lines.Length)
-            {
-                var nextLine = lines[i + 1].Trim();
-                if (string.IsNullOrEmpty(nextLine) || nextLine == "{}")
-                {
-                    diagnostics.Add(new Diagnostic
-                    {
-                        Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(i, 0, i, line.Length),
-                        Severity = DiagnosticSeverity.Warning,
-                        Message = "OnInit function appears to be empty.",
-                        Code = (baseCode + 2).ToString(),
-                        Source = "mql-lsp"
-                    });
-                }
-            }
-        }
-
-        if (mqlFile?.Symbols != null)
-        {
-            foreach (var symbol in mqlFile.Symbols)
-            {
-                token.ThrowIfCancellationRequested();
-
-                if (symbol.Name.StartsWith("_") && symbol.Kind == SymbolKind.Variable)
-                {
-                    diagnostics.Add(new Diagnostic
-                    {
-                        Range = symbol.Range,
-                        Severity = DiagnosticSeverity.Hint,
-                        Message = $"Variable '{symbol.Name}' starts with underscore",
-                        Code = (baseCode + 3).ToString(),
-                        Source = "mql-lsp"
-                    });
-                }
-            }
-        }
-
-        return diagnostics;
-    }
 }
