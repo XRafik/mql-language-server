@@ -304,6 +304,17 @@ public class Mql5AntlrParser : IMqlParser
             return null;
         }
 
+        // Issue #182: declarations in this document (or its include graph) take
+        // precedence over the builtin registry. Lookup is case-insensitive in
+        // both directions, so a local "bars" shadows the builtin "Bars()"
+        // instead of being answered from the registry.
+        var symbols = FindSymbolsByName(file, identifier);
+        if (symbols.Any())
+        {
+            return symbols.First();
+        }
+
+        // Fall back to the builtin registry
         if (IsBuiltin(identifier))
         {
             return new MqlSymbol
@@ -317,12 +328,6 @@ public class Mql5AntlrParser : IMqlParser
                     new LspPosition(searchLine, searchColumn + identifier.Length)
                 )
             };
-        }
-
-        var symbols = FindSymbolsByName(file, identifier);
-        if (symbols.Any())
-        {
-            return symbols.First();
         }
 
         return null;
