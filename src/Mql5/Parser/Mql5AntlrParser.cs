@@ -308,10 +308,14 @@ public class Mql5AntlrParser : IMqlParser
         // precedence over the builtin registry. Lookup is case-insensitive in
         // both directions, so a local "bars" shadows the builtin "Bars()"
         // instead of being answered from the registry.
-        var symbols = FindSymbolsByName(file, identifier);
-        if (symbols.Any())
+        // Issue #184: the document match is scope-aware — an enclosing
+        // declaration wins (S1), a document-scope declaration beats one
+        // nested in a foreign function (S2), included symbols compete at
+        // document scope (S4), and the registry stays the last fallback (S3).
+        var resolved = ResolveInScope(file, identifier, searchLine, searchColumn);
+        if (resolved != null)
         {
-            return symbols.First();
+            return resolved;
         }
 
         // Fall back to the builtin registry
@@ -600,7 +604,7 @@ public class Mql5AntlrParser : IMqlParser
 
     private Dictionary<string, List<MqlSymbol>> EnsureSymbolIndex(MqlFile file)
     {
-        if (file.SymbolIndex != null)
+        if (file.SymbolIndex != null && file.ScopeContainerSymbols != null)
         {
             return file.SymbolIndex;
         }
@@ -612,8 +616,32 @@ public class Mql5AntlrParser : IMqlParser
                 CreateSymbolIndex(file, out var newIndex);
                 file.SymbolIndex = newIndex;
             }
+
+            // Issue #184 (S6): cache this document's function/method
+            // declarations next to the name index — one pass over Symbols,
+            // built once, reused by every subsequent scope-aware lookup.
+            file.ScopeContainerSymbols ??= SymbolScopeResolver.CollectScopeContainers(file);
+
             return file.SymbolIndex;
         }
+    }
+
+    /// <summary>
+    /// Issue #184: choose the declaration of the identifier that is visible
+    /// at the lookup position (see SymbolScopeResolver for the S1/S2/S4/S5
+    /// precedence), or null when nothing in the document encloses the
+    /// position or is declared at document scope.
+    /// </summary>
+    private MqlSymbol? ResolveInScope(MqlFile file, string identifier, int searchLine, int searchColumn)
+    {
+        var symbolIndex = EnsureSymbolIndex(file);
+        if (!symbolIndex.TryGetValue(identifier, out var candidates) || candidates.Count == 0)
+        {
+            return null;
+        }
+
+        var containers = file.ScopeContainerSymbols ?? SymbolScopeResolver.CollectScopeContainers(file);
+        return SymbolScopeResolver.SelectCandidate(candidates, containers, file.FilePath, searchLine, searchColumn);
     }
 
     private void CreateSymbolIndex(MqlFile file, out Dictionary<string, List<MqlSymbol>> symbolsByName)
