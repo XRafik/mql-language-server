@@ -1,17 +1,20 @@
 #!/bin/bash
 # Opt-in evidence script: Tier-1 system-include verification against a real
 # MetaTrader installation (issue #179, S6). Drives a real LSP session that
-# opens a document with `#include <Trade\Trade.mqh>` and asserts the symbols
-# reached through that header produce zero undeclared-symbol diagnostics.
+# opens a document that pulls `<Trade\Trade.mqh>` and `<Arrays\ArrayLong.mqh>`
+# and asserts the symbols reached through them (direct declaration, quoted
+# same-directory hop, and subdirectory angle entry) produce zero
+# undeclared-symbol diagnostics.
 # It is NOT referenced by any CI workflow and never runs automatically.
 #
 # Usage:
 #   ./tools/verify-system-includes.sh <path-to-MQL5/Include>
 
-echo "=================================================="
-echo "System Include Verification Script (issue #179, S6)"
-echo "=================================================="
-echo ""
+# Banner goes to stderr so redirecting stdout yields pure JSON evidence.
+echo "==================================================" >&2
+echo "System Include Verification Script (issue #179, S6)" >&2
+echo "==================================================" >&2
+echo "" >&2
 
 # Check if we're in the right directory
 if [ ! -f "src/MqlLanguageServer.Server.csproj" ]; then
