@@ -164,3 +164,9 @@ boundary that issues #18/#21b established for quoted includes outside any declar
   `status:approved` on the user's explicit choice ("Aprueba #186 y ciérralo", single-PR slice).
   First CI cycle green: Build and Test, Analyze (csharp), VS Code Extension, CodeQL, and
   `mergeable: MERGEABLE`. Merge remains the user's decision.
+- **L13** (CI on the delivered branch): the follow-up commit `86bfc20` went green end to end —
+  CI run 40496207228 (Build and Test 36s, VS Code Extension 16s) and CodeQL run 40496207257
+  (Analyze (csharp) 2m10s), `CodeQL` check pass. PR state at that head: 4 commits
+  (`eee72e2..86bfc20`), base `main`, label `type:bug`, `mergeable: MERGEABLE`,
+  `mergeStateStatus: CLEAN`, no review decision required by branch protection. Nothing was merged:
+  merge is the user's decision, and this document's job ends at verified delivery-ready evidence.
