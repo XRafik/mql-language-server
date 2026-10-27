@@ -9,8 +9,11 @@ Consumes ``data/mql5-constants-audit.json`` produced by ``audit_mql5_constants.p
 * add the ``add`` entries — identifiers documented in the HTML authority that the dataset is
   missing, each carrying the description captured from its evidence row (audit rule S4).
 
-Nothing else changes: the ``adjudicate`` and ``undocumented_unknown`` sets stay untouched, on
-the conservative rule that undocumented is not proven fabricated (issue #176's
+Nothing else changes: the ``adjudicate`` set stays untouched, and the ``undocumented_unknown``
+set only changes through the human pass (issue #192): a removal needs positive evidence
+recorded in the report's ``adjudicated.remove`` (S3), while ``adjudicated.keep`` entries stay
+in the dataset and gain the decision's provenance marker. The conservative rule still retires
+an entry only on evidence, never on absence of documentation (issue #176's
 ``WFA_PerformCalculations`` is a real undocumented intrinsic).
 
 The script is idempotent — re-running it after a successful apply is a no-op — and refuses to
@@ -39,6 +42,18 @@ REPORT = TOOL_ROOT / "data" / "mql5-constants-audit.json"
 
 PROVENANCE = "mql5-constants-audit-2026-10-26"
 ADDED_PROVENANCE = "mql5-constants-audit-add-2026-10-26"
+
+
+def with_marker(provenance: object, marker: str) -> str | None:
+    """Return the provenance with `marker` appended, or None when it is already there.
+
+    Keeps are the conservative half of the human pass: the entry stays, so the only edit is
+    the adjudication marker. Appending it twice would make a re-run a fake change.
+    """
+    base = provenance if isinstance(provenance, str) and provenance else ""
+    if marker in base:
+        return None
+    return f"{base}; {marker}" if base else marker
 
 # One evidence row: <span class="f_EnumID">NAME</span> ... <span class="f_EnumDesc">text</span>
 ROW_RE = re.compile(
@@ -87,24 +102,40 @@ def main(argv: list[str]) -> int:
 
     removals = [entry["name"] for entry in report.get("remove") or []]
     additions = report.get("add") or []
+    adjudicated = report.get("adjudicated") or {}
+    adjudicated_removals = [entry["name"] for entry in adjudicated.get("remove") or []]
+    adjudicated_keeps = adjudicated.get("keep") or []
+    removals = removals + [n for n in adjudicated_removals if n not in removals]
     present_removals = [name for name in removals if name in variables]
     needed_additions = [entry for entry in additions if entry["name"] not in variables]
     addition_names = [entry["name"] for entry in needed_additions]
+    # Keeps are applied as provenance markers; a marker already present is a no-op.
+    marker_updates = [
+        (entry["name"], entry["marker"])
+        for entry in adjudicated_keeps
+        if entry["name"] in variables
+        and with_marker((variables[entry["name"]] or {}).get("provenance"), entry["marker"]) is not None
+    ]
 
     print(f"report: {report_path.relative_to(REPO_ROOT)}")
-    print(f"removals: {len(removals)} ({len(present_removals)} still present)")
+    print(f"removals: {len(removals)} ({len(present_removals)} still present)"
+          f" [adjudicated: {len(adjudicated_removals)}]")
     print(f"additions: {len(additions)} ({len(addition_names)} still missing)")
+    print(f"keeps: {len(adjudicated_keeps)} ({len(marker_updates)} markers to write)")
 
-    already_applied = not present_removals and not addition_names
+    already_applied = not present_removals and not addition_names and not marker_updates
     if already_applied:
         print("dataset already matches the audit; nothing to write (idempotent no-op).")
         return 0
 
     if not args.write:
         for name in present_removals:
-            print(f"  - remove  {name}")
+            kind = " (adjudicated)" if name in adjudicated_removals else ""
+            print(f"  - remove  {name}{kind}")
         for entry in needed_additions:
             print(f"  + add     {entry['name']}  <- fragment {entry.get('from_fragment')}")
+        for name, marker in marker_updates:
+            print(f"  ~ keep    {name}  + {marker}")
         print("dry run: pass --write to apply")
         return 0
 
@@ -118,6 +149,12 @@ def main(argv: list[str]) -> int:
 
     for name in present_removals:
         variables.pop(name)
+
+    for name, marker in marker_updates:
+        if name in variables:
+            entry = variables[name] or {}
+            entry["provenance"] = with_marker(entry.get("provenance"), marker)
+            variables[name] = entry
 
     rebuilt: list[tuple[str, object]] = []
     inserted: set[str] = set()
@@ -141,7 +178,8 @@ def main(argv: list[str]) -> int:
 
     dataset["variables"] = dict(rebuilt)
     dataset_path.write_text(json.dumps(dataset, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"applied: -{len(present_removals)} +{len(addition_names)} -> {len(dataset['variables'])} variables")
+    print(f"applied: -{len(present_removals)} +{len(addition_names)} "
+          f"~{len(marker_updates)} markers -> {len(dataset['variables'])} variables")
     return 0
 
 
