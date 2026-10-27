@@ -1,0 +1,370 @@
+{
+  "schema": "mql5-constants-audit-v2",
+  "dataset": "data/builtins/mql5.json",
+  "totals": {
+    "variables": 2004,
+    "documented": 1973,
+    "documented_pct": 98.5,
+    "truncated_fragments": 0,
+    "undocumented_unknown": 10,
+    "adjudicated_removals": 21,
+    "adjudicated_keeps": 11,
+    "decisions_already_applied": 0,
+    "removable_fragments": 0,
+    "additions_supported": 0,
+    "adjudication_needed": 0,
+    "ambiguous_adjudications": 0
+  },
+  "documented_in_authority": 1771,
+  "documented_pdf_only": 202,
+  "documented_sample": [
+    "ACCOUNT_ASSETS",
+    "ACCOUNT_BALANCE",
+    "ACCOUNT_COMMISSION_BLOCKED",
+    "ACCOUNT_COMPANY",
+    "ACCOUNT_CREDIT",
+    "ACCOUNT_CURRENCY",
+    "ACCOUNT_CURRENCY_DIGITS",
+    "ACCOUNT_EQUITY",
+    "ACCOUNT_FIFO_CLOSE",
+    "ACCOUNT_HEDGE_ALLOWED",
+    "ACCOUNT_LEVERAGE",
+    "ACCOUNT_LIABILITIES"
+  ],
+  "remove": [],
+  "add": [],
+  "adjudicate": [],
+  "undocumented_unknown": [
+    {
+      "name": "CRYPT_AES192",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-newer-than-evidence-2026-10-26"
+    },
+    {
+      "name": "CRYPT_ARCH_GZIP",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-newer-than-evidence-2026-10-26"
+    },
+    {
+      "name": "CRYPT_ARCH_ZLIB",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-newer-than-evidence-2026-10-26"
+    },
+    {
+      "name": "CRYPT_GOST28147_89",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-unverifiable-2026-10-26"
+    },
+    {
+      "name": "CRYPT_GOST28147_89_PRO",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-unverifiable-2026-10-26"
+    },
+    {
+      "name": "CRYPT_HASH_SHA512",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-newer-than-evidence-2026-10-26"
+    },
+    {
+      "name": "MODE_MINUSDI",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-mql4-heritage-issue-46-2026-10-26"
+    },
+    {
+      "name": "MODE_PLUSDI",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-mql4-heritage-issue-46-2026-10-26"
+    },
+    {
+      "name": "false",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-grammar-keyword-2026-10-26"
+    },
+    {
+      "name": "true",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1",
+      "adjudication": "adjudicated-kept-grammar-keyword-2026-10-26"
+    }
+  ],
+  "adjudicated": {
+    "remove": [
+      {
+        "name": "CHART_MOUSE_DOUBLE_CLICK",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess; MQL5 chart events document no double-click member",
+        "evidence": "page-cache/en__docs__constants__chartconstants__enum_chartevents.html documents CHARTEVENT_CLICK, CHARTEVENT_MOUSE_MOVE, CHARTEVENT_MOUSE_WHEEL and no double-click member; 'CHART_MOUSE_DOUBLE_CLICK' zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "CHART_SHOW_TIME_SCALE",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess; MQL5 names the axis DATE, not TIME",
+        "evidence": "page-cache/en__docs__constants__chartconstants__enum_chart_property.html documents the CHART_SHOW_* set (ASK_LINE, BID_LINE, DATE_SCALE, GRID, LAST_LINE, OBJECT_DESCR, OHLC, ONE_CLICK, PERIOD_SEP, PRICE_SCALE, TICKER, TRADE_HISTORY, TRADE_LEVELS, VOLUMES) and has no TIME_SCALE; 'CHART_SHOW_TIME_SCALE' zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "DEAL_BALANCE",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess cited by #173 as an evidence hole",
+        "evidence": "dealproperties.html documents DEAL_TYPE_BALANCE (with its 'Balance' description); 'DEAL_BALANCE' zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "DEAL_BONUS",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess",
+        "evidence": "dealproperties.html documents DEAL_TYPE_BONUS; 'DEAL_BONUS' zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "DEAL_BUY",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "MQL4-era bare deal-type guess; MQL5 documents the DEAL_TYPE_* prefix",
+        "evidence": "page-cache/en__docs__constants__tradingconstants__dealproperties.html documents DEAL_TYPE_BUY; 'DEAL_BUY' has zero occurrences in page-cache and in data/pdf/mql5-reference-layout.txt",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "DEAL_CHARGE",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess",
+        "evidence": "dealproperties.html documents DEAL_TYPE_CHARGE; 'DEAL_CHARGE' zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "DEAL_CORRECTION",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess",
+        "evidence": "dealproperties.html documents DEAL_TYPE_CORRECTION; 'DEAL_CORRECTION' zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "DEAL_CREDIT",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess",
+        "evidence": "dealproperties.html documents DEAL_TYPE_CREDIT; 'DEAL_CREDIT' zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "DEAL_SELL",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "MQL4-era bare deal-type guess; MQL5 documents the DEAL_TYPE_* prefix",
+        "evidence": "dealproperties.html documents DEAL_TYPE_SELL; 'DEAL_SELL' zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "INDICATOR_LEVELS_COLOR",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess joining two documented names",
+        "evidence": "page-cache/en__docs__constants__indicatorconstants__customindicatorproperties.html documents INDICATOR_LEVELS and INDICATOR_LEVELCOLOR; 'INDICATOR_LEVELS_COLOR' zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "INDICATOR_TESTER",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess; the MQL5 tester slot is a program-info constant",
+        "evidence": "zero 'INDICATOR_TESTER' occurrences in page-cache and in the PDF layout dump; page-cache/en__docs__constants__environment_state__mql5_programm_info.html documents MQL_TESTER",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "J_C",
+        "provenance": "official-mql5-reference-pdf-2026-10-18 pages 701",
+        "action": "remove",
+        "reason": "PDF extraction artifact (column-clipped identifier)",
+        "evidence": "data/pdf/mql5-reference-layout.txt the example code block renders (OBJ_CHART as (OB / J_C / HAR, a vertical kerning split (provenance pages 701); the token only ever occurs inside a longer documented identifier split across lines, never as a documented member",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "J_E",
+        "provenance": "official-mql5-reference-pdf-2026-10-18 pages 697",
+        "action": "remove",
+        "reason": "PDF extraction artifact (line-wrapped identifier)",
+        "evidence": "data/pdf/mql5-reference-layout.txt the example code block renders (OBJ_EDIT) as (OB / J_E / DIT) (provenance pages 697); the token only ever occurs inside a longer documented identifier split across lines, never as a documented member",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "L_S",
+        "provenance": "official-mql5-reference-pdf-2026-10-18 pages 769",
+        "action": "remove",
+        "reason": "PDF extraction artifact (kerning-split identifier)",
+        "evidence": "data/pdf/mql5-reference-layout.txt the table column renders the SYMBOL_SELECT-style identifiers split, e.g. M BO / L_S / EL (provenance pages 769); the token only ever occurs inside a longer documented identifier split across lines, never as a documented member",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "NT_MA",
+        "provenance": "official-mql5-reference-pdf-2026-10-18 pages 884,886,887",
+        "action": "remove",
+        "reason": "PDF extraction artifact (column-clipped identifier)",
+        "evidence": "the PDF renders INT_MAX as 'int i_value=INT_MAX;', whose clipped window yields 'NT_MA' (provenance pages 884,886,887)",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "OBJPROP_COMMENT",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess; the object description slot is documented as OBJPROP_TEXT",
+        "evidence": "the refetched live page-cache/en__docs__constants__objectconstants__enum_object_property.html (2026-10-26, backup .pre-192-refetch.bak) holds zero 'COMMENT' occurrences and documents OBJPROP_TEXT; 'OBJPROP_COMMENT' zero occurrences across page-cache and the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "OBJPROP_CORNEROBJPROP_ANCHOROBJPROP_ANGLE",
+        "provenance": "official-mql5-reference-pdf-2026-10-18 pages 716,721",
+        "action": "remove",
+        "reason": "PDF extraction artifact (three rows glued into one cell)",
+        "evidence": "provenance pages 716,721; the PDF table clips adjacent rows so OBJPROP_CORNER, OBJPROP_ANCHOR and OBJPROP_ANGLE concatenate; each member is separately documented in page-cache/en__docs__constants__objectconstants__enum_object_property.html",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "OBJ_ARROWED_HLINE",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess gluing two documented object members",
+        "evidence": "page-cache/en__docs__constants__objectconstants__enum_object.html documents OBJ_ARROWED_LINE, OBJ_HLINE and OBJ_TREND, and no OBJ_ARROWED_HLINE; zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "OBJ_ARROWED_TREND",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "remove",
+        "reason": "registry guess gluing two documented object members",
+        "evidence": "enum_object.html documents OBJ_ARROWED_LINE, OBJ_HLINE and OBJ_TREND, and no OBJ_ARROWED_TREND; zero occurrences in page-cache and in the PDF layout dump",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "R_TYP",
+        "provenance": "official-mql5-reference-pdf-2026-10-18 pages 913",
+        "action": "remove",
+        "reason": "PDF extraction artifact (kerning-split identifier)",
+        "evidence": "the PDF renders BORDER_TYPE as 'input ENUM_BORDER_TYPE InpBorder=BORDER...' (provenance page 913); 'R_TYP' is its clipped window",
+        "marker": "adjudicated-removed-2026-10-26"
+      },
+      {
+        "name": "T_MAR",
+        "provenance": "official-mql5-reference-pdf-2026-10-18 pages 885",
+        "action": "remove",
+        "reason": "PDF extraction artifact (kerning-split identifier)",
+        "evidence": "the PDF renders ENUM_ACCOUNT_MARGIN_MODE (provenance page 885); 'T_MAR' is a clipped window of that row",
+        "marker": "adjudicated-removed-2026-10-26"
+      }
+    ],
+    "keep": [
+      {
+        "name": "CRYPT_AES192",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "newer than both evidence artifacts; documented MQL4 name",
+        "evidence": "the ENUM_CRYPT_METHOD table in the 2026 PDF dump (line 49437ff) lists BASE64, AES128, AES256, DES, HASH_SHA1, HASH_SHA256, HASH_MD5, ARCH_ZIP; the live CryptEncode page loads its table from JavaScript (zero CRYPT_* in the captured HTML) and the name is a documented MQL4 entry, so absence here is not evidence of fabrication",
+        "marker": "adjudicated-kept-newer-than-evidence-2026-10-26"
+      },
+      {
+        "name": "CRYPT_ARCH_GZIP",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "newer than both evidence artifacts; documented MQL4 name",
+        "evidence": "same ENUM_CRYPT_METHOD table shape; CRYPT_ARCH_GZIP is a documented MQL4 name, mirrored by the MQL4 round-1 keeps of newer crypto/arch members",
+        "marker": "adjudicated-kept-newer-than-evidence-2026-10-26"
+      },
+      {
+        "name": "CRYPT_ARCH_ZLIB",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "newer than both evidence artifacts; documented MQL4 name",
+        "evidence": "same ENUM_CRYPT_METHOD table shape; CRYPT_ARCH_ZLIB is a documented MQL4 name",
+        "marker": "adjudicated-kept-newer-than-evidence-2026-10-26"
+      },
+      {
+        "name": "CRYPT_GOST28147_89",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "absent from both evidence artifacts, no contrary documented name",
+        "evidence": "no occurrence in page-cache or the PDF layout dump, and no MQL4 entry either; the conservative rule (undocumented is not proven fabricated) keeps it pending a live-table capture",
+        "marker": "adjudicated-kept-unverifiable-2026-10-26"
+      },
+      {
+        "name": "CRYPT_GOST28147_89_PRO",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "absent from both evidence artifacts, no contrary documented name",
+        "evidence": "no occurrence in page-cache or the PDF layout dump; kept under the same conservative rule as CRYPT_GOST28147_89",
+        "marker": "adjudicated-kept-unverifiable-2026-10-26"
+      },
+      {
+        "name": "CRYPT_HASH_SHA512",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "newer than both evidence artifacts; documented MQL4 name",
+        "evidence": "same ENUM_CRYPT_METHOD table shape as CRYPT_AES192; CRYPT_HASH_SHA512 is a documented MQL4 name and the cached MQL5 crypto page never carried the table",
+        "marker": "adjudicated-kept-newer-than-evidence-2026-10-26"
+      },
+      {
+        "name": "MODE_MINUSDI",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "MQL4-era ADX line index, documented in MQL4; the MQL5 reference names the slot PLUSDI_LINE/MINUSDI_LINE",
+        "evidence": "zero 'MODE_' occurrences in page-cache/en__docs__constants__indicatorconstants__lines.html (it documents PLUSDI_LINE/MINUSDI_LINE) and zero 'MODE_PLUSDI'/'MODE_MINUSDI' in the PDF layout dump; still registered for MQL5 by the issue #46 corpus pass — same evidence class as MODE_PLUSDI; kept together for symmetry. Disposition pending the maintainer's call on retiring MQL4-era line constants (see odd/tasks/issue-192 doc, L7).",
+        "marker": "adjudicated-kept-mql4-heritage-issue-46-2026-10-26"
+      },
+      {
+        "name": "MODE_PLUSDI",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "MQL4-era ADX line index, documented in MQL4; the MQL5 reference names the slot PLUSDI_LINE/MINUSDI_LINE",
+        "evidence": "zero 'MODE_' occurrences in page-cache/en__docs__constants__indicatorconstants__lines.html (it documents PLUSDI_LINE/MINUSDI_LINE) and zero 'MODE_PLUSDI'/'MODE_MINUSDI' in the PDF layout dump; still registered for MQL5 by the issue #46 corpus pass — MQL5Builtins_Resolves_StdlibEnumConstants pins it (issue #46). Disposition pending the maintainer's call on retiring MQL4-era line constants (see odd/tasks/issue-192 doc, L7).",
+        "marker": "adjudicated-kept-mql4-heritage-issue-46-2026-10-26"
+      },
+      {
+        "name": "false",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "grammar keyword, not a builtin constant",
+        "evidence": "same class as 'true'; the entry documents the boolean literal, it is not a table member the constants reference could cite",
+        "marker": "adjudicated-kept-grammar-keyword-2026-10-26"
+      },
+      {
+        "name": "true",
+        "provenance": "hand-curated-registry-v2.5.1-rc.1",
+        "action": "keep",
+        "reason": "grammar keyword, not a builtin constant",
+        "evidence": "MQL4 keeps True/False as boolean literal keywords (round 3 precedent, data/builtins/mql4.json 'True'); MQL5 accepts the legacy capitalized literals",
+        "marker": "adjudicated-kept-grammar-keyword-2026-10-26"
+      },
+      {
+        "name": "M_E",
+        "provenance": "official-mql5-reference-pdf-2026-10-18 pages 949; descriptions-official-mql5-reference-pdf-2026-10-19",
+        "action": "keep",
+        "reason": "documented mathematical constant; first pass misread the sample-code use as a local variable",
+        "evidence": "page-cache/en__docs__constants__namedconstants__mathsconstants.html documents M_E as a table row (<span class=\"f_fortable\">M_E</span>) alongside M_PI/M_LN2/M_LOG2E, all of which the dataset already holds; the PDF's only other occurrence is the sample code Print(\"M_E = \",DoubleToString(M_E,16)). It was invisible to the authority because IDENTIFIER_RE requires four characters and M_E has three; the audit now scans the M_* family explicitly.",
+        "marker": "adjudicated-kept-documented-math-constant-2026-10-26"
+      }
+    ]
+  },
+  "decisions_already_applied": [],
+  "rules": {
+    "fragment_min_length": "enforced by IDENTIFIER_RE (4+ characters)",
+    "min_parent_length_for_addition": 10,
+    "removal_policy": "fragment whose documented parent is already a dataset entry (S3)",
+    "addition_policy": "documented parent of a dataset fragment, unambiguous and long enough (S4)",
+    "unknown_policy": "kept: undocumented is not proven fabricated (S2, conservative rule L2)",
+    "adjudication_policy": [
+      "human pass over the unknown bucket (issue #192): a removal requires positive evidence, recorded per name; a keep stays in undocumented_unknown and gains a provenance marker"
+    ]
+  },
+  "evidence": {
+    "distinct_identifiers": 5130,
+    "html_pages": 95,
+    "html_authority_identifiers": 1974,
+    "wide_shape_identifiers": 171,
+    "pdf_identifiers": 4048,
+    "pdf_only_identifiers": 2985
+  }
+}
