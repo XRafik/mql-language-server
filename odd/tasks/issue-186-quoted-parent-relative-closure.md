@@ -69,3 +69,37 @@ boundary that issues #18/#21b established for quoted includes outside any declar
   folder is readable (`WorkspaceRoots.IsReadAllowed`) yet dropped by the containment guard. That is
   wider than S1 and is not part of this feature unless the user asks for it; candidate for a
   follow-up issue.
+- **L4** (T1 evidence, reproduced by the parent, not only by the writer): focused filter
+  `dotnet test --filter "FullyQualifiedName~IncludePathResolverTests|FullyQualifiedName~SystemIncludeFixtureTests"`
+  measured 3 failed / 31 passed / 34 total, and the three failures are exactly the new pins:
+  `TryResolveContained_QuotedParentRelativeInsideSystemRoot_Resolves` (`Assert.True() Failure /
+  Expected: True / Actual: False`), `Diagnostics_Mql5_CommittedFixture_QuotedParentRelativeInclude_
+  SuppressesUndeclaredSymbolsAsync` and its Mql4 twin (collection holds `Undeclared symbol
+  'CArrayLongSynth' is not defined in this document.` — the false 5070/1070 of S2). The three
+  controls were green already. Committed as `eee72e2`.
+- **L5** (self-check on this session's own reasoning): mid-task the parent announced a "correction"
+  claiming the containment base is the includer FILE path rather than its directory, which would
+  have implied the committed fixture's same-directory quoted hop (`Expert\ExpertLib.mqh`) never
+  resolved. That correction was wrong and is retracted: `PathSecurity.IsContainedInWorkspace` takes
+  `Path.GetDirectoryName(Path.GetFullPath(includingFile))`, so L2 as written stands, the fixture
+  README claim is accurate, and the only rejected shape is a hop into a DIFFERENT directory of the
+  same root. Consequence: task #5 (differential check against a scratch copy of the base commit for
+  the same-directory shape) lost its premise and is dropped; the differential evidence is now the
+  pre-existing pins (`TryResolveContained_ExistingSiblingInclude_Resolves`,
+  `..._InsideSubdirectoryOfIncluderDir_Resolves`, `..._QuotedBackslashSeparator_Resolves`,
+  `PathSecurityTests`, `CrossFileTests`, `RealWorldParsingTests`) staying green plus the suite-count
+  delta being exactly the six new tests (base measures 1,762, so the expected total is 1,768).
+- **L6** (T2 implemented, not yet committed): new `PathSecurity.IsContainedInCommonSystemRoot(
+  includingFile, resolvedPath, systemIncludeRoots)` — one and the same declared root must contain
+  the includer's directory and the resolved target, with the #21b fail-closed rule kept for the
+  queried path and the trusted-reference lexical fallback for the includer directory and the root;
+  `IncludePathResolver.TryResolveContained` now accepts either containment shape
+  (`IsContainedInWorkspace || IsContainedInCommonSystemRoot(…, CurrentSystemIncludeRoots)`) and
+  still clears nothing on the false path. `IsContainedInWorkspace` itself is untouched, so every
+  `PathSecurityTests` pin on it holds unchanged. Focused set green: 61/61 over
+  `IncludePathResolverTests|SystemIncludeFixtureTests|PathSecurityTests|SystemIncludeResolutionTests|DiagnosticHandlerCrossFileSuppressionTests`.
+- **L7** (consequence worth naming for review): a workspace document that itself sits inside a
+  declared system include root now follows its parent-relative quoted hops too. That is the same
+  trust unit the root already grants through `WorkspaceRoots.IsReadAllowed`, and it partially covers
+  the L3 case — the general workspace-sibling case (no root involved) is still rejected and stays a
+  follow-up candidate.

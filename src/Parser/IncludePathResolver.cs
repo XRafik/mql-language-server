@@ -377,13 +377,37 @@ public static class IncludePathResolver
     /// Combines <see cref="Resolve"/> + <see cref="File.Exists"/> +
     /// <see cref="PathSecurity.IsContainedInWorkspace"/> — the guard the didOpen
     /// path already applied and the parser copies lacked.
+    ///
+    /// <para>Issue #186 adds the second containment shape a quoted entry can
+    /// satisfy: when the includer and the resolved target both sit inside ONE
+    /// declared system include root, that root — not the header's own directory —
+    /// is the unit the user declared trustworthy, so the quoted parent-relative
+    /// hop the MetaQuotes library headers use
+    /// (<c>#include "..\Arrays\ArrayLong.mqh"</c> from <c>Trade\Trade.mqh</c>)
+    /// reaches the include closure instead of being dropped silently. Outside a
+    /// single declared root the directory rule above stays the only gate: an
+    /// escape to an arbitrary path, and a hop into a different declared tree,
+    /// keep failing exactly as before.</para>
     /// </summary>
     public static bool TryResolveContained(
         string includingFile, string? includeEntry, out string resolvedPath)
     {
-        resolvedPath = Resolve(includingFile, includeEntry) ?? string.Empty;
-        return !string.IsNullOrEmpty(resolvedPath)
-            && File.Exists(resolvedPath)
-            && PathSecurity.IsContainedInWorkspace(includingFile, resolvedPath);
+        var candidate = Resolve(includingFile, includeEntry) ?? string.Empty;
+        if (string.IsNullOrEmpty(candidate) || !File.Exists(candidate))
+        {
+            resolvedPath = string.Empty;
+            return false;
+        }
+
+        if (PathSecurity.IsContainedInWorkspace(includingFile, candidate)
+            || PathSecurity.IsContainedInCommonSystemRoot(
+                includingFile, candidate, CurrentSystemIncludeRoots))
+        {
+            resolvedPath = candidate;
+            return true;
+        }
+
+        resolvedPath = string.Empty;
+        return false;
     }
 }

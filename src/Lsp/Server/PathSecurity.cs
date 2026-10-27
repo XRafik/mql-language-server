@@ -126,6 +126,100 @@ internal static class PathSecurity
         return false;
     }
 
+    /// <summary>
+    /// Issue #186: true when <paramref name="includingFile"/> and
+    /// <paramref name="resolvedPath"/> both sit inside ONE AND THE SAME declared
+    /// system include root.
+    /// </summary>
+    /// <remarks>
+    /// Inside a root the user declared as a trusted include tree, the trusted unit
+    /// is that root and not the including header's own directory: MetaQuotes
+    /// library headers reach sibling directories of the Include tree with the
+    /// quoted parent-relative form (<c>#include "..\Arrays\ArrayLong.mqh"</c> from
+    /// <c>Trade\Trade.mqh</c>), and <see cref="WorkspaceRoots.IsReadAllowed"/>
+    /// already admits reads under the declared root. The admission is deliberately
+    /// narrow:
+    /// <list type="bullet">
+    /// <item>a single root must contain BOTH sides, so an entry cannot hop from one
+    /// declared tree into a different declared tree (two independent root hits are
+    /// not enough);</item>
+    /// <item>the #21b fail-closed rule is kept for the QUERIED path: a resolved
+    /// include whose real path cannot be determined is containment-unprovable and
+    /// is rejected;</item>
+    /// <item>with no root declared the answer is always false, which keeps the
+    /// fail-open pre-feature behaviour and the includer-directory rule of
+    /// <see cref="IsContainedInWorkspace"/> as the only gate.</item>
+    /// </list>
+    /// Symlink handling mirrors <see cref="IsContainedInWorkspace"/> exactly: the
+    /// including directory and the client-declared root are trusted references
+    /// (best-effort with a lexical fallback), the resolved include is not.
+    /// </remarks>
+    public static bool IsContainedInCommonSystemRoot(
+        string includingFile, string resolvedPath, IEnumerable<string> systemIncludeRoots)
+    {
+        if (string.IsNullOrEmpty(includingFile)
+            || string.IsNullOrEmpty(resolvedPath)
+            || systemIncludeRoots == null)
+        {
+            return false;
+        }
+
+        string includingDir;
+        string resolvedFull;
+        try
+        {
+            includingDir = Path.GetDirectoryName(Path.GetFullPath(includingFile))!;
+            resolvedFull = Path.GetFullPath(resolvedPath);
+        }
+        catch
+        {
+            // Malformed path: no admission (fail closed).
+            return false;
+        }
+
+        // The QUERIED path is attacker-influenceable: resolution failure is
+        // fail-CLOSED (issue #21b) — containment cannot be proven, so reject.
+        if (!TryResolveRealPath(resolvedFull, out var realResolvedFull))
+        {
+            return false;
+        }
+
+        var realIncludingDir = TryResolveRealPath(includingDir, out var resolvedIncludingDir)
+            ? resolvedIncludingDir
+            : includingDir;
+
+        foreach (var root in systemIncludeRoots)
+        {
+            if (string.IsNullOrEmpty(root))
+            {
+                continue;
+            }
+
+            string normalizedRoot;
+            try
+            {
+                normalizedRoot = Path.GetFullPath(root);
+            }
+            catch
+            {
+                continue;
+            }
+
+            var realRoot = TryResolveRealPath(normalizedRoot, out var resolvedRoot)
+                ? resolvedRoot
+                : normalizedRoot;
+
+            // One and the same root has to hold both sides.
+            if (IsDescendant(realRoot, realIncludingDir)
+                && IsDescendant(realRoot, realResolvedFull))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static bool IsDescendant(string baseDir, string fullPath)
     {
         var normalizedBase = baseDir.EndsWith(Path.DirectorySeparatorChar)

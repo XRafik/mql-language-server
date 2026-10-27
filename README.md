@@ -96,6 +96,7 @@ Roots can also be declared per project, so a repository carries its own configur
 - Relative entries resolve against the directory containing `.mql-lsp.json`, which keeps the file portable across machines; absolute entries are used as-is.
 - Precedence: a non-empty `systemIncludeRoots` initialization option wins and the project files are not consulted; otherwise the union across workspace folders applies. With neither source the server stays in fail-open mode.
 - A malformed or unreadable file is ignored and a warning is logged — it never breaks the session.
+- Inside a declared root, a quoted parent-relative hop that stays inside that same root is followed by the include closure exactly like the angle form: `#include "..\Arrays\ArrayLong.mqh"` written in `Trade\Trade.mqh` contributes its symbols (issue #186). A hop that leaves every declared root, or that lands in a *different* declared root, is still rejected.
 
 ### Unresolved system includes
 

@@ -96,6 +96,7 @@ Las raíces también se pueden declarar por proyecto, de modo que el repositorio
 - Las entradas relativas se resuelven contra el directorio que contiene `.mql-lsp.json`, lo que mantiene el archivo portable entre máquinas; las entradas absolutas se usan tal cual.
 - Precedencia: una opción de inicialización `systemIncludeRoots` no vacía tiene prioridad y los archivos del proyecto no se consultan; en caso contrario se aplica la unión de las carpetas del workspace. Sin ninguna de las dos fuentes, el servidor permanece en modo fail-open.
 - Un archivo malformado o ilegible se ignora y se registra una advertencia: nunca interrumpe la sesión.
+- Dentro de una raíz declarada, un salto entrecomillado relativo al padre que permanece dentro de esa misma raíz lo sigue la clausura de includes exactamente igual que la forma con ángulos: `#include "..\Arrays\ArrayLong.mqh"` escrito en `Trade\Trade.mqh` aporta sus símbolos (issue #186). Un salto que sale de todas las raíces declaradas, o que cae en una raíz declarada *distinta*, sigue rechazándose.
 
 ### Includes del sistema sin resolver
 
