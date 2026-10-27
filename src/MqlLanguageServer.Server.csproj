@@ -24,7 +24,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>mql-lsp-server</ToolCommandName>
     <PackageId>mql-language-server</PackageId>
-    <Version>2.6.2</Version>
+    <Version>2.7.0</Version>
     <Authors>Guillermo Davalillo</Authors>
     <Description>Language Server Protocol implementation for MQL4 and MQL5 (MetaTrader 4/5)</Description>
     <!-- NuGet package authoring best practices:
