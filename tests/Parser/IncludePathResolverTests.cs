@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using MqlLanguageServer.Lsp.Server;
 using MqlLanguageServer.Parser;
 using Xunit;
 
@@ -254,6 +255,128 @@ public class IncludePathResolverTests : IDisposable
         finally
         {
             IncludePathResolver.SetSystemIncludeRootsProvider(null);
+        }
+    }
+
+    // --- Issue #200: quoted parent-relative include between sibling folders of
+    //     an ordinary workspace folder is admitted by the containment gate. ---
+
+    [Fact]
+    public void TryResolveContained_QuotedParentRelativeInsideWorkspaceFolder_Resolves()
+    {
+        // Issue #200: the #186 rule admitted a quoted parent-relative hop only
+        // when BOTH sides sat inside one declared SYSTEM include root. The
+        // ordinary-workspace shape is different: the folders are declared
+        // workspace folders, not system roots. A quoted parent-relative include
+        // between sibling folders of the SAME workspace folder
+        // (e.g. `..\Common\util.mqh` from `Include\Trade.mqh`) resolves and is
+        // readable but the includer-directory guard alone rejects it, silently
+        // dropping the include edge. It must now be admitted.
+        var workspace = Path.Combine(_tempDir, "Workspace");
+        var includer = Path.Combine(workspace, "Include", "Trade.mqh");
+        var target = Path.Combine(workspace, "Common", "util.mqh");
+        Directory.CreateDirectory(Path.Combine(workspace, "Include"));
+        Directory.CreateDirectory(Path.Combine(workspace, "Common"));
+        File.WriteAllText(includer, "int trade = 1;\n");
+        File.WriteAllText(target, "int util = 2;\n");
+
+        IncludePathResolver.SetWorkspaceRootsProvider(() => new[] { workspace });
+        try
+        {
+            var ok = IncludePathResolver.TryResolveContained(includer, @"..\Common\util.mqh", out var resolved);
+
+            Assert.True(ok);
+            Assert.Equal(target, resolved);
+        }
+        finally
+        {
+            IncludePathResolver.SetWorkspaceRootsProvider(null);
+        }
+    }
+
+    [Fact]
+    public void TryResolveContained_QuotedParentRelativeEscapingWorkspaceFolder_ReturnsFalse()
+    {
+        // Control pin (issue #200): the widening admits only targets inside a
+        // declared workspace folder. A quoted hop that escapes the folder
+        // entirely — even with the folder declared — must stay rejected.
+        var workspace = Path.Combine(_tempDir, "Workspace");
+        var includer = Path.Combine(workspace, "Include", "Trade.mqh");
+        Directory.CreateDirectory(Path.Combine(workspace, "Include"));
+        File.WriteAllText(includer, "int trade = 1;\n");
+        File.WriteAllText(Path.Combine(_tempDir, "outside.mqh"), "int outside = 3;\n");
+
+        IncludePathResolver.SetWorkspaceRootsProvider(() => new[] { workspace });
+        try
+        {
+            var ok = IncludePathResolver.TryResolveContained(includer, @"..\..\outside.mqh", out _);
+
+            Assert.False(ok);
+        }
+        finally
+        {
+            IncludePathResolver.SetWorkspaceRootsProvider(null);
+        }
+    }
+
+    [Fact]
+    public void TryResolveContained_QuotedParentRelativeAcrossTwoWorkspaceFolders_ReturnsFalse()
+    {
+        // Common-root rule (issue #200): a hop from one declared workspace
+        // folder into a DIFFERENT one stays rejected — the includer and the
+        // target must share one single declared root, not merely two hits.
+        var workspaceA = Path.Combine(_tempDir, "WorkspaceA");
+        var workspaceB = Path.Combine(_tempDir, "WorkspaceB");
+        var includer = Path.Combine(workspaceA, "Include", "Trade.mqh");
+        var target = Path.Combine(workspaceB, "Common", "util.mqh");
+        Directory.CreateDirectory(Path.Combine(workspaceA, "Include"));
+        Directory.CreateDirectory(Path.Combine(workspaceB, "Common"));
+        File.WriteAllText(includer, "int trade = 1;\n");
+        File.WriteAllText(target, "int util = 2;\n");
+
+        IncludePathResolver.SetWorkspaceRootsProvider(() => new[] { workspaceA, workspaceB });
+        try
+        {
+            var ok = IncludePathResolver.TryResolveContained(
+                includer, @"..\..\WorkspaceB\Common\util.mqh", out _);
+
+            Assert.False(ok);
+        }
+        finally
+        {
+            IncludePathResolver.SetWorkspaceRootsProvider(null);
+        }
+    }
+
+    [Fact]
+    public void TryResolveContained_SystemRootStillAdmittedWhenWorkspaceFoldersAlsoDeclared()
+    {
+        // Issue #200 regression guard: the #186 system-root admission must keep
+        // working once workspace folders are also declared (the gate now unions
+        // the two root sets, so a hop inside a system root is still admitted).
+        var systemRoot = Path.Combine(_tempDir, "SystemRoot");
+        var workspace = Path.Combine(_tempDir, "Workspace");
+        var includer = Path.Combine(systemRoot, "Trade", "Trade.mqh");
+        var target = Path.Combine(systemRoot, "Arrays", "ArrayLong.mqh");
+        Directory.CreateDirectory(Path.Combine(systemRoot, "Trade"));
+        Directory.CreateDirectory(Path.Combine(systemRoot, "Arrays"));
+        Directory.CreateDirectory(workspace);
+        File.WriteAllText(includer, "int trade = 1;\n");
+        File.WriteAllText(target, "int arrayLong = 2;\n");
+
+        IncludePathResolver.SetSystemIncludeRootsProvider(() => new[] { systemRoot });
+        IncludePathResolver.SetWorkspaceRootsProvider(() => new[] { workspace });
+        try
+        {
+            var ok = IncludePathResolver.TryResolveContained(includer, @"..\Arrays\ArrayLong.mqh", out var resolved);
+
+            Assert.True(ok);
+            Assert.Equal(target, resolved);
+        }
+        finally
+        {
+            IncludePathResolver.SetSystemIncludeRootsProvider(null);
+            IncludePathResolver.SetWorkspaceRootsProvider(null);
         }
     }
 

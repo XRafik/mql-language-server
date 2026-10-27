@@ -422,6 +422,16 @@ namespace MqlLanguageServer
                             // them (fail-open only while the set is empty).
                             WorkspaceRoots.Set(workspaceFoldersSnapshot);
 
+                            // Issue #200: expose the declared workspace folders to the
+                            // single include-resolution service so a quoted
+                            // parent-relative include between sibling folders of the
+                            // same workspace (e.g. `..\Common\util.mqh` from
+                            // `Include\Trade.mqh`) is admitted by the containment
+                            // gate and reaches the include closure — mirroring the
+                            // #186 system-root rule. Wired to the same snapshot that
+                            // seeds the central read guard above.
+                            IncludePathResolver.SetWorkspaceRootsProvider(() => WorkspaceRoots.Current);
+
                             // System include roots (MQL4/MQL5 Standard Library):
                             // two explicit sources, in precedence order (issue
                             // #179 S2): the `systemIncludeRoots: ["...MQL5/Include", ...]`

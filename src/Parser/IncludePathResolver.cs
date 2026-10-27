@@ -89,6 +89,59 @@ public static class IncludePathResolver
         => _systemIncludeRootsProvider?.Invoke() ?? Array.Empty<string>();
 
     /// <summary>
+    /// Process-wide provider of the declared workspace-folder roots, set during
+    /// server initialization (Program.OnInitialize wires it to
+    /// <see cref="MqlLanguageServer.Lsp.Server.WorkspaceRoots.Current"/>). Null or
+    /// an empty result keeps the historical behavior: the includer-directory rule
+    /// and the #186 system-root rule are the only containment gates. Tests set it
+    /// directly via <see cref="SetWorkspaceRootsProvider"/>.
+    /// </summary>
+    private static Func<IReadOnlyList<string>?>? _workspaceRootsProvider;
+
+    /// <summary>
+    /// Installs the process-wide workspace-roots provider. Passing null restores
+    /// the default behavior (workspace folders do not widen containment).
+    /// </summary>
+    public static void SetWorkspaceRootsProvider(Func<IReadOnlyList<string>?>? provider)
+    {
+        _workspaceRootsProvider = provider;
+    }
+
+    private static IReadOnlyList<string> CurrentWorkspaceRoots
+        => _workspaceRootsProvider?.Invoke() ?? Array.Empty<string>();
+
+    /// <summary>
+    /// Issue #200: the union of every declared root the containment gate may
+    /// admit a quoted parent-relative hop through — the declared workspace
+    /// folders plus the system include roots. De-duplicated and order-stable
+    /// (workspace folders first, then system roots, both as configured). Each
+    /// candidate still has to hold BOTH sides of the hop on its own (see
+    /// <see cref="MqlLanguageServer.Lsp.Server.PathSecurity.IsContainedInCommonSystemRoot"/>)
+    /// so merging the two sets never admits a cross-root hop.
+    /// </summary>
+    private static List<string> AllDeclaredRoots()
+    {
+        var result = new List<string>();
+        foreach (var root in CurrentWorkspaceRoots)
+        {
+            if (!string.IsNullOrEmpty(root) && result.IndexOf(root) < 0)
+            {
+                result.Add(root);
+            }
+        }
+
+        foreach (var root in CurrentSystemIncludeRoots)
+        {
+            if (!string.IsNullOrEmpty(root) && result.IndexOf(root) < 0)
+            {
+                result.Add(root);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Issue #32 (REQ-IA-03): internal read-only accessor for content scans of
     /// existing quoted <c>#include "..."</c> entries. Resolve semantics are
     /// untouched — this only exposes the already-compiled pattern so the
@@ -384,10 +437,15 @@ public static class IncludePathResolver
     /// is the unit the user declared trustworthy, so the quoted parent-relative
     /// hop the MetaQuotes library headers use
     /// (<c>#include "..\Arrays\ArrayLong.mqh"</c> from <c>Trade\Trade.mqh</c>)
-    /// reaches the include closure instead of being dropped silently. Outside a
-    /// single declared root the directory rule above stays the only gate: an
-    /// escape to an arbitrary path, and a hop into a different declared tree,
-    /// keep failing exactly as before.</para>
+    /// reaches the include closure instead of being dropped silently. Issue #200
+    /// generalizes that rule to declared workspace folders as well: the same
+    /// parent-relative hop between sibling folders of an ordinary workspace
+    /// (<c>#include "..\Common\util.mqh"</c> from <c>Include\Trade.mqh</c>) is
+    /// admitted when both sides sit in one workspace folder, restoring the
+    /// include edge the rename, call-hierarchy and .mqh language routing key on.
+    /// Outside a single declared root the directory rule above stays the only
+    /// gate: an escape to an arbitrary path, and a hop into a different declared
+    /// tree, keep failing exactly as before.</para>
     /// </summary>
     public static bool TryResolveContained(
         string includingFile, string? includeEntry, out string resolvedPath)
@@ -399,9 +457,30 @@ public static class IncludePathResolver
             return false;
         }
 
-        if (PathSecurity.IsContainedInWorkspace(includingFile, candidate)
-            || PathSecurity.IsContainedInCommonSystemRoot(
-                includingFile, candidate, CurrentSystemIncludeRoots))
+        if (PathSecurity.IsContainedInWorkspace(includingFile, candidate))
+        {
+            resolvedPath = candidate;
+            return true;
+        }
+
+        // Issue #186 (and #200): a quoted parent-relative hop is also admitted
+        // when the includer and the resolved target both sit inside ONE declared
+        // root. The trusted unit is the root the user declared, not the header's
+        // own directory, so library headers that reach sibling directories with a
+        // quoted form (e.g. `..\Arrays\ArrayLong.mqh` from `Trade\Trade.mqh`)
+        // reach the include closure instead of being dropped. #186 opened this to
+        // declared system include roots; #200 generalizes it to declared
+        // workspace folders as well — the ordinary-workspace shape where a
+        // quoted parent-relative include between sibling folders of the same
+        // workspace (e.g. `..\Common\util.mqh` from `Include\Trade.mqh`)
+        // resolves and is readable but the includer-directory guard alone
+        // rejects it, silently dropping the include edge the rename
+        // (#90), call-hierarchy (#96) and .mqh language routing key on. A
+        // target that escapes every declared root, or a hop from one declared
+        // tree into a different one, still fails exactly as before: IsContainedIn
+        // CommonRoot requires one single root to contain BOTH sides.
+        if (PathSecurity.IsContainedInCommonSystemRoot(
+            includingFile, candidate, AllDeclaredRoots()))
         {
             resolvedPath = candidate;
             return true;
