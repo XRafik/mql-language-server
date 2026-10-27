@@ -164,16 +164,24 @@ internal static class PathSecurity
             return false;
         }
 
-        string includingDir;
+        string? includingDir;
         string resolvedFull;
         try
         {
-            includingDir = Path.GetDirectoryName(Path.GetFullPath(includingFile))!;
+            includingDir = Path.GetDirectoryName(Path.GetFullPath(includingFile));
             resolvedFull = Path.GetFullPath(resolvedPath);
         }
         catch
         {
             // Malformed path: no admission (fail closed).
+            return false;
+        }
+
+        if (includingDir == null)
+        {
+            // The includer is a filesystem root itself, so it has no containing
+            // directory to relate to the root: nothing can be proven, reject
+            // (same degenerate-path rule IsContainedInWorkspace applies).
             return false;
         }
 

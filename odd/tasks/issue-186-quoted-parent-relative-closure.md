@@ -137,3 +137,30 @@ boundary that issues #18/#21b established for quoted includes outside any declar
   #186 stayed invisible in that evidence). The committed synthetic chain
   `tests/fixtures/system-include/Include/Expert/ExpertQuotedEntry.mqh` is the durable evidence for
   S2 instead, and it is what the MQL4/MQL5 pins run against.
+- **L11** (independent verifier verdict and the two things it asked for): the read-only
+  `gentle-ai-verify` pass returned **no blockers** — S1, S2, S3, S4, S5, docs-vs-code and test
+  quality all `pass`, measuring focused 69/69, Release build 0 warnings / 0 errors and full suite
+  1,776, and confirming line by line that the new guard reuses the #21b fail-closed statement on the
+  queried path, that its admission set is a subset of what `WorkspaceRoots.IsReadAllowed` already
+  allows (`SystemIncludeRoots.ContainsPath` delegates to the same `PathSecurity.IsUnderAnyRoot`),
+  that the two closure consumers evaluate the identical predicate per hop so they cannot disagree,
+  and that every control pin would fail against an over-permissive implementation. It named two
+  gaps, both closed by the follow-up commit on this branch:
+  1. **missing pin** — `IsContainedInCommonSystemRoot` had no symlink case, so an implementation
+     that dropped the fail-closed `TryResolveRealPath` on the queried path would still have passed
+     all eight guard cases. Three pins added, mirroring the pre-existing `IsContainedInWorkspace`
+     trio: `..._SymlinkInsideRoot_True` (containment judged on the real path),
+     `..._SymlinkEscapingRoot_False` (a link under the root cannot be turned into an arbitrary
+     read), `..._SymlinkLoop_FailClosed` (unresolvable queried path is rejected, never allowed).
+  2. **hygiene nit** — the new guard used `Path.GetDirectoryName(...)!` where
+     `IsContainedInWorkspace` keeps a null check, so a degenerate includer path (a filesystem root)
+     could null-deref inside `IsDescendant`. The check is added with the same reasoning.
+  Two limits it recorded, kept here because they are honest limits of the evidence: the RED
+  measurement and the 1,762 base were not re-run, because reproducing either requires checking out
+  another commit and the task was read-only; the structural corroboration is that `eee72e2` carries
+  zero production changes and every test hunk on this branch is a pure addition (0 deletions).
+- **L12** (delivery): pushed as `fix/186-quoted-parent-relative-closure`; PR
+  davalillo/mql-language-server#199 with `type:bug` and `Closes #186`, and #186 labelled
+  `status:approved` on the user's explicit choice ("Aprueba #186 y ciérralo", single-PR slice).
+  First CI cycle green: Build and Test, Analyze (csharp), VS Code Extension, CodeQL, and
+  `mergeable: MERGEABLE`. Merge remains the user's decision.
