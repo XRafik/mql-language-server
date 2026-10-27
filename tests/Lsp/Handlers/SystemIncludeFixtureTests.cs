@@ -39,6 +39,11 @@ namespace MqlLanguageServer.Tests.Lsp.Handlers;
 /// depth &gt; 1.</item>
 /// <item><c>Expert\ExpertEntry.mqh</c> — the entry header the consumer
 /// document includes through the angle-bracket directive.</item>
+/// <item><c>Expert\ExpertQuotedEntry.mqh</c> — the quoted parent-relative
+/// entry header (issue #186): reached through the angle-bracket directive,
+/// its single nested hop uses the quoted <c>..\</c> form into
+/// <c>Collections\</c> — the hop the include closure must admit inside a
+/// declared system root.</item>
 /// </list>
 ///
 /// <para>Tier 1 contract under test: with system include roots configured,
@@ -55,6 +60,8 @@ public class SystemIncludeFixtureTests : IDisposable
     private readonly string _wsDir;     // workspace folder with consumer docs
     private readonly string _eaMql5Path;
     private readonly string _eaMql4Path;
+    private readonly string _eaMql5QuotedPath;
+    private readonly string _eaMql4QuotedPath;
 
     public SystemIncludeFixtureTests()
     {
@@ -91,6 +98,32 @@ public class SystemIncludeFixtureTests : IDisposable
             "   CArrayLongSynth values;\n" +
             "   int total = values.Total();\n" +
             "   MissingMql4Symbol();\n" +
+            "}\n");
+
+        // Issue #186 consumers: the entry header arrives through the angle
+        // form, but its single nested hop uses the QUOTED parent-relative
+        // form ("..\Collections\ArrayLongLib.mqh"). CArrayLongSynth must be
+        // suppressed through that hop; MissingQuoted*Symbol is genuinely
+        // unknown and must keep its diagnostic.
+        _eaMql5QuotedPath = Path.Combine(_wsDir, "consumer-quoted.mq5");
+        File.WriteAllText(_eaMql5QuotedPath,
+            "#include <Expert\\ExpertQuotedEntry.mqh>\n" +
+            "void OnTick()\n" +
+            "{\n" +
+            "   CArrayLongSynth values;\n" +
+            "   int total = values.Total();\n" +
+            "   MissingQuotedStdlibSymbol();\n" +
+            "}\n");
+
+        // MQL4 counterpart: same quoted parent-relative hop, same contract.
+        _eaMql4QuotedPath = Path.Combine(_wsDir, "consumer-quoted.mq4");
+        File.WriteAllText(_eaMql4QuotedPath,
+            "#include <Expert\\ExpertQuotedEntry.mqh>\n" +
+            "void OnStart()\n" +
+            "{\n" +
+            "   CArrayLongSynth values;\n" +
+            "   int total = values.Total();\n" +
+            "   MissingQuotedMql4Symbol();\n" +
             "}\n");
 
         // Point the session's system include roots at the committed fixture
@@ -224,6 +257,40 @@ public class SystemIncludeFixtureTests : IDisposable
         Assert.Contains(items, d => IsUnresolvedFor(d, "MissingMql4Symbol"));
     }
 
+    // --- Issue #186: quoted parent-relative hop inside a declared root ---
+
+    [Fact]
+    public async Task Diagnostics_Mql5_CommittedFixture_QuotedParentRelativeInclude_SuppressesUndeclaredSymbolsAsync()
+    {
+        // Issue #186 RED pin: the quoted parent-relative hop inside the
+        // declared root must feed the include closure, so CArrayLongSynth is
+        // suppressed exactly like through the angle-form chain; the
+        // genuinely-missing symbol keeps its diagnostic (no blanket
+        // suppression).
+        GlobalSymbolIndex.Instance.Clear();
+        var store = new OpenDocumentStore();
+        await DidOpenAsync(CreateOpenHandler(store), _eaMql5QuotedPath, "mql5");
+
+        var items = await GetPullDiagnosticsAsync(_eaMql5QuotedPath);
+
+        Assert.DoesNotContain(items, d => IsUnresolvedFor(d, "CArrayLongSynth"));
+        Assert.Contains(items, d => IsUnresolvedFor(d, "MissingQuotedStdlibSymbol"));
+    }
+
+    [Fact]
+    public async Task Diagnostics_Mql4_CommittedFixture_QuotedParentRelativeInclude_SuppressesUndeclaredSymbolsAsync()
+    {
+        // MQL4 mirror of the issue #186 quoted parent-relative pin.
+        GlobalSymbolIndex.Instance.Clear();
+        var store = new OpenDocumentStore();
+        await DidOpenAsync(CreateOpenHandler(store), _eaMql4QuotedPath, "mql4");
+
+        var items = await GetPullDiagnosticsAsync(_eaMql4QuotedPath);
+
+        Assert.DoesNotContain(items, d => IsUnresolvedFor(d, "CArrayLongSynth"));
+        Assert.Contains(items, d => IsUnresolvedFor(d, "MissingQuotedMql4Symbol"));
+    }
+
     // --- Fail-open controls: without roots the closure suppresses nothing ---
 
     [Fact]
@@ -253,5 +320,20 @@ public class SystemIncludeFixtureTests : IDisposable
         Assert.Contains(items, d => IsUnresolvedFor(d, "CSynthTrade"));
         Assert.Contains(items, d => IsUnresolvedFor(d, "CArrayLongSynth"));
         Assert.Contains(items, d => IsUnresolvedFor(d, "MissingMql4Symbol"));
+    }
+
+    [Fact]
+    public async Task Diagnostics_Mql5_NoRoots_QuotedParentRelativeInclude_StillFlaggedAsync()
+    {
+        // Fail-open control (issue #186): without declared roots the quoted
+        // consumer suppresses nothing — CArrayLongSynth and the missing
+        // symbol both keep their diagnostics.
+        SystemIncludeRoots.Clear();
+        GlobalSymbolIndex.Instance.Clear();
+
+        var items = await GetPullDiagnosticsAsync(_eaMql5QuotedPath);
+
+        Assert.Contains(items, d => IsUnresolvedFor(d, "CArrayLongSynth"));
+        Assert.Contains(items, d => IsUnresolvedFor(d, "MissingQuotedStdlibSymbol"));
     }
 }

@@ -181,6 +181,185 @@ public class PathSecurityTests
         Assert.False(PathSecurity.IsContainedInWorkspace(a!, b!));
     }
 
+    // --- IsContainedInCommonSystemRoot (issue #186: the root, not the header's
+    //     own directory, is the trusted unit inside a declared system root) ---
+
+    [Fact]
+    public void IsContainedInCommonSystemRoot_BothSidesInsideOneRoot_True()
+    {
+        // Trade\Trade.mqh reaching Collections\ with the quoted parent-relative
+        // form: includer and target share one declared root.
+        var root = CreateTempDir();
+        var including = Path.Combine(root, "Trade", "Trade.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Trade"));
+        File.WriteAllText(including, "// x");
+        var target = Path.Combine(root, "Collections", "ArrayLong.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Collections"));
+        File.WriteAllText(target, "// h");
+
+        Assert.True(PathSecurity.IsContainedInCommonSystemRoot(including, target, new[] { root }));
+
+        Cleanup(root);
+    }
+
+    [Fact]
+    public void IsContainedInCommonSystemRoot_TargetOutsideEveryRoot_False()
+    {
+        // The widening never reaches an arbitrary path: the target escaped the
+        // only declared root (#18/#21b rule kept outside a root).
+        var root = CreateTempDir();
+        var including = Path.Combine(root, "Trade", "Trade.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Trade"));
+        File.WriteAllText(including, "// x");
+        var outside = Path.Combine(Path.GetTempPath(), "escaped-" + Guid.NewGuid().ToString("N") + ".mqh");
+        File.WriteAllText(outside, "// secret");
+
+        Assert.False(PathSecurity.IsContainedInCommonSystemRoot(including, outside, new[] { root }));
+
+        Cleanup(root);
+        File.Delete(outside);
+    }
+
+    [Fact]
+    public void IsContainedInCommonSystemRoot_TwoDifferentRoots_False()
+    {
+        // One and the SAME root must hold both sides: an includer declared under
+        // RootA cannot hop into RootB just because RootB is also declared.
+        var rootA = CreateTempDir();
+        var rootB = CreateTempDir();
+        var including = Path.Combine(rootA, "Trade", "Trade.mqh");
+        Directory.CreateDirectory(Path.Combine(rootA, "Trade"));
+        File.WriteAllText(including, "// x");
+        var target = Path.Combine(rootB, "Arrays", "ArrayLong.mqh");
+        Directory.CreateDirectory(Path.Combine(rootB, "Arrays"));
+        File.WriteAllText(target, "// h");
+
+        Assert.False(PathSecurity.IsContainedInCommonSystemRoot(including, target, new[] { rootA, rootB }));
+
+        Cleanup(rootA);
+        Cleanup(rootB);
+    }
+
+    [Fact]
+    public void IsContainedInCommonSystemRoot_NoRootsDeclared_False()
+    {
+        // Fail open (issue #179 contract): with no root declared nothing is
+        // admitted, so pre-feature behaviour is unchanged.
+        var root = CreateTempDir();
+        var including = Path.Combine(root, "Trade.mqh");
+        File.WriteAllText(including, "// x");
+        var target = Path.Combine(root, "ArrayLong.mqh");
+        File.WriteAllText(target, "// h");
+
+        Assert.False(PathSecurity.IsContainedInCommonSystemRoot(including, target, Array.Empty<string>()));
+
+        Cleanup(root);
+    }
+
+    [Fact]
+    public void IsContainedInCommonSystemRoot_SymlinkInsideRoot_True()
+    {
+        // Inside a declared root containment is judged on the REAL path, not the
+        // lexical one: a hop that is itself a link, whose target stays under that
+        // root, is admitted.
+        var root = CreateTempDir();
+        var including = Path.Combine(root, "Trade", "Trade.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Trade"));
+        File.WriteAllText(including, "// x");
+        var realTarget = Path.Combine(root, "Collections", "ArrayLong.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Collections"));
+        File.WriteAllText(realTarget, "// h");
+
+        var linkPath = Path.Combine(root, "Collections", "link.mqh");
+        try
+        {
+            File.CreateSymbolicLink(linkPath, realTarget);
+        }
+        catch (PlatformNotSupportedException)
+        {
+            Cleanup(root);
+            throw; // rethrow so the test is skipped on platforms without symlinks
+        }
+
+        Assert.True(PathSecurity.IsContainedInCommonSystemRoot(including, linkPath, new[] { root }));
+
+        Cleanup(root);
+    }
+
+    [Fact]
+    public void IsContainedInCommonSystemRoot_SymlinkEscapingRoot_False()
+    {
+        // #21b through the new guard: a link under the declared root whose real
+        // target lives outside it must NOT be admitted, so widening the trusted
+        // unit to the root cannot be turned into an arbitrary file read.
+        var root = CreateTempDir();
+        var outsideDir = Path.Combine(Path.GetTempPath(), "mql-lsp-outside-root-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(outsideDir);
+        var outsideTarget = Path.Combine(outsideDir, "secret.mqh");
+        File.WriteAllText(outsideTarget, "// secret");
+
+        var including = Path.Combine(root, "Trade", "Trade.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Trade"));
+        File.WriteAllText(including, "// x");
+
+        var linkPath = Path.Combine(root, "Collections", "link.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Collections"));
+        try
+        {
+            File.CreateSymbolicLink(linkPath, outsideTarget);
+        }
+        catch (PlatformNotSupportedException)
+        {
+            Cleanup(root);
+            Cleanup(outsideDir);
+            throw; // rethrow so the test is skipped on platforms without symlinks
+        }
+
+        Assert.False(PathSecurity.IsContainedInCommonSystemRoot(including, linkPath, new[] { root }));
+
+        Cleanup(root);
+        Cleanup(outsideDir);
+    }
+
+    [Fact]
+    public void IsContainedInCommonSystemRoot_SymlinkLoop_FailClosed()
+    {
+        // The queried path with an unresolvable real path (loop) is
+        // containment-unprovable and must be rejected rather than falling back to
+        // the lexical value — the same fail-closed rule IsContainedInWorkspace
+        // already pins.
+        var root = CreateTempDir();
+        var including = Path.Combine(root, "Trade", "Trade.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Trade"));
+        File.WriteAllText(including, "// x");
+
+        var linkPath = Path.Combine(root, "Collections", "loop.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Collections"));
+        try
+        {
+            File.CreateSymbolicLink(linkPath, linkPath);
+        }
+        catch (PlatformNotSupportedException)
+        {
+            Cleanup(root);
+            throw; // rethrow so the test is skipped on platforms without symlinks
+        }
+
+        Assert.False(PathSecurity.IsContainedInCommonSystemRoot(including, linkPath, new[] { root }));
+
+        Cleanup(root);
+    }
+
+    [Theory]
+    [InlineData("", "x")]
+    [InlineData("x", "")]
+    [InlineData(null, "x")]
+    [InlineData("x", null)]
+    public void IsContainedInCommonSystemRoot_RejectsNullOrEmpty(string? a, string? b)
+    {
+        Assert.False(PathSecurity.IsContainedInCommonSystemRoot(a!, b!, new[] { "/tmp" }));
+    }
+
     private static void Cleanup(string dir)
     {
         try { if (Directory.Exists(dir)) Directory.Delete(dir, true); }

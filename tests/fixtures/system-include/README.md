@@ -18,6 +18,7 @@ root; the tests point `SystemIncludeRoots.Set(...)` at it.
 | `Include/Collections/ArrayLongLib.mqh` | The `CArrayLong` pattern: a collection-like type (`CArrayLongSynth`) with a count accessor. |
 | `Include/Expert/ExpertLib.mqh` | An includer header one hop below the entry: pulls the collection header from the `Collections\` family, as real library headers depend on headers from another directory of the Include tree. This hop makes the closure transitive. |
 | `Include/Expert/ExpertEntry.mqh` | The entry header the consumer document includes via `#include <Expert\ExpertEntry.mqh>`; everything else arrives through the transitive closure it opens. |
+| `Include/Expert/ExpertQuotedEntry.mqh` | The quoted parent-relative entry header (issue #186): the consumer document includes it via the angle form, and its single nested hop uses the quoted `..\` form (`#include "..\Collections\ArrayLongLib.mqh"`) to reach the collection header in a sibling directory of the same root — mirroring how real library headers reach a sibling directory with the quoted form. This is the hop the include closure must admit. |
 
 Include closure exercised by the tests (depth > 1):
 
@@ -34,6 +35,21 @@ sibling hop uses the same-directory quoted form. Both are the include styles
 the server's didOpen indexer resolves from inside a header (quoted hops are
 containment-guarded to the includer's own directory, so sibling headers stay
 colocated exactly like the real library's).
+
+The quoted parent-relative chain exercised by the issue #186 tests:
+
+```
+consumer document (quoted parent-relative hop, issue #186)
+└── <Expert\ExpertQuotedEntry.mqh>        (angle-bracket, resolved via system include roots)
+    └── "..\Collections\ArrayLongLib.mqh" (quoted parent-relative hop: one level up from
+                                          Expert\ into Collections\, inside the same root)
+```
+
+This hop is admitted only when the resolved target and the includer both sit
+inside the same single declared system include root. Outside a declared root
+the includer-directory rule is unchanged, and a quoted hop from one declared
+root into a different declared root stays rejected (a common root is required,
+not merely two root hits).
 
 ## Dialect coverage
 
