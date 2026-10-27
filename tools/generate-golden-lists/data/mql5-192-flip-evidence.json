@@ -1,0 +1,587 @@
+{
+ "MqlBookInfo": [
+  "en__docs__constants__structures.html",
+  "en__docs__constants__structures__mqlbookinfo.html",
+  "en__docs__constants__tradingconstants__enum_book_type.html"
+ ],
+ "MqlCalendarCountry": [
+  "en__docs__constants__structures__mqlcalendar.html"
+ ],
+ "MqlCalendarEvent": [
+  "en__docs__constants__structures__mqlcalendar.html"
+ ],
+ "MqlCalendarValue": [
+  "en__docs__constants__structures__mqlcalendar.html"
+ ],
+ "MqlDateTime": [
+  "en__docs__constants__structures.html",
+  "en__docs__constants__structures__mqldatetime.html"
+ ],
+ "MqlParam": [
+  "en__docs__constants__indicatorconstants.html",
+  "en__docs__constants__indicatorconstants__enum_datatype.html",
+  "en__docs__constants__indicatorconstants__enum_indicator.html",
+  "en__docs__constants__structures.html",
+  "en__docs__constants__structures__mqlparam.html"
+ ],
+ "MqlRates": [
+  "en__docs__constants__structures.html",
+  "en__docs__constants__structures__mqlrates.html"
+ ],
+ "MqlTick": [
+  "en__docs__constants__structures.html",
+  "en__docs__constants__structures__mqltick.html"
+ ],
+ "MqlTradeCheckResult": [
+  "en__docs__constants__structures.html",
+  "en__docs__constants__structures__mqltradecheckresult.html"
+ ],
+ "MqlTradeRequest": [
+  "en__docs__constants__environment_state__marketinfoconstants.html",
+  "en__docs__constants__errorswarnings__enum_trade_return_codes.html",
+  "en__docs__constants__structures.html",
+  "en__docs__constants__structures__mqltraderequest.html",
+  "en__docs__constants__structures__mqltraderesult.html",
+  "en__docs__constants__structures__mqltradetransaction.html",
+  "en__docs__constants__tradingconstants__enum_trade_request_actions.html",
+  "en__docs__constants__tradingconstants__orderproperties.html",
+  "en__docs__constants__tradingconstants__positionproperties.html"
+ ],
+ "MqlTradeResult": [
+  "en__docs__constants__errorswarnings__enum_trade_return_codes.html",
+  "en__docs__constants__structures.html",
+  "en__docs__constants__structures__mqltraderequest.html",
+  "en__docs__constants__structures__mqltraderesult.html",
+  "en__docs__constants__structures__mqltradetransaction.html",
+  "en__docs__constants__tradingconstants__enum_trade_request_actions.html"
+ ],
+ "MqlTradeTransaction": [
+  "en__docs__constants__structures.html",
+  "en__docs__constants__structures__mqltraderesult.html",
+  "en__docs__constants__structures__mqltradetransaction.html",
+  "en__docs__constants__tradingconstants__enum_trade_transaction_type.html"
+ ],
+ "_LastError": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__errorswarnings__errorcodes.html"
+ ],
+ "_Point": [
+  "en__docs__constants__structures__mqltradetransaction.html"
+ ],
+ "_Symbol": [
+  "en__docs__constants__structures__mqltraderequest.html",
+  "en__docs__constants__structures__mqltradetransaction.html",
+  "en__docs__constants__tradingconstants__enum_trade_request_actions.html"
+ ],
+ "_UninitReason": [
+  "en__docs__constants__namedconstants__uninit.html"
+ ],
+ "__COUNTER__": [
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "__CPU_ARCHITECTURE__": [
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "__DATETIME__": [
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "__DATE__": [
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "__FILE__": [
+  "en__docs__constants__environment_state__mql5_programm_info.html",
+  "en__docs__constants__namedconstants__compilemacros.html",
+  "en__docs__constants__namedconstants__uninit.html"
+ ],
+ "__FUNCSIG__": [
+  "en__docs__constants__errorswarnings__errorscompile.html",
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "__FUNCTION__": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__errorswarnings__errorscompile.html",
+  "en__docs__constants__namedconstants__compilemacros.html",
+  "en__docs__constants__namedconstants__uninit.html",
+  "en__docs__constants__objectconstants__enum_object__obj_arrowed_line.html",
+  "en__docs__constants__objectconstants__enum_object__obj_channel.html",
+  "en__docs__constants__objectconstants__enum_object__obj_cycles.html",
+  "en__docs__constants__objectconstants__enum_object__obj_elliotwave3.html",
+  "en__docs__constants__objectconstants__enum_object__obj_elliotwave5.html",
+  "en__docs__constants__objectconstants__enum_object__obj_expansion.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fibo.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fiboarc.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fibochannel.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fibofan.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fibotimes.html",
+  "en__docs__constants__objectconstants__enum_object__obj_gannfan.html",
+  "en__docs__constants__objectconstants__enum_object__obj_ganngrid.html",
+  "en__docs__constants__objectconstants__enum_object__obj_gannline.html",
+  "en__docs__constants__objectconstants__enum_object__obj_hline.html",
+  "en__docs__constants__objectconstants__enum_object__obj_pitchfork.html",
+  "en__docs__constants__objectconstants__enum_object__obj_rectangle.html",
+  "en__docs__constants__objectconstants__enum_object__obj_regression.html",
+  "en__docs__constants__objectconstants__enum_object__obj_stddevchannel.html",
+  "en__docs__constants__objectconstants__enum_object__obj_trend.html",
+  "en__docs__constants__objectconstants__enum_object__obj_trendbyangle.html",
+  "en__docs__constants__objectconstants__enum_object__obj_triangle.html",
+  "en__docs__constants__objectconstants__enum_object__obj_vline.html"
+ ],
+ "__LINE__": [
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "__MQL5BUILD__": [
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "__MQLBUILD__": [
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "__PATH__": [
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "__RANDOM__": [
+  "en__docs__constants__namedconstants__compilemacros.html"
+ ],
+ "clrAliceBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrAntiqueWhite": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrAqua": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrAquamarine": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrBeige": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrBisque": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrBlack": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrBlanchedAlmond": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrBlue": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__objectconstants__enum_anchorpoint.html",
+  "en__docs__constants__objectconstants__enum_elliot_wave_degree.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrBlueViolet": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrBrown": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrBurlyWood": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrCadetBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrChartreuse": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrChocolate": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrCoral": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrCornflowerBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrCornsilk": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrCrimson": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkGoldenrod": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkGray": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkKhaki": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkOliveGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkOrange": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkOrchid": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkSalmon": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkSeaGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkSlateBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkSlateGray": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkTurquoise": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDarkViolet": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDeepPink": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDeepSkyBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDimGray": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrDodgerBlue": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrFireBrick": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrForestGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrGainsboro": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrGold": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrGoldenrod": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrGray": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrGreen": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__objectconstants__enum_anchorpoint.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrGreenYellow": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrHoneydew": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrHotPink": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrIndianRed": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrIndigo": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrIvory": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrKhaki": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLavender": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLavenderBlush": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLawnGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLemonChiffon": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightCoral": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightCyan": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightGoldenrod": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightGray": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightPink": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightSalmon": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightSeaGreen": [
+  "en__docs__constants__indicatorconstants__customindicatorproperties.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightSkyBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightSlateGray": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightSteelBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLightYellow": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLime": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLimeGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrLinen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMagenta": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMaroon": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMediumAquamarine": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMediumBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMediumOrchid": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMediumPurple": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMediumSeaGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMediumSlateBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMediumSpringGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMediumTurquoise": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMediumVioletRed": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMidnightBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMintCream": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMistyRose": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrMoccasin": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrNONE": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__namedconstants__otherconstants.html"
+ ],
+ "clrNavajoWhite": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrNavy": [
+  "en__docs__constants__indicatorconstants__prices.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrOldLace": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrOlive": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrOliveDrab": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrOrange": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrOrangeRed": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrOrchid": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPaleGoldenrod": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPaleGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPaleTurquoise": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPaleVioletRed": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPapayaWhip": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPeachPuff": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPeru": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPink": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPlum": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPowderBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrPurple": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrRed": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__indicatorconstants__customindicatorproperties.html",
+  "en__docs__constants__indicatorconstants__drawstyles.html",
+  "en__docs__constants__indicatorconstants__prices.html",
+  "en__docs__constants__namedconstants__otherconstants.html",
+  "en__docs__constants__objectconstants__enum_anchorpoint.html",
+  "en__docs__constants__objectconstants__enum_object__obj_arrowed_line.html",
+  "en__docs__constants__objectconstants__enum_object__obj_channel.html",
+  "en__docs__constants__objectconstants__enum_object__obj_cycles.html",
+  "en__docs__constants__objectconstants__enum_object__obj_elliotwave3.html",
+  "en__docs__constants__objectconstants__enum_object__obj_elliotwave5.html",
+  "en__docs__constants__objectconstants__enum_object__obj_expansion.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fibo.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fiboarc.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fibochannel.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fibofan.html",
+  "en__docs__constants__objectconstants__enum_object__obj_fibotimes.html",
+  "en__docs__constants__objectconstants__enum_object__obj_gannfan.html",
+  "en__docs__constants__objectconstants__enum_object__obj_ganngrid.html",
+  "en__docs__constants__objectconstants__enum_object__obj_gannline.html",
+  "en__docs__constants__objectconstants__enum_object__obj_hline.html",
+  "en__docs__constants__objectconstants__enum_object__obj_pitchfork.html",
+  "en__docs__constants__objectconstants__enum_object__obj_rectangle.html",
+  "en__docs__constants__objectconstants__enum_object__obj_regression.html",
+  "en__docs__constants__objectconstants__enum_object__obj_stddevchannel.html",
+  "en__docs__constants__objectconstants__enum_object__obj_trend.html",
+  "en__docs__constants__objectconstants__enum_object__obj_trendbyangle.html",
+  "en__docs__constants__objectconstants__enum_object__obj_triangle.html",
+  "en__docs__constants__objectconstants__enum_object__obj_vline.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrRosyBrown": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrRoyalBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSaddleBrown": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSalmon": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSandyBrown": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSeaGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSeashell": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSienna": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSilver": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSkyBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSlateBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSlateGray": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSnow": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSpringGreen": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrSteelBlue": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrTan": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrTeal": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrThistle": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrTomato": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrTurquoise": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrViolet": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrWheat": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrWhite": [
+  "en__docs__constants__chartconstants__charts_samples.html",
+  "en__docs__constants__objectconstants__enum_anchorpoint.html",
+  "en__docs__constants__objectconstants__enum_object_property.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrWhiteSmoke": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrYellow": [
+  "en__docs__constants__objectconstants__webcolors.html"
+ ],
+ "clrYellowGreen": [
+  "en__docs__constants__objectconstants__enum_gann_direction.html",
+  "en__docs__constants__objectconstants__webcolors.html"
+ ]
+}
