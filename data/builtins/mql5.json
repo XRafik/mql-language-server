@@ -4093,11 +4093,11 @@
     },
     "true": {
       "description": "Boolean literal true",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-grammar-keyword-2026-10-26"
     },
     "false": {
       "description": "Boolean literal false",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-grammar-keyword-2026-10-26"
     },
     "ENUM_CRYPT_METHOD": {
       "description": "Crypt methods enumeration (CRYPT_DES..CRYPT_AES256, CRYPT_HASH_MD5, CRYPT_HASH_SHA1..)",
@@ -4113,7 +4113,7 @@
     },
     "CRYPT_AES192": {
       "description": "CRYPT method: AES 192-bit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-newer-than-evidence-2026-10-26"
     },
     "CRYPT_AES256": {
       "description": "CRYPT method: AES 256-bit",
@@ -4121,7 +4121,7 @@
     },
     "CRYPT_GOST28147_89": {
       "description": "CRYPT method: GOST 28147-89",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-unverifiable-2026-10-26"
     },
     "CRYPT_HASH_MD5": {
       "description": "CRYPT hash method: MD5",
@@ -4137,7 +4137,7 @@
     },
     "CRYPT_HASH_SHA512": {
       "description": "CRYPT hash method: SHA512",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-newer-than-evidence-2026-10-26"
     },
     "CRYPT_ARCH_ZIP": {
       "description": "CRYPT archiving method: ZIP",
@@ -4145,15 +4145,15 @@
     },
     "CRYPT_GOST28147_89_PRO": {
       "description": "CRYPT method: GOST 28147-89 extended key set",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-unverifiable-2026-10-26"
     },
     "CRYPT_ARCH_GZIP": {
       "description": "CRYPT archiving method: GZIP",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-newer-than-evidence-2026-10-26"
     },
     "CRYPT_ARCH_ZLIB": {
       "description": "CRYPT archiving method: ZLIB",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-newer-than-evidence-2026-10-26"
     },
     "TRADE_ACTION_DEAL": {
       "description": "Place a market order",
@@ -4385,11 +4385,11 @@
     },
     "MODE_PLUSDI": {
       "description": "Indicator line identifier: +DI line (MQL5 indicator line; in MQL4 an indicator-buffer mode)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-mql4-heritage-issue-46-2026-10-26"
     },
     "MODE_MINUSDI": {
       "description": "Indicator line identifier: -DI line (MQL5 indicator line; in MQL4 an indicator-buffer mode)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-kept-mql4-heritage-issue-46-2026-10-26"
     },
     "OBJ_VLINE": {
       "description": "ENUM_OBJECT type: vertical line",
@@ -4549,14 +4549,6 @@
     },
     "OBJ_STDDEVCHANNEL": {
       "description": "ENUM_OBJECT type (MQL5): standard deviation channel",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "OBJ_ARROWED_HLINE": {
-      "description": "ENUM_OBJECT type (MQL5): horizontal line with arrows",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "OBJ_ARROWED_TREND": {
-      "description": "ENUM_OBJECT type (MQL5): trend line with arrows",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "OBJ_ARROW_BUY": {
@@ -4755,10 +4747,6 @@
       "description": "Object property: channel deviation in standard deviations",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
-    "OBJPROP_COMMENT": {
-      "description": "Object property: object comment",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "OBJPROP_TEXT": {
       "description": "Object property: object text",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
@@ -4939,16 +4927,8 @@
       "description": "Chart property (MQL5): crosshair tool enabled",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
-    "CHART_MOUSE_DOUBLE_CLICK": {
-      "description": "Chart property (MQL5): double-click event delivery enabled",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "CHART_SHOW_PRICE_SCALE": {
       "description": "Chart property (MQL5): vertical price scale display",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "CHART_SHOW_TIME_SCALE": {
-      "description": "Chart property (MQL5): horizontal time scale display",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "CHART_COMMENT": {
@@ -4999,10 +4979,6 @@
       "description": "Indicator property: fixed maximum of the separate window scale",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
-    "INDICATOR_TESTER": {
-      "description": "Indicator property (MQL5): use of the indicator in the strategy tester",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
     "INDICATOR_DATA": {
       "description": "Indicator property (MQL5): indicator plot data buffer",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
@@ -5013,10 +4989,6 @@
     },
     "INDICATOR_CALCULATIONS": {
       "description": "Indicator property (MQL5): auxiliary buffer for intermediate calculations",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "INDICATOR_LEVELS_COLOR": {
-      "description": "Indicator property (MQL5): level line colors",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "DRAW_LINE": {
@@ -5205,34 +5177,6 @@
     },
     "ORDER_TYPE_SELL_STOP_LIMIT": {
       "description": "ENUM_ORDER_TYPE (MQL5): sell stop-limit pending order",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "DEAL_BUY": {
-      "description": "ENUM_DEAL_TYPE (MQL5): buy deal",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "DEAL_SELL": {
-      "description": "ENUM_DEAL_TYPE (MQL5): sell deal",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "DEAL_BALANCE": {
-      "description": "ENUM_DEAL_TYPE (MQL5): balance operation",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "DEAL_CREDIT": {
-      "description": "ENUM_DEAL_TYPE (MQL5): credit operation",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "DEAL_CHARGE": {
-      "description": "ENUM_DEAL_TYPE (MQL5): charge operation",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "DEAL_CORRECTION": {
-      "description": "ENUM_DEAL_TYPE (MQL5): correction operation",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "DEAL_BONUS": {
-      "description": "ENUM_DEAL_TYPE (MQL5): bonus operation",
       "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "DEAL_ORDER": {
@@ -8369,14 +8313,6 @@
       "description": "Flag that a mq5-program operates in profiling mode non zero in profiling mode, otherwise zero",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 957,958; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "J_C": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 701"
-    },
-    "J_E": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 697"
-    },
     "J_FI": {
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 698"
@@ -8428,10 +8364,6 @@
     "L_PERCENT": {
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 894"
-    },
-    "L_S": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 769"
     },
     "L_SWAP": {
       "description": "(description not yet captured)",
@@ -8635,7 +8567,7 @@
     },
     "M_E": {
       "description": "e MathematicalConstants",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 949; descriptions-official-mql5-reference-pdf-2026-10-19"
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 949; descriptions-official-mql5-reference-pdf-2026-10-19; adjudicated-kept-documented-math-constant-2026-10-26"
     },
     "M_LN10": {
       "description": "ln(10) MathematicalConstants",
@@ -8673,17 +8605,9 @@
       "description": "sqrt(2)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 949; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "NT_MA": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 884,886,887"
-    },
     "N_ID": {
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 918"
-    },
-    "OBJPROP_CORNEROBJPROP_ANCHOROBJPROP_ANGLE": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 716,721"
     },
     "OBJPROP_NAME": {
       "description": "Obj ectname",
@@ -9220,10 +9144,6 @@
     "RGIN_S": {
       "description": "(description not yet captured)",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 886,887"
-    },
-    "R_TYP": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 913"
     },
     "SECTOR_BASIC_MATERIALS": {
       "description": "Basic materials",
@@ -11108,10 +11028,6 @@
     "TYPE_USHORT": {
       "description": "ushort MqlParam",
       "provenance": "official-mql5-reference-pdf-2026-10-18 pages 753; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "T_MAR": {
-      "description": "(description not yet captured)",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 885"
     },
     "UCHAR_MAX": {
       "description": "Maximal value, which can be represented by uchar type",

@@ -649,6 +649,70 @@ public class Issue136BuiltinRegistryCoverageTests
         "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE",
     };
 
+    /// <summary>
+    /// Issue #192: the undocumented-unknown bucket of the #173 constants audit, adjudicated
+    /// name by name against the HTML page cache and the PDF layout dump. Every removal here
+    /// has positive evidence recorded in
+    /// tools/generate-golden-lists/data/mql5-192-adjudications-2026-10-26.json: either the
+    /// reference documents a different name for that slot (DEAL_BUY vs DEAL_TYPE_BUY,
+    /// INDICATOR_LEVELS_COLOR vs INDICATOR_LEVELCOLOR, OBJPROP_COMMENT vs OBJPROP_TEXT) or the
+    /// entry is a proven extraction artifact of a documented identifier (NT_MA is the clipped
+    /// window of INT_MAX, J_E the wrapped OBJ_EDIT, OBJPROP_CORNEROBJPROP_ANCHOROBJPROP_ANGLE
+    /// three glued rows). None of them appears anywhere in either evidence artifact.
+    /// </summary>
+    private static readonly string[] Mql5NamesRemovedByConstantsAdjudication =
+    {
+        "CHART_MOUSE_DOUBLE_CLICK",
+        "CHART_SHOW_TIME_SCALE",
+        "DEAL_BALANCE",
+        "DEAL_BONUS",
+        "DEAL_BUY",
+        "DEAL_CHARGE",
+        "DEAL_CORRECTION",
+        "DEAL_CREDIT",
+        "DEAL_SELL",
+        "INDICATOR_LEVELS_COLOR",
+        "INDICATOR_TESTER",
+        "J_C",
+        "J_E",
+        "L_S",
+        "NT_MA",
+        "OBJPROP_COMMENT",
+        "OBJPROP_CORNEROBJPROP_ANCHOROBJPROP_ANGLE",
+        "OBJ_ARROWED_HLINE",
+        "OBJ_ARROWED_TREND",
+        "R_TYP",
+        "T_MAR",
+    };
+
+    /// <summary>
+    /// Issue #192: the names the adjudication pass kept although no MQL5 authority documents
+    /// them. Kept is a decision, not an oversight, and each carries an
+    /// adjudicated-kept-*-2026-10-26 provenance marker: the CRYPT_* members and the boolean
+    /// literals are newer than or outside the cached reference (the live CryptEncode page
+    /// renders its ENUM_CRYPT_METHOD table from JavaScript, so the captured HTML cannot judge
+    /// them), and MODE_PLUSDI/MODE_MINUSDI are documented MQL4 names the issue #46 corpus pass
+    /// registered for MQL5. Bulk-deleting them would convert a false negative into the false
+    /// positive this project exists to eliminate.
+    /// </summary>
+    private static readonly string[] Mql5NamesKeptUndocumentedByAdjudication =
+    {
+        "CRYPT_AES192",
+        "CRYPT_ARCH_GZIP",
+        "CRYPT_ARCH_ZLIB",
+        "CRYPT_GOST28147_89",
+        "CRYPT_GOST28147_89_PRO",
+        "CRYPT_HASH_SHA512",
+        "MODE_MINUSDI",
+        "MODE_PLUSDI",
+        // Documented short math constant (three characters, below the uppercase floor of the
+        // #173 authority), restored by the second pass after the first misread its sample-code
+        // use as a local variable.
+        "M_E",
+        "false",
+        "true",
+    };
+
     private static readonly string[] Mql4OnlyNamesRemovedFromMql5Golden =
     {
         // functions (14)
@@ -738,6 +802,65 @@ public class Issue136BuiltinRegistryCoverageTests
         }
     }
 
+    /// <summary>
+    /// Issue #192 gate (the MQL5 counterpart of Mql4GoldenList_ExcludesFabricatedNames):
+    /// an adjudicated removal cannot silently return to the golden list.
+    /// </summary>
+    [Fact]
+    public void Mql5GoldenList_ExcludesFabricatedNames()
+    {
+        var builtins = new Mql5Builtins();
+        var (functions, variables) = LoadMql5Golden();
+
+        var offenders = Mql5NamesRemovedByConstantsAdjudication
+            .Where(n => functions.ContainsKey(n) || variables.ContainsKey(n))
+            .ToList();
+
+        Assert.True(offenders.Count == 0,
+            "Adjudicated names are still present in data/builtins/mql5.json " +
+            "(the MQL5 reference documents a different name, or the entry is a proven " +
+            "extraction artifact; see " +
+            "tools/generate-golden-lists/data/mql5-192-adjudications-2026-10-26.json): " +
+            string.Join(", ", offenders));
+
+        // The user-visible half: the registry must stop answering for the removed name, and
+        // must keep answering for the documented name that owns the slot. Otherwise the
+        // golden-list edit never reaches the 5070 diagnostic it is supposed to unmask.
+        foreach (var name in Mql5NamesRemovedByConstantsAdjudication)
+        {
+            Assert.False(builtins.IsBuiltinVariable(name),
+                $"'{name}' is still registered as an MQL5 builtin variable, so the " +
+                "5070 diagnostic stays suppressed for code MetaEditor rejects");
+        }
+        Assert.True(builtins.IsBuiltinVariable("DEAL_TYPE_BUY"),
+            "DEAL_TYPE_BUY — the documented name that replaced the DEAL_BUY guess — must " +
+            "stay registered");
+        Assert.True(builtins.IsBuiltinVariable("clrAliceBlue"),
+            "clrAliceBlue — documented by the cached webcolors page, unknown only because of " +
+            "the pre-#192 uppercase-only authority — must stay registered");
+    }
+
+    /// <summary>
+    /// Issue #192 keep-pin: the conservative keeps of the same pass stay registered, each
+    /// with its adjudication marker, so a later cleanup cannot retire them without new
+    /// evidence (undocumented is not proven fabricated — issue #176's
+    /// WFA_PerformCalculations is a real undocumented intrinsic).
+    /// </summary>
+    [Fact]
+    public void Mql5GoldenList_KeepsAdjudicatedUndocumentedNames()
+    {
+        var (_, variables) = LoadMql5Golden();
+        var provenance = LoadMql5GoldenVariableProvenance();
+
+        foreach (var name in Mql5NamesKeptUndocumentedByAdjudication)
+        {
+            Assert.True(variables.ContainsKey(name),
+                $"'{name}' was kept by the #192 adjudication with documented reasoning and " +
+                "must stay registered until an authority retires it");
+            Assert.Contains("adjudicated-kept", provenance[name]);
+        }
+    }
+
     public static TheoryData<string> CoreFunctionNames() => ToTheoryData(CoreFunctionsBothDialects);
     public static TheoryData<string> Mql4FunctionNames() => ToTheoryData(Mql4Functions);
     public static TheoryData<string> UnderscoreVariableNames() => ToTheoryData(Mql4UnderscoreVariables);
@@ -781,6 +904,25 @@ public class Issue136BuiltinRegistryCoverageTests
                 : "(description not yet captured)";
         }
         return (functions, variables);
+    }
+
+    /// <summary>
+    /// Issue #192: the provenance strings of the MQL5 variable entries. The adjudication
+    /// markers live there, not in the hover description, so a conservative keep has to be
+    /// checked against the field that records why the entry stayed.
+    /// </summary>
+    private static Dictionary<string, string> LoadMql5GoldenVariableProvenance()
+    {
+        var path = Path.Combine(FindRepoRoot(), "data", "builtins", "mql5.json");
+        using var doc = JsonDocument.Parse(File.ReadAllText(path));
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in doc.RootElement.GetProperty("variables").EnumerateObject())
+        {
+            result[entry.Name] = entry.Value.TryGetProperty("provenance", out var provenance)
+                ? provenance.GetString() ?? string.Empty
+                : string.Empty;
+        }
+        return result;
     }
 
     private static (Dictionary<string, string> Functions, Dictionary<string, string> Variables) LoadMql4Golden()
