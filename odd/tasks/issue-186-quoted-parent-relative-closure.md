@@ -89,7 +89,7 @@ boundary that issues #18/#21b established for quoted includes outside any declar
   `..._InsideSubdirectoryOfIncluderDir_Resolves`, `..._QuotedBackslashSeparator_Resolves`,
   `PathSecurityTests`, `CrossFileTests`, `RealWorldParsingTests`) staying green plus the suite-count
   delta being exactly the six new tests (base measures 1,762, so the expected total is 1,768).
-- **L6** (T2 implemented, not yet committed): new `PathSecurity.IsContainedInCommonSystemRoot(
+- **L6** (T2 implemented and committed as `75f65ff`): new `PathSecurity.IsContainedInCommonSystemRoot(
   includingFile, resolvedPath, systemIncludeRoots)` — one and the same declared root must contain
   the includer's directory and the resolved target, with the #21b fail-closed rule kept for the
   queried path and the trusted-reference lexical fallback for the includer directory and the root;
@@ -103,3 +103,37 @@ boundary that issues #18/#21b established for quoted includes outside any declar
   trust unit the root already grants through `WorkspaceRoots.IsReadAllowed`, and it partially covers
   the L3 case — the general workspace-sibling case (no root involved) is still rejected and stays a
   follow-up candidate.
+- **L8** (post-mutation graph checks and the direct guard pins they forced): the impact check on
+  `TryResolveContained` (62 dependents; the exposed `change` op was unavailable, so `analyze
+  kind:impact` served as the pre-mutation check) listed four production consumers of the shared
+  service — didOpen lazy indexing, the Tier-1 suppression closure, `WorkspaceIndexer
+  .ResolveWorkspaceInclude` and `Mql5AntlrParser.ParseFileWithIncludes` — which is why the fix sits
+  in the service instead of in either branch site: all four agree by construction, and the MQL5 +
+  MQL4 fixture pins plus the fail-open control observe the agreement through the public surface.
+  `change(detect)` on the unstaged tree flagged the new guard as having no direct coverage, so
+  `PathSecurityTests` gained five pins of its own (same root admitted; escaped target rejected;
+  two different declared roots rejected; no roots declared rejected; null/empty pairs rejected on
+  the existing theory pattern). Measured after that: Release build 0 warnings / 0 errors, full suite
+  1,776 passing — base 1,762 + the six #186 pins + the eight guard-pin cases, so the delta is
+  exactly the new tests and no pre-existing test changed behaviour.
+- **L9** (delivery shape and review routing): three work-unit commits on
+  `fix/186-quoted-parent-relative-closure` — `eee72e2` (RED pins + committed fixture header,
+  266 lines), `75f65ff` (the guard + service change, the five direct guard pins, CHANGELOG and the
+  three READMEs, 250 lines), `002da87` (this tracking document). The branch total (533 authored
+  lines) passed the ~400-line review slice, so the boundary is recorded here and the delivery unit
+  for review is the pair `eee72e2..75f65ff`: the tests-to-behaviour slice is `c1`+`c2`, and `c3` is
+  bookkeeping that can be dropped from a review slice without changing the diff's meaning.
+  `gentle_review assess` reports `nativeRisk: unassessable` (reason code
+  `package-local-binary-missing`: the native assessment is unavailable in this environment, so no
+  native tier was computed), and the agent escalation of Task Size item 2 (guard / trust boundary)
+  was applied, yielding risk `high` with the plan "writer self-verifies + a separate independent
+  verifier runs". The independent verification is delegated to a read-only `gentle-ai-verify` task
+  over this document (T1-T4, S1-S5) rather than asserted here.
+- **L10** (T4 scope adjustment): the `tools/verify-system-includes.py` probe variant for the quoted
+  form is NOT added, deliberately. That script runs against a real terminal installation and asserts
+  over the user's own `MQL5/Include` tree; exercising a quoted parent-relative hop there would mean
+  writing into the user's terminal directory, which the tool's contract forbids (it only reads, and
+  the real Standard Library's cross-directory convention is the angle form — which is exactly why
+  #186 stayed invisible in that evidence). The committed synthetic chain
+  `tests/fixtures/system-include/Include/Expert/ExpertQuotedEntry.mqh` is the durable evidence for
+  S2 instead, and it is what the MQL4/MQL5 pins run against.
