@@ -563,16 +563,6 @@
       "description": "Checks the existence of a globalvariable with the specified name",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
     },
-    "TERMINAL_DLLS_ALLOWED": {
-      "signature": "Terminal property: DLL imports allowed",
-      "description": "Permission to use DLL",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
-    "TERMINAL_DATA_PATH": {
-      "signature": "Terminal property: data folder path",
-      "description": "Folder in which terminal data are stored",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql5-reference-pdf-2026-10-19"
-    },
     "OnInit": {
       "signature": "int OnInit()",
       "description": "The OnInit() function is the Init event handler. It must be of void or int type, with no parameters:",
@@ -10247,7 +10237,7 @@
     },
     "TERMINAL_DATA_PATH": {
       "description": "Folder in which terminal data are stored",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 759; descriptions-official-mql5-reference-pdf-2026-10-19"
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 759; descriptions-official-mql5-reference-pdf-2026-10-19; placement-normalized-2026-10-27"
     },
     "TERMINAL_DISK_SPACE": {
       "description": "Free disk space for the MQL5\\Files folder of the terminal(agent), MB",
@@ -10255,7 +10245,7 @@
     },
     "TERMINAL_DLLS_ALLOWED": {
       "description": "Permission to use DLL",
-      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 755; descriptions-official-mql5-reference-pdf-2026-10-19"
+      "provenance": "official-mql5-reference-pdf-2026-10-18 pages 755; descriptions-official-mql5-reference-pdf-2026-10-19; placement-normalized-2026-10-27"
     },
     "TERMINAL_EMAIL_ENABLED": {
       "description": "Permission to send e-mails using SMTP-server and login, specified in the terminalsettings",

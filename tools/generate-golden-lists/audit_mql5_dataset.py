@@ -161,13 +161,13 @@ KEPT_VERIFIED = {
         "MQL5-documented (docUrl from #163) yet ZERO occurrences in the "
         "dumps — a documented dump hole, NOT evidence of absence. Kept.",
     "TERMINAL_DATA_PATH":
-        "MQL5-legitimate (documented terminal constant) but misplaced "
-        "under `functions` in mql5.json — placement defect, follow-up, "
-        "not a leak.",
+        "MQL5-legitimate (documented terminal constant); placement normalized "
+        "2026-10-27 (issue #174): now registered under `variables` alongside "
+        "the other TERMINAL_* constants.",
     "TERMINAL_DLLS_ALLOWED":
-        "MQL5-legitimate (documented terminal constant) but misplaced "
-        "under `functions` in mql5.json — placement defect, follow-up, "
-        "not a leak.",
+        "MQL5-legitimate (documented terminal constant); placement normalized "
+        "2026-10-27 (issue #174): now registered under `variables` alongside "
+        "the other TERMINAL_* constants.",
 }
 
 DUMP_HOLE_CAVEAT = (

@@ -335,45 +335,6 @@
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "It copies and converts part of array of uchar type into a returned string."
     },
-    "ENUM_CRYPT_METHOD": {
-      "signature": "Crypt methods enumeration",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "The ENUM_CRYPT_METHOD enumeration is used to specify the data transformation method, used in CryptEncode() and CryptDecode() functions."
-    },
-    "CRYPT_DES": {
-      "signature": "CRYPT method: DES 56-bit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "DES encryption with 56 bit key (7 bytes)"
-    },
-    "CRYPT_AES128": {
-      "signature": "CRYPT method: AES 128-bit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "AES encryption with 128 bit key (16 bytes)"
-    },
-    "CRYPT_AES192": {
-      "signature": "CRYPT method: AES 192-bit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "CRYPT_AES256": {
-      "signature": "CRYPT method: AES 256-bit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "AES encryption with 256 bit key (32 bytes)"
-    },
-    "CRYPT_HASH_SHA1": {
-      "signature": "CRYPT hash method: SHA1",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "SHA1 HASH calculation"
-    },
-    "CRYPT_HASH_SHA256": {
-      "signature": "CRYPT hash method: SHA256",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "SHA256 HASH calculation"
-    },
-    "CRYPT_ARCH_ZIP": {
-      "signature": "CRYPT archiving method: ZIP",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "ZIP archives"
-    },
     "AccountInfoInteger": {
       "signature": "long AccountInfoInteger(int prop_id)",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
@@ -440,220 +401,6 @@
       },
       "description": "Checks if the Expert Advisor runs in the testing mode."
     },
-    "MB_ICONINFORMATION": {
-      "signature": "MessageBox flag: information icon",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "The encircled i sign"
-    },
-    "ACCOUNT_COMPANY": {
-      "signature": "Account property: company",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Name of a company that serves the account"
-    },
-    "ACCOUNT_LOGIN": {
-      "signature": "Account property: login",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Account number"
-    },
-    "ACCOUNT_NAME": {
-      "signature": "Account property: name",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Client name"
-    },
-    "CRYPT_BASE64": {
-      "signature": "CRYPT method: Base64 encoding (MQL4 ENUM_CRYPT_METHOD value)",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "BASE64"
-    },
-    "CRYPT_HASH_SHA512": {
-      "signature": "CRYPT hash method: SHA512",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "CRYPT_HASH_SHA3_256": {
-      "signature": "CRYPT hash method: SHA3-256",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-newer-than-chm-crypt-family-2026-10-22"
-    },
-    "CRYPT_HASH_SHA3_512": {
-      "signature": "CRYPT hash method: SHA3-512",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-newer-than-chm-crypt-family-2026-10-22"
-    },
-    "CRYPT_ARCH_GZIP": {
-      "signature": "CRYPT archiving method: GZIP",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "CRYPT_ARCH_ZLIB": {
-      "signature": "CRYPT archiving method: ZLIB",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "CRYPT_ARCH_RLE": {
-      "signature": "CRYPT archiving method: RLE",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-newer-than-chm-crypt-family-2026-10-22"
-    },
-    "ACCOUNT_SERVER": {
-      "signature": "Account property: trade server name",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Trade server name"
-    },
-    "ACCOUNT_CURRENCY": {
-      "signature": "Account property: deposit currency",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Account currency"
-    },
-    "ACCOUNT_BALANCE": {
-      "signature": "Account property: balance",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Account balance in the deposit currency"
-    },
-    "ACCOUNT_EQUITY": {
-      "signature": "Account property: equity",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Account equity in the deposit currency"
-    },
-    "ACCOUNT_PROFIT": {
-      "signature": "Account property: floating profit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Current profit of an account in the deposit currency"
-    },
-    "ACCOUNT_LEVERAGE": {
-      "signature": "Account property: leverage",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Account leverage"
-    },
-    "ACCOUNT_MARGIN": {
-      "signature": "Account property: used margin",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Account margin used in the deposit currency"
-    },
-    "ACCOUNT_MARGIN_FREE": {
-      "signature": "Account property: free margin",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Free margin of an account in the deposit currency"
-    },
-    "ACCOUNT_MARGIN_LEVEL": {
-      "signature": "Account property: margin level",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Account margin level in percents"
-    },
-    "ACCOUNT_MARGIN_SO_SO": {
-      "signature": "Account property: margin stop-out level",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Margin stop out level. Depending on the set ACCOUNT_MARGIN_SO_MODE is expressed in percents or in the deposit currency"
-    },
-    "ACCOUNT_MARGIN_SO_CALL": {
-      "signature": "Account property: margin call level",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Margin call level. Depending on the set ACCOUNT_MARGIN_SO_MODE is expressed in percents or in the deposit currency"
-    },
-    "ACCOUNT_MARGIN_SO_MODE": {
-      "signature": "Account property: stop-out mode",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Mode for setting the minimal allowed margin"
-    },
-    "ACCOUNT_CREDIT": {
-      "signature": "Account property: credit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Account credit in the deposit currency"
-    },
-    "ACCOUNT_TRADE_ALLOWED": {
-      "signature": "Account property: trade allowed for this account",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Allowed trade for the current account"
-    },
-    "ACCOUNT_TRADE_EXPERT": {
-      "signature": "Account property: EA trade allowed for this account",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Allowed trade for an Expert Advisor"
-    },
-    "ACCOUNT_TRADE_MODE": {
-      "signature": "Account property: account trade mode",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Account trade mode"
-    },
-    "ACCOUNT_TRADE_MODE_DEMO": {
-      "signature": "Account trade mode: demo",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Demo account"
-    },
-    "ACCOUNT_TRADE_MODE_CONTEST": {
-      "signature": "Account trade mode: contest",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Contest account"
-    },
-    "ACCOUNT_TRADE_MODE_REAL": {
-      "signature": "Account trade mode: real",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Real account"
-    },
-    "ACCOUNT_LIMIT_ORDERS": {
-      "signature": "Account property: maximum pending orders",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Maximum allowed number of open positions and active pending orders (in total), 0 — unlimited"
-    },
-    "ACCOUNT_ASSETS": {
-      "signature": "Account property: assets",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Not supported"
-    },
-    "ACCOUNT_LIABILITIES": {
-      "signature": "Account property: liabilities",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Not supported"
-    },
-    "ACCOUNT_COMMISSION_BLOCKED": {
-      "signature": "Account property: blocked commission",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Not supported"
-    },
-    "TERMINAL_DLLS_ALLOWED": {
-      "signature": "Terminal property: DLL imports allowed",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Permission to use DLL"
-    },
-    "TERMINAL_DATA_PATH": {
-      "signature": "Terminal property: data directory path",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Folder in which terminal data are stored"
-    },
-    "TERMINAL_CONNECTED": {
-      "signature": "Terminal property: connection to the server",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Connection to a trade server"
-    },
-    "TERMINAL_TRADE_ALLOWED": {
-      "signature": "Terminal property: trading allowed",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Permission to trade"
-    },
-    "TERMINAL_COMMONDATA_PATH": {
-      "signature": "Terminal property: common data directory",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Common path for all of the terminals installed on a computer"
-    },
-    "TERMINAL_LANGUAGE": {
-      "signature": "Terminal property: interface language",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Language of the terminal"
-    },
-    "TERMINAL_BUILD": {
-      "signature": "Terminal property: build number",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "The client terminal build number"
-    },
-    "TERMINAL_NAME": {
-      "signature": "Terminal property: terminal name",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Terminal name"
-    },
-    "TERMINAL_PATH": {
-      "signature": "Terminal property: executable directory",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Folder from which the terminal is started"
-    },
-    "TERMINAL_FTP_ENABLED": {
-      "signature": "Terminal property: FTP publishing enabled",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Permission to send reports using FTP-server and login, specified in the terminal settings"
-    },
     "IsExpertEnabled": {
       "signature": "bool IsExpertEnabled()",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
@@ -668,81 +415,6 @@
       "signature": "void MathSrand(int seed)",
       "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "Sets the starting point for generating a series of pseudorandom integers."
-    },
-    "MODE_MINLOT": {
-      "signature": "MarketInfo property: minimum lot size",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Minimum permitted amount of a lot"
-    },
-    "MODE_MAXLOT": {
-      "signature": "MarketInfo property: maximum lot size",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Maximum permitted amount of a lot"
-    },
-    "MODE_LOTSIZE": {
-      "signature": "MarketInfo property: contract lot size",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Lot size in the base currency"
-    },
-    "MODE_LOTSTEP": {
-      "signature": "MarketInfo property: lot size step",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Step for changing lots"
-    },
-    "MODE_POINT": {
-      "signature": "MarketInfo property: point size",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Point size in the quote currency. For the current symbol, it is stored in the predefined variable Point"
-    },
-    "MODE_DIGITS": {
-      "signature": "MarketInfo property: decimal digits",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Count of digits after decimal point in the symbol prices. For the current symbol, it is stored in the predefined variable Digits"
-    },
-    "MODE_SPREAD": {
-      "signature": "MarketInfo property: current spread",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Spread value in points"
-    },
-    "MODE_STOPLEVEL": {
-      "signature": "MarketInfo property: minimum stop distance",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Stop level in points A zero value of MODE_STOPLEVEL means either absence of any restrictions on the minimal distance for Stop Loss/Take Profit or the fact that a trade server utilizes some external mechanisms for dynamic level control, which cannot be translated in the client terminal. In the second case, GetLastError() can return error 130, because MODE_STOPLEVEL is actually \"floating\" here."
-    },
-    "MODE_FREEZELEVEL": {
-      "signature": "MarketInfo property: freeze distance",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Order freeze level in points. If the execution price lies within the range defined by the freeze level, the order cannot be modified, cancelled or closed"
-    },
-    "MODE_BID": {
-      "signature": "MarketInfo property: current bid",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Last incoming bid price. For the current symbol, it is stored in the predefined variable Bid"
-    },
-    "MODE_ASK": {
-      "signature": "MarketInfo property: current ask",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Last incoming ask price. For the current symbol, it is stored in the predefined variable Ask"
-    },
-    "MODE_HIGH": {
-      "signature": "MarketInfo property: day high",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "High day price"
-    },
-    "MODE_LOW": {
-      "signature": "MarketInfo property: day low",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Low day price"
-    },
-    "MODE_TIME": {
-      "signature": "MarketInfo property: last quote time",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "The last incoming tick time (last known server time)"
-    },
-    "MODE_TRADEALLOWED": {
-      "signature": "MarketInfo property: trading allowed for the symbol",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20",
-      "description": "Trade is allowed for the symbol"
     },
     "MathAbs": {
       "signature": "double MathAbs(double value)",
@@ -2047,6 +1719,86 @@
       "docUrl": "https://docs.mql4.com/files/filetell",
       "provenance": "issue-163-documented; descriptions-official-mql4-reference-chm-2026-10-20",
       "description": "The file returns the current position of the file pointer of an open file."
+    },
+    "AccountBalance": {
+      "signature": "double AccountBalance()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account balance"
+    },
+    "AccountCredit": {
+      "signature": "double AccountCredit()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account credit"
+    },
+    "AccountCompany": {
+      "signature": "string AccountCompany()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Broker company name"
+    },
+    "AccountCurrency": {
+      "signature": "string AccountCurrency()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account currency"
+    },
+    "AccountEquity": {
+      "signature": "double AccountEquity()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account equity"
+    },
+    "AccountFreeMargin": {
+      "signature": "double AccountFreeMargin()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account free margin"
+    },
+    "AccountFreeMarginCheck": {
+      "signature": "double AccountFreeMarginCheck(string symbol, int cmd, double volume)",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account free margin check"
+    },
+    "AccountFreeMarginMode": {
+      "signature": "double AccountFreeMarginMode()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account free margin calculation mode"
+    },
+    "AccountLeverage": {
+      "signature": "int AccountLeverage()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account leverage"
+    },
+    "AccountMargin": {
+      "signature": "double AccountMargin()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account margin"
+    },
+    "AccountName": {
+      "signature": "string AccountName()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account name"
+    },
+    "AccountNumber": {
+      "signature": "int AccountNumber()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account number"
+    },
+    "AccountProfit": {
+      "signature": "double AccountProfit()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Account profit"
+    },
+    "AccountServer": {
+      "signature": "string AccountServer()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Server name"
+    },
+    "AccountStopoutLevel": {
+      "signature": "int AccountStopoutLevel()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Stop out level"
+    },
+    "AccountStopoutMode": {
+      "signature": "int AccountStopoutMode()",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27",
+      "description": "Stop out mode"
     }
   },
   "variables": {
@@ -2134,70 +1886,6 @@
         "semanticsChanged": false,
         "note": "MQL4 predefined series array; rejected by MQL5"
       }
-    },
-    "AccountBalance": {
-      "description": "Account balance",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountCredit": {
-      "description": "Account credit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountCompany": {
-      "description": "Broker company name",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountCurrency": {
-      "description": "Account currency",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountEquity": {
-      "description": "Account equity",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountFreeMargin": {
-      "description": "Account free margin",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountFreeMarginCheck": {
-      "description": "Account free margin check",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountFreeMarginMode": {
-      "description": "Account free margin calculation mode",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountLeverage": {
-      "description": "Account leverage",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountMargin": {
-      "description": "Account margin",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountName": {
-      "description": "Account name",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountNumber": {
-      "description": "Account number",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountProfit": {
-      "description": "Account profit",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountServer": {
-      "description": "Server name",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountStopoutLevel": {
-      "description": "Stop out level",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
-    },
-    "AccountStopoutMode": {
-      "description": "Stop out mode",
-      "provenance": "hand-curated-registry-v2.5.1-rc.1"
     },
     "Symbol": {
       "description": "Current symbol",
@@ -4279,7 +3967,7 @@
       "description": "MessageBox flag: information icon",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/common",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MB_DEFBUTTON1": {
       "description": "MessageBox flag: default button 1",
@@ -4387,49 +4075,49 @@
       "description": "MarketInfo: current ask price",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_BID": {
       "description": "MarketInfo: current bid price",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_POINT": {
       "description": "MarketInfo: point size",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_DIGITS": {
       "description": "MarketInfo: digits after the decimal point",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_SPREAD": {
       "description": "MarketInfo: spread in points",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_STOPLEVEL": {
       "description": "MarketInfo: minimum stop distance in points",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_FREEZELEVEL": {
       "description": "MarketInfo: freeze distance in points",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_LOTSIZE": {
       "description": "MarketInfo: contract lot size",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_TICKVALUE": {
       "description": "MarketInfo: tick value",
@@ -4447,19 +4135,19 @@
       "description": "MarketInfo: minimum lot size",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_LOTSTEP": {
       "description": "MarketInfo: lot step",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_MAXLOT": {
       "description": "MarketInfo: maximum lot size",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_SWAPLONG": {
       "description": "MarketInfo: long swap value",
@@ -4477,7 +4165,7 @@
       "description": "MarketInfo: trading allowed for the symbol",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/marketinformation",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MODE_MARGININIT": {
       "description": "MarketInfo: initial margin requirement",
@@ -4741,109 +4429,109 @@
       "description": "ENUM_ACCOUNT_INFO_INTEGER: account number",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_TRADE_MODE": {
       "description": "ENUM_ACCOUNT_INFO_INTEGER: account trade mode",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_TRADE_MODE_DEMO": {
       "description": "ENUM_ACCOUNT_TRADE_MODE: demo account",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_TRADE_MODE_CONTEST": {
       "description": "ENUM_ACCOUNT_TRADE_MODE: contest account",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_TRADE_MODE_REAL": {
       "description": "ENUM_ACCOUNT_TRADE_MODE: real account",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_LEVERAGE": {
       "description": "ENUM_ACCOUNT_INFO_INTEGER: leverage",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_LIMIT_ORDERS": {
       "description": "ENUM_ACCOUNT_INFO_INTEGER: max active pending orders",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_TRADE_ALLOWED": {
       "description": "ENUM_ACCOUNT_INFO_INTEGER: trading allowed for the account",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_TRADE_EXPERT": {
       "description": "ENUM_ACCOUNT_INFO_INTEGER: EA trading allowed",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_BALANCE": {
       "description": "ENUM_ACCOUNT_INFO_DOUBLE: balance",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_CREDIT": {
       "description": "ENUM_ACCOUNT_INFO_DOUBLE: credit",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_PROFIT": {
       "description": "ENUM_ACCOUNT_INFO_DOUBLE: current profit",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_EQUITY": {
       "description": "ENUM_ACCOUNT_INFO_DOUBLE: equity",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_MARGIN": {
       "description": "ENUM_ACCOUNT_INFO_DOUBLE: used margin",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_MARGIN_FREE": {
       "description": "ENUM_ACCOUNT_INFO_DOUBLE: free margin",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_MARGIN_LEVEL": {
       "description": "ENUM_ACCOUNT_INFO_DOUBLE: margin level %",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_MARGIN_SO_CALL": {
       "description": "ENUM_ACCOUNT_INFO_DOUBLE: margin call level",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_MARGIN_SO_SO": {
       "description": "ENUM_ACCOUNT_INFO_DOUBLE: stop-out level",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_STOPOUT_MODE_PERCENT": {
       "description": "ENUM_ACCOUNT_STOPOUT_MODE: stop-out as percentage",
@@ -4861,25 +4549,25 @@
       "description": "ENUM_ACCOUNT_INFO_STRING: account name",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_SERVER": {
       "description": "ENUM_ACCOUNT_INFO_STRING: trade server",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_CURRENCY": {
       "description": "ENUM_ACCOUNT_INFO_STRING: account currency",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "ACCOUNT_COMPANY": {
       "description": "ENUM_ACCOUNT_INFO_STRING: broker company",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/accountconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "MQL_TESTER": {
       "description": "ENUM_MQL_INFO_INTEGER: running in the tester",
@@ -4927,19 +4615,19 @@
       "description": "Terminal property: terminal connected to the server",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/terminalconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "TERMINAL_TRADE_ALLOWED": {
       "description": "Terminal property: AutoTrading enabled",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/terminalconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "TERMINAL_DLLS_ALLOWED": {
       "description": "Terminal property: DLL imports allowed",
       "apiTier": "shared",
       "docUrl": "https://docs.mql4.com/constants/terminalconstants",
-      "provenance": "mql4-reference-enrichment-rc2"
+      "provenance": "mql4-reference-enrichment-rc2; placement-normalized-2026-10-27"
     },
     "OBJ_RECTANGLE_LABEL": {
       "description": "ENUM_OBJECT type: rectangle label object",
@@ -5189,6 +4877,122 @@
     "CP_ACP": {
       "description": "Code page constant: the currently active ANSI code page (0)",
       "provenance": "issue-163-documented"
+    },
+    "ENUM_CRYPT_METHOD": {
+      "description": "The ENUM_CRYPT_METHOD enumeration is used to specify the data transformation method, used in CryptEncode() and CryptDecode() functions.",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "CRYPT_DES": {
+      "description": "DES encryption with 56 bit key (7 bytes)",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "CRYPT_AES128": {
+      "description": "AES encryption with 128 bit key (16 bytes)",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "CRYPT_AES192": {
+      "description": "CRYPT method: AES 192-bit",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27"
+    },
+    "CRYPT_AES256": {
+      "description": "AES encryption with 256 bit key (32 bytes)",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "CRYPT_HASH_SHA1": {
+      "description": "SHA1 HASH calculation",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "CRYPT_HASH_SHA256": {
+      "description": "SHA256 HASH calculation",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "CRYPT_ARCH_ZIP": {
+      "description": "ZIP archives",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "CRYPT_BASE64": {
+      "description": "BASE64",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "CRYPT_HASH_SHA512": {
+      "description": "CRYPT hash method: SHA512",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27"
+    },
+    "CRYPT_HASH_SHA3_256": {
+      "description": "CRYPT hash method: SHA3-256",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-newer-than-chm-crypt-family-2026-10-22; placement-normalized-2026-10-27"
+    },
+    "CRYPT_HASH_SHA3_512": {
+      "description": "CRYPT hash method: SHA3-512",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-newer-than-chm-crypt-family-2026-10-22; placement-normalized-2026-10-27"
+    },
+    "CRYPT_ARCH_GZIP": {
+      "description": "CRYPT archiving method: GZIP",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27"
+    },
+    "CRYPT_ARCH_ZLIB": {
+      "description": "CRYPT archiving method: ZLIB",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; placement-normalized-2026-10-27"
+    },
+    "CRYPT_ARCH_RLE": {
+      "description": "CRYPT archiving method: RLE",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; adjudicated-newer-than-chm-crypt-family-2026-10-22; placement-normalized-2026-10-27"
+    },
+    "ACCOUNT_MARGIN_SO_MODE": {
+      "description": "Mode for setting the minimal allowed margin",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "ACCOUNT_ASSETS": {
+      "description": "Not supported",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "ACCOUNT_LIABILITIES": {
+      "description": "Not supported",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "ACCOUNT_COMMISSION_BLOCKED": {
+      "description": "Not supported",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "TERMINAL_DATA_PATH": {
+      "description": "Folder in which terminal data are stored",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "TERMINAL_COMMONDATA_PATH": {
+      "description": "Common path for all of the terminals installed on a computer",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "TERMINAL_LANGUAGE": {
+      "description": "Language of the terminal",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "TERMINAL_BUILD": {
+      "description": "The client terminal build number",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "TERMINAL_NAME": {
+      "description": "Terminal name",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "TERMINAL_PATH": {
+      "description": "Folder from which the terminal is started",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "TERMINAL_FTP_ENABLED": {
+      "description": "Permission to send reports using FTP-server and login, specified in the terminal settings",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "MODE_HIGH": {
+      "description": "High day price",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "MODE_LOW": {
+      "description": "Low day price",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
+    },
+    "MODE_TIME": {
+      "description": "The last incoming tick time (last known server time)",
+      "provenance": "hand-curated-registry-v2.5.1-rc.1; descriptions-official-mql4-reference-chm-2026-10-20; placement-normalized-2026-10-27"
     }
   }
 }

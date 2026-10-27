@@ -33,6 +33,10 @@ and consumed by:
 
 ## Maintenance rules
 
+- Section semantics (issue #174 normalization, 2026-10-27): `functions`
+  holds only callable API; constants (ALL-CAPS identifiers such as
+  `ACCOUNT_*`, `MODE_*`, `TERMINAL_*`) belong in `variables`. Pinned by the
+  `GoldenList_FunctionsSection_IsConstantFree` and placement gates.
 - Adding a documented name: edit the JSON (never the C# classes), run the
   parity tests.
 - A name must carry `docUrl` (official reference) or an explicit

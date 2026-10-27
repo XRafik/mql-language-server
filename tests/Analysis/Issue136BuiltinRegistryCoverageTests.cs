@@ -583,6 +583,164 @@ public class Issue136BuiltinRegistryCoverageTests
             "(obsolete.htm old-name table + MQL4.hhk keyword index).");
     }
 
+    // --- issue #174: golden-list placement normalization (2026-10-27) --------
+    // --- The dataset-hygiene audits (audit_mql4_dataset.py / -----------------
+    // --- audit_mql5_dataset.py) found constants registered under ------------
+    // --- `functions` (ACCOUNT_*/MODE_*/CRYPT_*/MB_ICON*/TERMINAL_* families) -
+    // --- and the legacy MQL4 Account* functions registered under ------------
+    // --- `variables`. Section semantics are normalized: constants live in ---
+    // --- `variables`, callable functions in `functions`. --------------------
+
+    private static readonly string[] Mql4PlacementNormalizedConstants =
+    {
+        "ACCOUNT_ASSETS", "ACCOUNT_BALANCE", "ACCOUNT_COMMISSION_BLOCKED", "ACCOUNT_COMPANY",
+        "ACCOUNT_CREDIT", "ACCOUNT_CURRENCY", "ACCOUNT_EQUITY", "ACCOUNT_LEVERAGE", "ACCOUNT_LIABILITIES",
+        "ACCOUNT_LIMIT_ORDERS", "ACCOUNT_LOGIN", "ACCOUNT_MARGIN", "ACCOUNT_MARGIN_FREE",
+        "ACCOUNT_MARGIN_LEVEL", "ACCOUNT_MARGIN_SO_CALL", "ACCOUNT_MARGIN_SO_MODE", "ACCOUNT_MARGIN_SO_SO",
+        "ACCOUNT_NAME", "ACCOUNT_PROFIT", "ACCOUNT_SERVER", "ACCOUNT_TRADE_ALLOWED", "ACCOUNT_TRADE_EXPERT",
+        "ACCOUNT_TRADE_MODE", "ACCOUNT_TRADE_MODE_CONTEST", "ACCOUNT_TRADE_MODE_DEMO",
+        "ACCOUNT_TRADE_MODE_REAL", "CRYPT_AES128", "CRYPT_AES192", "CRYPT_AES256", "CRYPT_ARCH_GZIP",
+        "CRYPT_ARCH_RLE", "CRYPT_ARCH_ZIP", "CRYPT_ARCH_ZLIB", "CRYPT_BASE64", "CRYPT_DES",
+        "CRYPT_HASH_SHA1", "CRYPT_HASH_SHA256", "CRYPT_HASH_SHA3_256", "CRYPT_HASH_SHA3_512",
+        "CRYPT_HASH_SHA512", "ENUM_CRYPT_METHOD", "MB_ICONINFORMATION", "MODE_ASK", "MODE_BID",
+        "MODE_DIGITS", "MODE_FREEZELEVEL", "MODE_HIGH", "MODE_LOTSIZE", "MODE_LOTSTEP", "MODE_LOW",
+        "MODE_MAXLOT", "MODE_MINLOT", "MODE_POINT", "MODE_SPREAD", "MODE_STOPLEVEL", "MODE_TIME",
+        "MODE_TRADEALLOWED", "TERMINAL_BUILD", "TERMINAL_COMMONDATA_PATH", "TERMINAL_CONNECTED",
+        "TERMINAL_DATA_PATH", "TERMINAL_DLLS_ALLOWED", "TERMINAL_FTP_ENABLED", "TERMINAL_LANGUAGE",
+        "TERMINAL_NAME", "TERMINAL_PATH", "TERMINAL_TRADE_ALLOWED",
+    };
+
+    private static readonly string[] Mql5PlacementNormalizedConstants =
+    {
+        "TERMINAL_DATA_PATH", "TERMINAL_DLLS_ALLOWED",
+    };
+
+    private static readonly string[] Mql4PlacementNormalizedAccountFunctions =
+    {
+        "AccountBalance", "AccountCompany", "AccountCredit", "AccountCurrency", "AccountEquity",
+        "AccountFreeMargin", "AccountFreeMarginCheck", "AccountFreeMarginMode", "AccountLeverage",
+        "AccountMargin", "AccountName", "AccountNumber", "AccountProfit", "AccountServer",
+        "AccountStopoutLevel", "AccountStopoutMode",
+    };
+
+    /// <summary>
+    /// Issue #174 gate: constant-like (ALL-CAPS) entries must not be registered
+    /// under `functions` in either golden list — constants belong in `variables`.
+    /// BuiltinGoldenData projects a `signature` for every functions entry, so a
+    /// constant there renders a meaningless pseudo-signature fence on hover.
+    /// </summary>
+    [Fact]
+    public void GoldenList_FunctionsSection_IsConstantFree()
+    {
+        var (mql4Functions, _) = LoadMql4Golden();
+        var (mql5Functions, _) = LoadMql5Golden();
+
+        var offenders = mql4Functions.Keys.Concat(mql5Functions.Keys)
+            .Where(IsConstantLike)
+            .Distinct()
+            .ToList();
+
+        Assert.True(offenders.Count == 0,
+            "Constant-like (ALL-CAPS) entries are registered under `functions` in the " +
+            "golden lists — constants belong in `variables` (issue #174 placement " +
+            "normalization): " + string.Join(", ", offenders));
+    }
+
+    /// <summary>
+    /// Issue #174 gate: every normalized MQL4 constant family is registered as a
+    /// variable, carries the normalization marker in its provenance, and answers
+    /// through the variables projection — never through the functions one.
+    /// </summary>
+    [Fact]
+    public void Mql4GoldenList_PlacesConstantsUnderVariables()
+    {
+        var (_, variables) = LoadMql4Golden();
+        var provenance = LoadMql4GoldenVariableProvenance();
+
+        foreach (var name in Mql4PlacementNormalizedConstants)
+        {
+            Assert.True(variables.ContainsKey(name),
+                $"'{name}' is a documented MQL4 constant and must be registered under " +
+                "variables in data/builtins/mql4.json (issue #174 placement normalization)");
+            Assert.Contains("placement-normalized-2026-10-27", provenance[name]);
+
+            Assert.True(Mql4Builtins.IsBuiltinVariable(name),
+                $"'{name}' must answer through the MQL4 variables projection");
+            Assert.False(Mql4Builtins.IsBuiltinFunction(name),
+                $"'{name}' is a constant: the MQL4 functions projection must not answer for it");
+        }
+    }
+
+    /// <summary>
+    /// Issue #174 gate: the MQL5 constants the registry seed had misplaced under
+    /// `functions` (TERMINAL_DATA_PATH / TERMINAL_DLLS_ALLOWED — the same names
+    /// the MQL5 reference documents among the TerminalInfo* properties) live in
+    /// `variables`, matching the other 62 TERMINAL_* constants of the list.
+    /// </summary>
+    [Fact]
+    public void Mql5GoldenList_PlacesConstantsUnderVariables()
+    {
+        var (_, variables) = LoadMql5Golden();
+        var provenance = LoadMql5GoldenVariableProvenance();
+        var builtins = new Mql5Builtins();
+
+        foreach (var name in Mql5PlacementNormalizedConstants)
+        {
+            Assert.True(variables.ContainsKey(name),
+                $"'{name}' is a documented MQL5 constant and must be registered under " +
+                "variables in data/builtins/mql5.json (issue #174 placement normalization)");
+            Assert.Contains("placement-normalized-2026-10-27", provenance[name]);
+
+            Assert.True(builtins.IsBuiltinVariable(name),
+                $"'{name}' must answer through the MQL5 variables projection");
+            Assert.False(builtins.IsBuiltinFunction(name),
+                $"'{name}' is a constant: the MQL5 functions projection must not answer for it");
+        }
+    }
+
+    /// <summary>
+    /// Issue #174 gate: the legacy MQL4 account functions (AccountBalance and
+    /// siblings) are callable functions, not variables — they belong under
+    /// `functions` with their real MQL4 signatures (MQL4 Reference CHM,
+    /// Account Information pages), and must not stay registered as variables.
+    /// </summary>
+    [Fact]
+    public void Mql4GoldenList_LegacyAccountFunctions_UnderFunctionsWithSignatures()
+    {
+        var (functions, variables) = LoadMql4Golden();
+        var signatures = LoadMql4GoldenFunctionSignatures();
+
+        foreach (var name in Mql4PlacementNormalizedAccountFunctions)
+        {
+            Assert.True(functions.ContainsKey(name),
+                $"'{name}' is a callable MQL4 account function and must be registered under " +
+                "functions in data/builtins/mql4.json (issue #174 placement normalization)");
+            Assert.False(variables.ContainsKey(name),
+                $"'{name}' was misplaced under variables; the normalized placement is functions");
+
+            Assert.True(signatures.TryGetValue(name, out var signature)
+                    && !string.IsNullOrEmpty(signature)
+                    && !signature.Contains("not yet captured"),
+                $"'{name}' must carry its real MQL4 signature in the functions section " +
+                "(MQL4 Reference CHM, Account Information pages)");
+
+            Assert.True(Mql4Builtins.IsBuiltinFunction(name),
+                $"'{name}' must answer through the MQL4 functions projection");
+            Assert.False(Mql4Builtins.IsBuiltinVariable(name),
+                $"'{name}' is a function: the MQL4 variables projection must not answer for it");
+        }
+
+        // Spot-check the CHM-documented shapes the move captured.
+        Assert.Equal("double AccountBalance()", signatures["AccountBalance"]);
+        Assert.Equal("double AccountFreeMarginCheck(string symbol, int cmd, double volume)", signatures["AccountFreeMarginCheck"]);
+        Assert.Equal("string AccountServer()", signatures["AccountServer"]);
+    }
+
+    private static bool IsConstantLike(string name) =>
+        name.Length > 0
+        && name.Any(char.IsLetter)
+        && name.All(c => char.IsUpper(c) || char.IsDigit(c) || c == '_');
+
     // --- documented math alias pow (client report, issue #173 thread) --------
     // --- MQL5 Reference "Math Functions" table has a dedicated pow row; ------
     // --- MQL4 CHM lists pow as a keyword of mathpow.htm (MQL4.hhk exact ------
@@ -920,6 +1078,43 @@ public class Issue136BuiltinRegistryCoverageTests
         {
             result[entry.Name] = entry.Value.TryGetProperty("provenance", out var provenance)
                 ? provenance.GetString() ?? string.Empty
+                : string.Empty;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Issue #174: the provenance strings of the MQL4 variable entries, where
+    /// the placement-normalization markers live.
+    /// </summary>
+    private static Dictionary<string, string> LoadMql4GoldenVariableProvenance()
+    {
+        var path = Path.Combine(FindRepoRoot(), "data", "builtins", "mql4.json");
+        using var doc = JsonDocument.Parse(File.ReadAllText(path));
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in doc.RootElement.GetProperty("variables").EnumerateObject())
+        {
+            result[entry.Name] = entry.Value.TryGetProperty("provenance", out var provenance)
+                ? provenance.GetString() ?? string.Empty
+                : string.Empty;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Issue #174: the captured signatures of the MQL4 functions entries, so the
+    /// placement gate can tell a real CHM-documented signature from the
+    /// "(signature not yet captured)" placeholder.
+    /// </summary>
+    private static Dictionary<string, string> LoadMql4GoldenFunctionSignatures()
+    {
+        var path = Path.Combine(FindRepoRoot(), "data", "builtins", "mql4.json");
+        using var doc = JsonDocument.Parse(File.ReadAllText(path));
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in doc.RootElement.GetProperty("functions").EnumerateObject())
+        {
+            result[entry.Name] = entry.Value.TryGetProperty("signature", out var signature)
+                ? signature.GetString() ?? string.Empty
                 : string.Empty;
         }
         return result;
