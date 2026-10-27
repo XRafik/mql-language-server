@@ -10,13 +10,22 @@
 
 Implementación del Language Server Protocol (LSP) para MQL4 y MQL5 (MetaTrader 4/5). Proporciona características de IDE como autocompletado, ir a definición, información al pasar el cursor y navegación de símbolos.
 
+| | |
+|---|---|
+| **Editores** | Cualquier cliente LSP — VS Code, Neovim, Emacs, Vim, Sublime Text |
+| **Conocimiento de builtins** | 3.670 símbolos MQL4/MQL5 documentados (funciones, constantes, enums, structs, macros) con procedencia por entrada de las referencias oficiales |
+| **Diagnósticos que respetan el código real** | Los falsos `Undeclared symbol` se suprimen mediante la clausura de includes y el índice del workspace; el radar de migración MQL4→MQL5 marca la API legacy con sus reemplazos |
+| **Funciona en todas partes** | Binarios autocontenidos para Windows/Linux/macOS (x64 + ARM64) y herramienta .NET en nuget.org |
+
 ## Características
 
 - Extracción de símbolos (funciones, variables, clases, structs, interfaces, enums, includes) en MQL4 y MQL5
 - Ir a Definición / Declaración / Definición de Tipo / Implementación
+- Jerarquía de Tipos (LSP 3.17): navegación de supertipos/subtipos para clases, interfaces y enums
 - Buscar Todas las Referencias y Renombrar con conciencia de ámbito local del documento (detecta el sombreado)
 - Símbolos del Documento, Símbolos del Workspace, Resaltado de Documento, Rangos de Plegado, Rangos de Selección
-- Autocompletado (builtins + símbolos locales, con auto-import de `#include` para símbolos resueltos) y Hover
+- Autocompletado (builtins + símbolos locales, con auto-import de `#include` para símbolos resueltos) y Hover con firmas reales y descripciones oficiales de la referencia para los builtins
+- Base de datos de builtins guiada por la documentación: 3.670 funciones, constantes, miembros de enum, structs y macros de MQL4/MQL5 con procedencia por entrada (886 MQL4 / 2.784 MQL5) — auditadas contra las referencias oficiales por pases de dataset cuyos resultados quedan fijados por gates de regresión
 - Ayuda de Firma
 - Diagnósticos vía pull mode (`textDocument/diagnostic`): reglas semánticas con ventanas de códigos MQL4 1000 / MQL5 5000, radar de migración de API exclusiva de MQL4 en archivos MQL5, constantes de enum de la biblioteca estándar MQL según el dialecto, y supresión multiarchivo de símbolos no resueltos mediante la clausura de includes y el índice del workspace
 - Code Actions (QuickFix con asistencia de includes) y Muestras de Color (`documentColor` / `colorPresentation`)
@@ -33,7 +42,7 @@ Esta versión añade soporte de primera clase para MQL5 manteniendo intacto el c
 
 - Los archivos `.mq5` y `.mqh` se reconocen automáticamente.
 - Se analiza la sintaxis específica de MQL5: clases, structs, interfaces, herencia, plantillas, `enum class`, `nullptr`, `union`, `final`, `pack(n)`, parámetros por referencia, `using`, `#resource`, listas de inicialización y `new`/`delete` en el heap.
-- Las funciones integradas y variables predefinidas de MQL5 se incluyen en el autocompletado y hover.
+- 2.784 símbolos builtin de MQL5 documentados (funciones, constantes, enums, structs, macros) incluidos en el autocompletado y hover, auditados contra la referencia oficial de MQL5.
 - Los diagnósticos de archivos MQL5 usan un rango de códigos distinto `MQL5xxx` para que los filtros de CI puedan separar los problemas de MQL4 y MQL5.
 
 ## Exclusiones del Escaneo del Workspace (`.mqlignore`)
@@ -287,10 +296,11 @@ No requiere pasos adicionales. Antlr4BuildTasks maneja todo automáticamente.
 - ✅ Dos parsers ANTLR (MQL4 + MQL5), conscientes del preprocesador (expansión de macros, includes anidados, condicionales)
 - ✅ Superficie LSP completa: más de 20 handlers registrados (símbolos, definiciones, referencias, rename, autocompletado, hover, ayuda de firma, diagnósticos en pull mode, code actions, color, formateo, plegado, rango de selección, símbolos del workspace, moniker, inlay hints)
 - ✅ Índice de símbolos: escaneo del workspace + índice de ocurrencias + caché LRU de reutilización de parseo
-- ✅ Suite de pruebas: 1192 pruebas en verde (`dotnet test`, excluye las categorías Performance/FpMeasurement)
+- ✅ Suite de pruebas: 1.778 pruebas en verde (`dotnet test`, excluye las categorías Performance/FpMeasurement)
+- ✅ Dataset de builtins: 3.670 entradas guiadas por la documentación (886 MQL4 / 2.784 MQL5) con procedencia por entrada, crecidas y auditadas por pases de dataset guiados por issues
 - ✅ Binarios: Linux x64/ARM64, macOS x64/ARM64, Windows x64/ARM64 (autocontenidos, de archivo único)
 - ✅ CI/CD: GitHub Actions — CI de PR, pipeline de release con pruebas de humo en ARM nativo, puerta de vulnerabilidades de dependencias
-- ✅ Publicado: GitHub Releases y nuget.org (`mql-language-server`, estable 2.4.0) vía Trusted Publishing
+- ✅ Publicado: GitHub Releases y nuget.org (`mql-language-server`, estable 2.7.0) vía Trusted Publishing
 
 ## Seguridad
 
@@ -303,7 +313,7 @@ Ejecutar las pruebas unitarias:
 dotnet test
 ```
 
-Cobertura de pruebas: 1192 pruebas (consulte el [CHANGELOG](CHANGELOG.md) para conocer el estado actual de la suite) que cubren el parser, los handlers LSP y casos límite.
+Cobertura de pruebas: 1.778 pruebas (consulte el [CHANGELOG](CHANGELOG.md) para conocer el estado actual de la suite) que cubren el parser, los handlers LSP y casos límite.
 
 ### Cobertura de código con Coverlet
 

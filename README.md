@@ -10,13 +10,22 @@ English | [Español](README.es.md) | [Русский](README.ru.md)
 
 Language Server Protocol (LSP) implementation for MQL4 and MQL5 (MetaTrader 4/5). Provides IDE features like auto-completion, go-to-definition, hover info, and symbol navigation.
 
+| | |
+|---|---|
+| **Editors** | Any LSP client — VS Code, Neovim, Emacs, Vim, Sublime Text |
+| **Builtin knowledge** | 3,670 documented MQL4/MQL5 symbols (functions, constants, enums, structs, macros) with per-entry provenance from the official references |
+| **Diagnostics that respect real code** | False `Undeclared symbol` positives suppressed through the include closure and workspace index; MQL4→MQL5 migration radar flags legacy API with replacements |
+| **Runs everywhere** | Self-contained binaries for Windows/Linux/macOS (x64 + ARM64) and a .NET tool on nuget.org |
+
 ## Features
 
 - Symbol extraction (functions, variables, classes, structs, interfaces, enums, includes) across MQL4 and MQL5
 - Go to Definition / Declaration / Type Definition / Implementation
+- Type Hierarchy (LSP 3.17): supertype/subtype navigation for classes, interfaces and enums
 - Find All References and Rename with document-local scope awareness (shadowing-aware)
 - Document Symbols, Workspace Symbols, Document Highlight, Folding Ranges, Selection Ranges
-- Completion (builtins + local symbols, with auto-import of `#include` for resolved symbols) and Hover
+- Completion (builtins + local symbols, with auto-import of `#include` for resolved symbols) and Hover with real signatures and official reference descriptions for builtins
+- Documentation-driven builtin database: 3,670 MQL4/MQL5 functions, constants, enum members, structs and macros with per-entry provenance (886 MQL4 / 2,784 MQL5) — audited against the official references by dataset passes whose results are pinned by regression gates
 - Signature Help
 - Diagnostics via pull mode (`textDocument/diagnostic`): semantic rules with MQL4 1000 / MQL5 5000 code windows, MQL4-only API migration radar in MQL5 files, dialect-aware MQL standard-library enum constants, and cross-file unresolved-symbol suppression through the include closure and workspace index
 - Code Actions (include-assist QuickFix) and Color Swatches (`documentColor` / `colorPresentation`)
@@ -33,7 +42,7 @@ This release adds first-class MQL5 support while keeping MQL4 behavior intact:
 
 - `.mq5` and `.mqh` files are recognized automatically.
 - MQL5-specific syntax is parsed: classes, structs, interfaces, inheritance, templates, `enum class`, `nullptr`, `union`, `final`, `pack(n)`, reference parameters, `using`, `#resource`, initialization lists, and heap `new`/`delete`.
-- MQL5 built-in functions and predefined variables are included in completion and hover.
+- 2,784 documented MQL5 builtin symbols (functions, constants, enums, structs, macros) are included in completion and hover, audited against the official MQL5 Reference.
 - Diagnostics for MQL5 files use a distinct `MQL5xxx` code range so CI filters can separate MQL4 and MQL5 issues.
 
 ## Workspace Scan Exclusions (`.mqlignore`)
@@ -287,10 +296,11 @@ No additional steps required. Antlr4BuildTasks handles everything automatically.
 - ✅ Dual ANTLR parsers (MQL4 + MQL5), preprocessor-aware (macro expansion, nested includes, conditionals)
 - ✅ Full LSP surface: 20+ registered handlers (symbols, definitions, references, rename, completion, hover, signature help, diagnostics pull mode, code actions, color, formatting, folding, selection range, workspace symbols, moniker, inlay hints)
 - ✅ Symbol index: workspace scan + occurrence index + parse-reuse LRU cache
-- ✅ Test suite: 1192 tests green (`dotnet test`, excludes Performance/FpMeasurement categories)
+- ✅ Test suite: 1,778 tests green (`dotnet test`, excludes Performance/FpMeasurement categories)
+- ✅ Builtin dataset: 3,670 documentation-driven entries (886 MQL4 / 2,784 MQL5) with per-entry provenance, grown and audited by issue-driven dataset passes
 - ✅ Binaries: Linux x64/ARM64, macOS x64/ARM64, Windows x64/ARM64 (self-contained, single-file)
 - ✅ CI/CD: GitHub Actions — PR CI, release pipeline with native-ARM smoke tests, dependency vulnerability gate
-- ✅ Published: GitHub Releases and nuget.org (`mql-language-server`, stable 2.4.0) via Trusted Publishing
+- ✅ Published: GitHub Releases and nuget.org (`mql-language-server`, stable 2.7.0) via Trusted Publishing
 
 ## Security
 
@@ -303,7 +313,7 @@ Run unit tests:
 dotnet test
 ```
 
-Test coverage: 1192 tests (see the [CHANGELOG](CHANGELOG.md) for the current suite status) covering the parser, LSP handlers, and edge cases.
+Test coverage: 1,778 tests (see the [CHANGELOG](CHANGELOG.md) for the current suite status) covering the parser, LSP handlers, and edge cases.
 
 ### Code Coverage with Coverlet
 
