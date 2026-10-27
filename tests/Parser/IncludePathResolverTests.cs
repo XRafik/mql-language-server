@@ -171,6 +171,92 @@ public class IncludePathResolverTests : IDisposable
         Assert.Equal(Path.Combine(sub, "wfa.mqh"), resolved);
     }
 
+    [Fact]
+    public void TryResolveContained_QuotedParentRelativeInsideSystemRoot_Resolves()
+    {
+        // Issue #186: a quoted parent-relative entry written inside a declared
+        // system include root must resolve when the target stays inside that
+        // same root. Inside a declared root the trusted unit is the ROOT, not
+        // the including header's own directory: the root is what the user
+        // declared trustworthy, and real library headers reach sibling
+        // directories of the Include tree with the quoted form. The
+        // includer-directory rule keeps protecting everything outside one.
+        var root = Path.Combine(_tempDir, "SystemRoot");
+        var includer = Path.Combine(root, "Trade", "Trade.mqh");
+        var target = Path.Combine(root, "Arrays", "ArrayLong.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Trade"));
+        Directory.CreateDirectory(Path.Combine(root, "Arrays"));
+        File.WriteAllText(includer, "int trade = 1;\n");
+        File.WriteAllText(target, "int arrayLong = 2;\n");
+
+        IncludePathResolver.SetSystemIncludeRootsProvider(() => new[] { root });
+        try
+        {
+            var ok = IncludePathResolver.TryResolveContained(includer, @"..\Arrays\ArrayLong.mqh", out var resolved);
+
+            Assert.True(ok);
+            Assert.Equal(target, resolved);
+        }
+        finally
+        {
+            IncludePathResolver.SetSystemIncludeRootsProvider(null);
+        }
+    }
+
+    [Fact]
+    public void TryResolveContained_QuotedParentRelativeEscapingSystemRoot_ReturnsFalse()
+    {
+        // Control pin (issue #186): the widening admits only targets inside a
+        // declared root. A quoted hop that escapes the root entirely — even
+        // with roots configured — must stay rejected.
+        var root = Path.Combine(_tempDir, "SystemRoot");
+        var includer = Path.Combine(root, "Trade", "Trade.mqh");
+        Directory.CreateDirectory(Path.Combine(root, "Trade"));
+        File.WriteAllText(includer, "int trade = 1;\n");
+        File.WriteAllText(Path.Combine(_tempDir, "outside.mqh"), "int outside = 3;\n");
+
+        IncludePathResolver.SetSystemIncludeRootsProvider(() => new[] { root });
+        try
+        {
+            var ok = IncludePathResolver.TryResolveContained(includer, @"..\..\outside.mqh", out _);
+
+            Assert.False(ok);
+        }
+        finally
+        {
+            IncludePathResolver.SetSystemIncludeRootsProvider(null);
+        }
+    }
+
+    [Fact]
+    public void TryResolveContained_QuotedParentRelativeAcrossTwoRoots_ReturnsFalse()
+    {
+        // Common-root rule: a hop from one declared root into a DIFFERENT
+        // declared root stays rejected — the includer and the target must
+        // share one single declared root, not merely two root hits.
+        var rootA = Path.Combine(_tempDir, "RootA");
+        var rootB = Path.Combine(_tempDir, "RootB");
+        var includer = Path.Combine(rootA, "Trade", "Trade.mqh");
+        var target = Path.Combine(rootB, "Arrays", "ArrayLong.mqh");
+        Directory.CreateDirectory(Path.Combine(rootA, "Trade"));
+        Directory.CreateDirectory(Path.Combine(rootB, "Arrays"));
+        File.WriteAllText(includer, "int trade = 1;\n");
+        File.WriteAllText(target, "int arrayLong = 2;\n");
+
+        IncludePathResolver.SetSystemIncludeRootsProvider(() => new[] { rootA, rootB });
+        try
+        {
+            var ok = IncludePathResolver.TryResolveContained(
+                includer, @"..\..\RootB\Arrays\ArrayLong.mqh", out _);
+
+            Assert.False(ok);
+        }
+        finally
+        {
+            IncludePathResolver.SetSystemIncludeRootsProvider(null);
+        }
+    }
+
     // --- System include roots (T3: angle-bracket resolution against configured roots) ---
 
     /// <summary>
