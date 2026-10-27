@@ -60,3 +60,9 @@ jobs:
           npm run compile
           npx vitest run
           npm run package
+
+      # Mirrors the .NET gate above: the npm tree was unscanned in CI, which
+      # is how CVE-2026-109461 (Dependabot #26) lived alongside green PRs.
+      - name: Vulnerable npm packages gate
+        working-directory: vscode/mql-language-server
+        run: npm audit --audit-level=high
